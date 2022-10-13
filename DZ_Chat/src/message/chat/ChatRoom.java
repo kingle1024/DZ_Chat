@@ -27,4 +27,8 @@ public class ChatRoom implements Serializable {
 	public int size() {
 		return chatServiceList.size();
 	}
+	
+	public String getRoomName() {
+		return roomName;
+	}
 }

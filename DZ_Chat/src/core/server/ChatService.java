@@ -16,9 +16,9 @@ public class ChatService extends Service {
 		super(server, socket);
 		this.chatRoom = chatRoom;
 		this.me = me;
-		request();
 	}
 
+	@Override
 	public void request() {
 		Server.threadPool.execute(() -> {
 			try {

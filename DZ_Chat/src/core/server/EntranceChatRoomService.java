@@ -2,6 +2,7 @@ package core.server;
 
 import java.net.Socket;
 
+import member.Member;
 import message.chat.ChatRoom;
 
 public class EntranceChatRoomService extends Service {
@@ -10,12 +11,15 @@ public class EntranceChatRoomService extends Service {
 		super(server, socket);
 		if (!Server.chatRoomMap.containsKey(chatRoomName)) throw new IllegalArgumentException();
 		chatRoom = Server.chatRoomMap.get(chatRoomName);
+		// Mock
+		int random = (int) (Math.random() * 10);
+		super.me = new Member("id" + random, "pw" + random, "name" + random, random);
 	}
 
 	@Override
 	public void request() {
-		System.out.println("Entrance ChatRoom");
-		chatRoom.entrance(new ChatService(super.server, super.socket, chatRoom, super.me));
-		System.out.println("Total: " + chatRoom.size());
+		ChatService chatService = new ChatService(super.server, super.socket, chatRoom, super.me);
+		chatRoom.entrance(chatService);
+		chatService.request();
 	}
 }

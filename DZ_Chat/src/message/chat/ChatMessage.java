@@ -9,11 +9,13 @@ import core.server.Server;
 import member.Member;
 
 public class ChatMessage extends Message {
+	private static final long serialVersionUID = -4472963080600091036L;
 	private final Member sender;
 	private final String message;
 	
 	public ChatMessage(ChatRoom chatRoom, Member sender, String message) {
 		super(chatRoom);
+		System.out.println("chatRoom size: " + chatRoom.size());
 		this.sender = sender;
 		this.message = message;
 	}
@@ -27,16 +29,16 @@ public class ChatMessage extends Message {
 	
 	@Override
 	public void push() {
-		System.out.println(this);
-		chatRoom.getChatServiceList().stream().forEach(s -> {
+		System.out.println("PUSH: " + chatRoom.size());
+		super.chatRoom.getChatServiceList().stream().forEach(s -> {
 			try {
-				System.out.println(s.getMe());
+				System.out.println("HERE");
 				send(s.getSocket().getOutputStream());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
+		System.out.println("Push END");
 	}
 	
 	@Override

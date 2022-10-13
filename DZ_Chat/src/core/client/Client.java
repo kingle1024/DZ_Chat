@@ -12,13 +12,14 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+import core.server.Server;
 import member.Member;
 import message.chat.ChatMessage;
 import message.chat.ChatRoom;
 import message.chat.Message;
 
 public class Client {
-	private static String SERVER_HOST = "192.168.30.84";
+	private static String SERVER_HOST = "localhost";
 	private static int PORT_NUMBER = 50_001;
 	private Socket socket;
 	private InputStream is;
@@ -37,7 +38,6 @@ public class Client {
 		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 		oos.writeObject(message);
 		oos.flush();
-		System.out.println("SEND" + message);
 	}
 
 	public void receive() {
@@ -77,25 +77,20 @@ public class Client {
 			Client client = new Client();
 			
 			// Mock
-			client.login(12);
-			ChatRoom chatRoom = new ChatRoom("ROOM1");
+			client.login(11);
+			ChatRoom chatRoom = Server.chatRoomMap.get("TEST ROOM");
+			System.out.println(Server.chatRoomMap.keySet().size());
 			
 			Scanner scanner = new Scanner(System.in);
 			client.connect();
 			while (true) {
-				if (client.socket == null) {
-					client.connect();
-				}
 				String inputStr = scanner.nextLine();
 				if ("q".equals(inputStr.toLowerCase()))
 					break;
 
 				// TODO Message send
 				Message message = new ChatMessage(chatRoom, client.member, inputStr);
-				System.out.println("MESSAGE" + message);
 //				Message message = new FileMessage(chatRoome, me, filePath(inputStr));
-				System.out.println(client.socket.isConnected());
-				if (client.socket == null) client.connect();
 				client.send(message);
 			}
 			scanner.close();
