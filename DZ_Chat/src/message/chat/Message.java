@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.time.LocalDateTime;
 
 public abstract class Message {
-	private ChatRoom chatRoom;
+	protected final ChatRoom chatRoom;
 	private final LocalDateTime time;
 	public Message(ChatRoom chatRoom) {
 		this.chatRoom = chatRoom;

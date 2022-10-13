@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import core.server.Server;
 import member.Member;
 
 public class ChatMessage extends Message {

@@ -5,8 +5,14 @@ import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 
 public class Task {
-	String ipAddress;
-	int port;
+	private String ipAddress;
+	private int port;
+	
+	public Task(String ipAddress, int port) {
+		this.ipAddress = ipAddress;
+		this.port = port;
+	}
+	
 	public void work() throws IOException {
 		String data = "업데이트 내역";
 		byte[] bytes = data.getBytes("UTF-8");

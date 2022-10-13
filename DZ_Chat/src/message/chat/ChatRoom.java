@@ -5,17 +5,19 @@ import java.util.*;
 import member.Member;
 
 public class ChatRoom {
-	private final String name;
+	private final String roomName;
 	private final List<Member> memberList;
-	private final List<Message> messageList;
 	
-	public ChatRoom(String name) {
-		this.name = name;
+	public ChatRoom(String roomName) {
+		this.roomName = roomName;
 		this.memberList = new ArrayList<>();
-		this.messageList = new ArrayList<>();
 	}
 	
 	public void invite(Member newMember) {
 		memberList.add(newMember);
+	}
+	
+	public List<Member> getMemberList() {
+		return memberList;
 	}
 }
