@@ -2,8 +2,6 @@ package message.ftp;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +9,6 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.Scanner;
 
 // 받는곳(Server)
@@ -60,10 +57,11 @@ public class FileTransferReceiver {
 					// Client 메시지 확인
 					String clientMessage = clientMessageReceive(socket);
 					
+					System.out.println("Message:"+clientMessage);
 					// 파일 전송 
 					if(clientMessage.startsWith("#fileSend")) {
 						fileSend(clientMessage, socket);
-					}										
+					}
 					
 //					socket.close();
 //					server.close();
@@ -107,7 +105,7 @@ public class FileTransferReceiver {
 		try {						
 			System.out.println("내가 받은 :"+filename);
 			FileOutputStream fos = new FileOutputStream(filename);		
-			InputStream is = socket.getInputStream();			
+			InputStream is = socket.getInputStream();
 
 			byte[] buffer = new byte[4096];
 			int readBytes;

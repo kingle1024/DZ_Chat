@@ -1,14 +1,19 @@
 package message.ftp;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -21,26 +26,34 @@ import message.chat.Message;
 public class FileTransferSender {
 	public static int DEFAULT_BUFFER_SIZE = 10000;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception, SecurityException, Exception {
 		String serverIP = "localhost";
 		int port = 50001;
 
 		try {
 			// 서버 연결
 			Socket socket = new Socket(serverIP, port);
-			connectErrorCheck(socket);			
+			connectErrorCheck(socket);	
+			System.out.print("채팅 입력 (Ex #fileSend fileName.txt) : ");			
 			
 //			messageSend(socket);
-			dir("");
-//			Message chatMessage = new ChatMessage(null, null, "");
-//			chatMessage.send(socket.getOutputStream());			
-								
-			//파일 보내는 부분 			
-//			fileSend(socket);
+//			dir("");
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//			#fileSend fileName.txt
+			String input = br.readLine();
+			Message chatMessage = new ChatMessage(null, null, input);			
+			chatMessage.send(socket.getOutputStream());			
+											
+			//파일 보내는 부분 		
+			if(input.startsWith("#fileSend")){
+				fileSend(input, socket);			
+			}else if(input.startsWith("#fileSave")) {
+				saveFile(input, socket);
+			}
 			
 //			os.flush();			
 			
-			socket.close();
+//			socket.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			System.out.println("Err1");
@@ -48,6 +61,55 @@ public class FileTransferSender {
 			e.printStackTrace();
 			System.out.println("Err2");
 		}
+	}
+	public static void saveFile(String input, Socket socket) throws ClassNotFoundException, Exception, SecurityException {
+		try {
+			byte[] buffer = new byte[4096];
+			int readBytes;
+			
+			String osName = System.getProperty("os.name").toLowerCase();				
+			String userName = System.getProperty("user.name");
+			StringBuffer sb = new StringBuffer();
+			if(osName.contains("window")){
+				sb.append("C:\\Users\\"+userName+"\\Downloads\\");
+			}else if(osName.contains("mac")) {
+				sb.append("/Users/"+userName+"/Downloads/");
+			}
+			
+			System.out.println(sb);
+			
+			FileOutputStream fos = new FileOutputStream(sb.toString()+"test.txt");
+			InputStream is = new FileInputStream("fileName.txt");
+			
+			while ((readBytes = is.read(buffer)) != -1) {
+				fos.write(buffer, 0, readBytes);
+			}
+			
+			fos.close();
+		}catch(IOException e) {
+			
+		}
+	}
+	public static String getOs() {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            System.out.println("Windows");
+            return "win";
+        } else if (os.contains("mac")) {
+            System.out.println("Mac");
+            return "mac";
+        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
+            System.out.println("Unix");
+            return "nix";
+        } else if (os.contains("linux")) {
+            System.out.println("Linux");
+            return "linux";
+        } else if (os.contains("sunos")) {
+            System.out.println("Solaris");
+            return "sunos";
+        }
+        return null;
 	}
 	public static void connectErrorCheck(Socket socket) {
 		if (!socket.isConnected()) {
@@ -84,16 +146,18 @@ public class FileTransferSender {
 		bufferedWriter.newLine();
 		bufferedWriter.flush();
 		System.out.println("메시지 전송 완료");
-	}
-	public static void fileSend(Socket socket) throws IOException {
+	}	
+	public static void fileSend(String fileName, Socket socket) throws IOException {
 		// 파일 존재 여부 확인 
-		String FileName = "fileName.txt";
-		File file = new File(FileName);
+//		String FileName = "fileName.txt";		
+		String[] input = fileName.split(" ");
+		File file = new File(input[1]);
+		
 		if (!file.exists()) {
 			System.out.println("File not Exist");
-			System.out.println(0);
+			return;
 		}
-				
+						
 		int readBytes;
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE]; // 4K가 적절하지 않나?
 		long totalReadBytes = 0;
