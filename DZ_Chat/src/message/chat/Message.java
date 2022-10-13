@@ -14,5 +14,6 @@ public abstract class Message implements Serializable {
 		this.time = LocalDateTime.now();
 	}
 	public abstract void send(OutputStream os) throws IOException;
+	public abstract void sendAll(OutputStream os) throws IOException;
 	public abstract void push();
 }

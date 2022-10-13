@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import member.Member;
 import message.chat.ChatMessage;
+import message.chat.ChatRoom;
 import message.chat.Message;
 
 public class Client {
@@ -30,9 +31,11 @@ public class Client {
 	}
 
 	public void listenUDP() throws IOException {
+		System.out.println("ListenUDP");
 		byte[] bytes = new byte[256];
 		DatagramPacket receivePacket = new DatagramPacket(bytes, 0, bytes.length);
 		datagramSocket.receive(receivePacket);
+		System.out.println("RECEIVE UDP");
 	}
 
 	public void connect() throws IOException {
@@ -46,6 +49,7 @@ public class Client {
 		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
 		oos.writeObject(message);
 		oos.flush();
+		System.out.println("SEND" + message);
 	}
 
 	public void receive() {
@@ -66,26 +70,45 @@ public class Client {
 
 	public void unconnect() throws IOException {
 		socket.close();
+		socket = null;
+		System.out.println("[클라이언트] 연결 종료");
 	}
-
+	public void login(int x) {
+		login("id"+x, "pw"+x, "name"+x, x);
+	}
+	public void login(String id, String pw, String name, int birth) {
+		this.member = new Member(id, pw, name, birth);
+		System.out.println(member.getName() + member.getUserId());
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("[클라이언트] 시작");
 		try {
 			Client client = new Client(new DatagramSocket());
+			
+			// Mock
+			client.login(11);
+			ChatRoom chatRoom = new ChatRoom("ROOM1");
+			
 			Scanner scanner = new Scanner(System.in);
 			client.connect();
 			while (true) {
-//				client.listenUDP();
-//				client.connect();
+				if (client.socket == null) {
+//					client.listenUDP();
+					client.connect();
+				}
 				String inputStr = scanner.nextLine();
 				if ("q".equals(inputStr.toLowerCase()))
 					break;
 
 				// TODO Message send
-				Message message = new ChatMessage(null, new Member("ID", "PW", "NAME", 123), inputStr);
+				Message message = new ChatMessage(chatRoom, client.member, inputStr);
+				System.out.println("MESSAGE" + message);
 //				Message message = new FileMessage(chatRoome, me, filePath(inputStr));
+				System.out.println(client.socket.isConnected());
+				if (client.socket == null) client.connect();
 				client.send(message);
-//				client.unconnect();
+				client.unconnect();
 			}
 			scanner.close();
 			client.unconnect();
