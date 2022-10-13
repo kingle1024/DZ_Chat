@@ -30,12 +30,24 @@ public class Client {
 		this.datagramSocket = datagramSocket;
 	}
 
-	public void listenUDP() throws IOException {
-		System.out.println("ListenUDP");
-		byte[] bytes = new byte[256];
-		DatagramPacket receivePacket = new DatagramPacket(bytes, 0, bytes.length);
-		datagramSocket.receive(receivePacket);
-		System.out.println("RECEIVE UDP");
+	public void listenUDP() {
+		Thread thread = new Thread(() -> {
+			System.out.println("ListenUDP");
+			byte[] bytes = new byte[256];
+			DatagramPacket receivePacket = new DatagramPacket(bytes, 0, bytes.length);
+			try {
+				while (true) {
+					datagramSocket.receive(receivePacket);					
+					System.out.println("RECEIVE UDP");
+					connect();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				
+		});
+		
 	}
 
 	public void connect() throws IOException {
@@ -46,7 +58,7 @@ public class Client {
 	}
 
 	public void send(Message message) throws IOException {
-		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
+		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 		oos.writeObject(message);
 		oos.flush();
 		System.out.println("SEND" + message);
@@ -55,7 +67,7 @@ public class Client {
 	public void receive() {
 		Thread thread = new Thread(() -> {
 			try {
-				ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
+				ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 				while (true) {
 					Message message = (Message) ois.readObject();
 					System.out.println(message);

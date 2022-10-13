@@ -36,18 +36,18 @@ public class SocketClient {
 
 	public void receive() {
 		Server.threadPool.execute(() -> {
-			while (true) {
-				try {
+			try {
+				while (true) {
 					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
 					Message message = (Message) ois.readObject();
 					System.out.println("RECEIVE: " + message);
 					message.sendAll(os);
 					message.push();
-				} catch (IOException e) {
-//					e.printStackTrace();
-				} catch (ClassNotFoundException cfe) {
-					cfe.printStackTrace();
 				}
+			} catch (IOException e) {
+//				e.printStackTrace();
+			} catch (ClassNotFoundException cfe) {
+				cfe.printStackTrace();
 			}
 		});
 	}
