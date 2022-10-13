@@ -18,7 +18,7 @@ public class FileTransferSender {
 	public static void main(String[] args) {
 		String serverIP = "localhost";
 		int port = 50001;
-		String FileName = "./test.txt";
+		String FileName = "fileName.txt";
 
 		// 파일 존재 여부 확인 
 		File file = new File(FileName);
@@ -57,7 +57,7 @@ public class FileTransferSender {
 				System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
 						+ (totalReadBytes * 100 / fileSize) + " %)");				
 			}
-			os.flush();
+//			os.flush();
 
 			System.out.println("File transfer completed.");
 			fis.close();
