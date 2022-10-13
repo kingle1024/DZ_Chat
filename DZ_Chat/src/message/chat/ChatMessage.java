@@ -1,6 +1,9 @@
 package message.chat;
 
-import java.time.LocalDateTime;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import member.Member;
 
@@ -15,9 +18,19 @@ public class ChatMessage extends Message {
 	}
 	
 	@Override
-	public void send() {
-		// TODO Auto-generated method stub
-		
+	public void send(OutputStream os) throws IOException {
+		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(os));
+		dos.writeUTF(message);
+		dos.flush();
+		dos.close();
 	}
 
+	@Override
+	public String toString() {
+		return new StringBuilder()
+				.append(sender.toString())
+				.append("> ")
+				.append(message)
+				.toString();
+	}
 }

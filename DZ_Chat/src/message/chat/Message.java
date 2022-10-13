@@ -1,5 +1,7 @@
 package message.chat;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 
 public abstract class Message {
@@ -9,5 +11,5 @@ public abstract class Message {
 		this.chatRoom = chatRoom;
 		this.time = LocalDateTime.now();
 	}
-	public abstract void send();
+	public abstract void send(OutputStream os) throws IOException;
 }
