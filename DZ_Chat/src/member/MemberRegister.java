@@ -1,10 +1,7 @@
 package member;
 
-import java.io.BufferedReader;
+
 import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class MemberRegister {
@@ -19,12 +16,14 @@ public class MemberRegister {
 			String pwdChk;
 			String name;
 			int birth;
+			
+			dao = new MemberDao();
 
 			System.out.println("\n2. 회원가입 하세요.");
 			do {
 				System.out.print("아이디 : ");
 				uid = scanner.nextLine();
-			} while (dao.containKey(uid));
+			} while (dao.checkDupId(uid));
 
 			do {
 				System.out.print("비밀번호 : ");
@@ -43,7 +42,6 @@ public class MemberRegister {
 			Member member = new Member(uid, pwdChk, name, birth);
 
 			new MemberFile(member);
-			dao = new MemberDao();
 			dao.registerMember(member);
 
 		} catch (Exception e) {
@@ -51,28 +49,6 @@ public class MemberRegister {
 		}
 	}
 
-//	private boolean checkDupId(String id) {
-//		File f = new File("./MemberFile.txt");
-//
-//		try (BufferedReader br = new BufferedReader(new FileReader(f));) {
-//
-//			while (true) {
-//				String data = br.readLine();
-//				if (data == null)
-//					break;
-//				String idData = data.split(" ")[0];
-//				if (idData.equals(id)) {
-//					System.out.println("이미 등록된 아이디입니다. 다시 입력해주세요.");
-//					return false; // 아이디 중복
-//				}
-//			}
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		return true;
-//	}
 
 	private boolean checkPwd(String pwd, String pwdChk) {
 		if (pwd.equals(pwdChk))

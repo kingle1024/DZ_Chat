@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 public class Member implements Comparable<Member>, Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4338769178604718663L;
 	private String userId;
 	private String password;
