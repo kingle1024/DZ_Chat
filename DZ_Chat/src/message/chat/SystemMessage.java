@@ -22,6 +22,11 @@ public class SystemMessage extends Message {
 	}
 
 	@Override
+	public void push() {
+		System.out.println(this);
+	}
+	
+	@Override
 	public String toString() {
 		return new StringBuilder()
 				.append("\t[System")
@@ -30,5 +35,4 @@ public class SystemMessage extends Message {
 				.append("]\t")
 				.toString();
 	}
-
 }

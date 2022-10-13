@@ -27,6 +27,11 @@ public class ChatMessage extends Message {
 	}
 
 	@Override
+	public void push() {
+		System.out.println(this);
+	}
+	
+	@Override
 	public String toString() {
 		return new StringBuilder()
 				.append(sender.toString())
@@ -34,4 +39,6 @@ public class ChatMessage extends Message {
 				.append(message)
 				.toString();
 	}
+
+
 }

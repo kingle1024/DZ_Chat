@@ -1,7 +1,9 @@
 package core.server;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Queue;
@@ -23,13 +25,28 @@ public class SocketClient {
 		this.os = socket.getOutputStream();
 		member = null;
 		
-		if (Server.taskMap.containsKey(member)) {
-			Queue<Message> messageQue = Server.taskMap.get(member);
-			while (!messageQue.isEmpty()) {
-				messageQue.poll().send(os);
-			}
-		}
+//		if (Server.taskMap.containsKey(member)) {
+//			Queue<Message> messageQue = Server.taskMap.get(member);
+//			while (!messageQue.isEmpty()) {
+//				messageQue.poll().send(os);
+//			}
+//		}
+		receive();
 	}
 	
-	
+	public void receive() {
+		Server.threadPool.execute(() -> {
+			while (true) {
+				try {
+					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
+					Message message = (Message) ois.readObject();
+					message.push();
+				} catch (IOException e) {
+//					e.printStackTrace();
+				} catch (ClassNotFoundException cfe) {
+					cfe.printStackTrace();
+				} 
+			}
+		});
+	}
 }
