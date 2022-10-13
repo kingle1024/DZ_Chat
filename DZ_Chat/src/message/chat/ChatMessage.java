@@ -24,15 +24,19 @@ public class ChatMessage extends Message {
 		dos.writeUTF(message);
 		dos.flush();
 	}
-
-	@Override
-	public void sendAll(OutputStream os) throws IOException {
-		chatRoom.getMemberList().stream().forEach(member -> Server.taskMap.get(member).add(this));
-	}
 	
 	@Override
 	public void push() {
 		System.out.println(this);
+		chatRoom.getChatServiceList().stream().forEach(s -> {
+			try {
+				System.out.println(s.getMe());
+				send(s.getSocket().getOutputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	@Override

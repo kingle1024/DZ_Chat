@@ -7,18 +7,14 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.SynchronousQueue;
 
-import member.Member;
-import message.chat.Message;
+import message.chat.ChatRoom;
 
 public class Server {
-	public static final SynchronousQueue<Task> taskAlramQue = new SynchronousQueue<>();
-	public static final Map<Task, Queue<Message>> taskMap = Collections.synchronizedMap(new HashMap<>());
+	static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>()); 
 	static final ExecutorService threadPool = Executors.newFixedThreadPool(16);
 	static DatagramSocket datagramSocket;
 
@@ -28,31 +24,20 @@ public class Server {
 	public void start() throws IOException {
 		serverSocket = new ServerSocket(PORT_NUMBER);
 		System.out.println("[서버] 시작");
-
 		threadPool.execute(() -> {
 			try {
 				while (true) {
 					Socket socket = serverSocket.accept();
-					SocketClient sc = new SocketClient(this, socket);					
+					System.out.println("Socket Accept");
+					Service service = new EntranceChatRoomService(this, socket, "TEST ROOM");
+					service.request();
+					
 				}
 			} catch (IOException e) {
 			}
 		});
 	}
 
-	public void pushAlarmStart() {
-		Thread thread = new Thread(() -> {
-			try {
-				while (true) {
-					if (taskAlramQue.isEmpty()) continue;
-					taskAlramQue.poll().work();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-		thread.start();
-	}
 	public void stop() throws IOException {
 		serverSocket.close();
 		// TODO close all socket client
@@ -61,11 +46,12 @@ public class Server {
 	}
 
 	public static void main(String[] args) {
+		// Mock
+		chatRoomMap.put("TEST ROOM", new ChatRoom("TEST ROOM"));
+		
 		try {
-			datagramSocket = new DatagramSocket();
 			Server server = new Server();
 			server.start();
-			server.pushAlarmStart();
 			Scanner scanner = new Scanner(System.in);
 			while (!"q".equals(scanner.nextLine().toLowerCase()))
 				;
@@ -73,7 +59,5 @@ public class Server {
 			server.stop();
 		} catch (IOException e) {
 		}
-
 	}
-
 }

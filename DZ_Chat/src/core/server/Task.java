@@ -42,4 +42,9 @@ public class Task {
 		DatagramPacket sendPacket = new DatagramPacket(bytes, 0, bytes.length, new InetSocketAddress(ipAddress, port));
  		Server.datagramSocket.send(sendPacket);
 	}
+	
+	@Override
+	public String toString() {
+		return ipAddress + ": " + port;
+	}
 }

@@ -26,30 +26,6 @@ public class Client {
 	private Member member;
 	private DatagramSocket datagramSocket;
 
-	public Client(DatagramSocket datagramSocket) {
-		this.datagramSocket = datagramSocket;
-	}
-
-	public void listenUDP() {
-		Thread thread = new Thread(() -> {
-			System.out.println("ListenUDP");
-			byte[] bytes = new byte[256];
-			DatagramPacket receivePacket = new DatagramPacket(bytes, 0, bytes.length);
-			try {
-				while (true) {
-					datagramSocket.receive(receivePacket);					
-					System.out.println("RECEIVE UDP");
-					connect();
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-				
-		});
-		
-	}
-
 	public void connect() throws IOException {
 		socket = new Socket(SERVER_HOST, PORT_NUMBER);
 		is = socket.getInputStream();
@@ -85,6 +61,8 @@ public class Client {
 		socket = null;
 		System.out.println("[클라이언트] 연결 종료");
 	}
+	
+	// Mock
 	public void login(int x) {
 		login("id"+x, "pw"+x, "name"+x, x);
 	}
@@ -96,17 +74,16 @@ public class Client {
 	public static void main(String[] args) {
 		System.out.println("[클라이언트] 시작");
 		try {
-			Client client = new Client(new DatagramSocket());
+			Client client = new Client();
 			
 			// Mock
-			client.login(212);
+			client.login(12);
 			ChatRoom chatRoom = new ChatRoom("ROOM1");
 			
 			Scanner scanner = new Scanner(System.in);
 			client.connect();
 			while (true) {
 				if (client.socket == null) {
-//					client.listenUDP();
 					client.connect();
 				}
 				String inputStr = scanner.nextLine();
@@ -120,7 +97,6 @@ public class Client {
 				System.out.println(client.socket.isConnected());
 				if (client.socket == null) client.connect();
 				client.send(message);
-				client.unconnect();
 			}
 			scanner.close();
 			client.unconnect();
