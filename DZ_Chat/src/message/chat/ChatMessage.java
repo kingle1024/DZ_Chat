@@ -5,12 +5,11 @@ import java.time.LocalDateTime;
 import member.Member;
 
 public class ChatMessage extends Message {
-	private ChatRoom chatRoom;
-	private Member sender;
-	private String message;
-	private LocalDateTime time;
+	private final Member sender;
+	private final String message;
 	
-	public ChatMessage(Member sender, String message) {
+	public ChatMessage(ChatRoom chatRoom, Member sender, String message) {
+		super(chatRoom);
 		this.sender = sender;
 		this.message = message;
 	}

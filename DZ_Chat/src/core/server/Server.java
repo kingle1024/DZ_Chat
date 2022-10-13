@@ -1,4 +1,4 @@
-package core;
+package core.server;
 
 public class Server {
 
