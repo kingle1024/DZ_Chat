@@ -16,7 +16,7 @@ public class Member implements Comparable<Member>, Serializable{
 	public Member(String userId, String password, String name, int birth) {
 		this.userId = userId;
 		this.password = password;
-		this.name = name; 
+		this.name = name;
 		this.birth = birth;
 	}
 	
@@ -56,5 +56,10 @@ public class Member implements Comparable<Member>, Serializable{
 	public int compareTo(Member o) {
 		 return this.getName().compareTo(o.getName());
 	}	
+	
+	@Override
+	public String toString() {
+		return userId + " " + password + " " + name + " " + birth;
+	}
 	
 }

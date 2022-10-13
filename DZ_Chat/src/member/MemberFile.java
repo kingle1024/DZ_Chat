@@ -1,18 +1,19 @@
 package member;
 
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.io.ObjectOutputStream;
 
 public class MemberFile {
-	public MemberFile() throws Exception{
+	public MemberFile(Member member) throws Exception{
+		FileOutputStream fos = new FileOutputStream("./MemberFile.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		
+		oos.writeObject(member);
+		
+		oos.flush();
+		oos.close();
+		fos.close();
 
 	}
 	
 }
- 

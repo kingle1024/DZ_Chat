@@ -1,33 +1,42 @@
 package member;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class MemberDao{
+
+	FileOutputStream fos = new FileOutputStream("./MemberFile.txt");
+//	ObjectOutputStream oos = new ObjectOutputStream(fos);
+	ObjectOutputStream oos;
 	
 	private Map<String, Member> MemberMap = new TreeMap<String, Member>();
 
-	public MemberDao() {
-		
+	public MemberDao() throws Exception{
+		oos = new ObjectOutputStream(fos);
 	}
 	
 	//회원 등록
-	public void registerMember(Member member) {
+	public void registerMember(Member member) throws Exception {
 		MemberMap.put(member.getUserId(), member);
 	}
 	
-	public void registerMember(String userId, String password, String name, int birth) {
+	public void registerMember(String userId, String password, String name, int birth) throws Exception {
 		MemberMap.put(userId, new Member(userId, password, name, birth));
 	}
 	
-	 
+	
 	// 키 중복 체크
 	public boolean containKey(String key) {
+		if(MemberMap.containsKey(key)) {
+			System.out.println("이미 등록된 아이디입니다. 다시 입력해주세요.");
+		}
 		return MemberMap.containsKey(key);
 	}
-	// 키 값에 해당하는 value 값 가져오기
-	public Member get(String key) {
-		return MemberMap.get(key);
+	// 키 값에 해당하는 비밀번호 value 값 가져오기
+	public String getPwd(String key) {		
+		return MemberMap.get(key).getPassword();
 	}
 	
 	// 회정 정보 수정, 비밀번호만 수정 가능
@@ -46,7 +55,7 @@ public class MemberDao{
 	public boolean deleteMember(String userId) {
 		boolean check = false;
 		if(MemberMap.containsKey(userId)) {
-			Member member = MemberMap.remove(userId);
+			MemberMap.remove(userId);
 			check = true;
 		}
 		return check;
