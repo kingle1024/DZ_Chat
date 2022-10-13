@@ -78,8 +78,7 @@ public class Client {
 			
 			// Mock
 			client.login(11);
-			ChatRoom chatRoom = Server.chatRoomMap.get("TEST ROOM");
-			System.out.println(Server.chatRoomMap.keySet().size());
+			String chatRoomName = "TEST ROOM";
 			
 			Scanner scanner = new Scanner(System.in);
 			client.connect();
@@ -89,9 +88,9 @@ public class Client {
 					break;
 
 				// TODO Message send
-				Message message = new ChatMessage(chatRoom, client.member, inputStr);
+//				Message message = new ChatMessage(chatRoomName, client.member, inputStr);
 //				Message message = new FileMessage(chatRoome, me, filePath(inputStr));
-				client.send(message);
+//				client.send(message);
 			}
 			scanner.close();
 			client.unconnect();

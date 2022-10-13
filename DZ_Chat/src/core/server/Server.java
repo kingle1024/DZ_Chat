@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 import message.chat.ChatRoom;
 
 public class Server {
-	public static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>()); 
+	static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>()); 
 	static final ExecutorService threadPool = Executors.newFixedThreadPool(16);
 	static DatagramSocket datagramSocket;
 
@@ -30,7 +30,7 @@ public class Server {
 					Socket socket = serverSocket.accept();
 					System.out.println("Socket Accept");
 					Service service = new ChatRoomListService(this, socket);
-					Service service = new EntranceChatRoomService(this, socket, "TEST ROOM");
+					service = new EntranceChatRoomService(this, socket, "TEST ROOM");
 					service.request();
 					
 				}

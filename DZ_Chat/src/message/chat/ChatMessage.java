@@ -15,6 +15,8 @@ public class ChatMessage extends Message {
 	
 	public ChatMessage(ChatRoom chatRoom, Member sender, String message) {
 		super(chatRoom);
+		// String
+//		ChatRoom chatroom = Server.chatRoomMap.
 		System.out.println("chatRoom size: " + chatRoom.size());
 		this.sender = sender;
 		this.message = message;
