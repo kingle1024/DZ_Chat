@@ -31,8 +31,10 @@ public class Server {
 
 		threadPool.execute(() -> {
 			try {
-				Socket socket = serverSocket.accept();
-				SocketClient sc = new SocketClient(this, socket);
+				while (true) {
+					Socket socket = serverSocket.accept();
+					SocketClient sc = new SocketClient(this, socket);					
+				}
 			} catch (IOException e) {
 			}
 		});

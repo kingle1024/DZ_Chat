@@ -99,7 +99,7 @@ public class Client {
 			Client client = new Client(new DatagramSocket());
 			
 			// Mock
-			client.login(11);
+			client.login(212);
 			ChatRoom chatRoom = new ChatRoom("ROOM1");
 			
 			Scanner scanner = new Scanner(System.in);
