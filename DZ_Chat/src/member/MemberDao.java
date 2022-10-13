@@ -28,17 +28,6 @@ public class MemberDao{
 	
 	// 키 중복 체크
 	public boolean containKey(String key) {
-		if(!MemberMap.containsKey(key)) {
-			System.out.println("아이디가 존재하지 않습니다.");
-		}
-		return MemberMap.containsKey(key);
-	}
-	
-	//아이디 중복 확인
-	public boolean checkDupId(String key) {
-		if(MemberMap.containsKey(key)) {
-			System.out.println("이미 등록된 아이디입니다. 다시 입력해주세요.");
-		}
 		return MemberMap.containsKey(key);
 	}
 	

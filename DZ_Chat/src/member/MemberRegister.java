@@ -1,6 +1,5 @@
 package member;
 
-
 import java.io.DataInputStream;
 import java.util.Scanner;
 
@@ -16,14 +15,14 @@ public class MemberRegister {
 			String pwdChk;
 			String name;
 			int birth;
-			
+
 			dao = new MemberDao();
 
 			System.out.println("\n2. 회원가입 하세요.");
 			do {
 				System.out.print("아이디 : ");
 				uid = scanner.nextLine();
-			} while (dao.checkDupId(uid));
+			} while (checkId(uid));
 
 			do {
 				System.out.print("비밀번호 : ");
@@ -43,12 +42,22 @@ public class MemberRegister {
 
 			new MemberFile(member);
 			dao.registerMember(member);
+			
+//			System.out.println("회원가입 완료");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	private boolean checkId(String uid) {
+		if (dao.containKey(uid)) {
+			System.out.println("이미 등록된 아이디입니다. 다시 입력해주세요.");
+			return true;
+		} else
+			return false;
+
+	}
 
 	private boolean checkPwd(String pwd, String pwdChk) {
 		if (pwd.equals(pwdChk))

@@ -1,6 +1,7 @@
 package member;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Member implements Comparable<Member>, Serializable{
 	
@@ -21,10 +22,6 @@ public class Member implements Comparable<Member>, Serializable{
 		return userId;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -37,17 +34,28 @@ public class Member implements Comparable<Member>, Serializable{
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public int getBirth() {
 		return birth;
 	}
-
-	public void setBirth(int birth) {
-		this.birth = birth;
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Member other = (Member) obj;
+		return Objects.equals(userId, other.userId);
 	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(userId);
+	}
+
 
 	@Override
 	public int compareTo(Member o) {
