@@ -23,9 +23,18 @@ public class ChatMessage extends Message {
 		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(os));
 		dos.writeUTF(message);
 		dos.flush();
-		dos.close();
 	}
 
+	@Override
+	public void sendAll(OutputStream os) throws IOException {
+		chatRoom.getMemberList().stream().forEach(member -> Server.taskMap.get(member).add(this));
+	}
+	
+	@Override
+	public void push() {
+		System.out.println(this);
+	}
+	
 	@Override
 	public String toString() {
 		return new StringBuilder()
@@ -34,4 +43,6 @@ public class ChatMessage extends Message {
 				.append(message)
 				.toString();
 	}
+
+
 }

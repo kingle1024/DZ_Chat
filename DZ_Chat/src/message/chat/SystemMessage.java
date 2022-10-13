@@ -4,8 +4,12 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 
-public class SystemMessage extends Message {
+import core.server.Server;
+
+public class SystemMessage extends Message implements Serializable {
+	private static final long serialVersionUID = 7033598494494691135L;
 	private final String message;
 	
 	public SystemMessage(ChatRoom chatRoom, String message) {
@@ -22,6 +26,16 @@ public class SystemMessage extends Message {
 	}
 
 	@Override
+	public void sendAll(OutputStream os) throws IOException {
+		chatRoom.getMemberList().stream().forEach(member -> Server.taskMap.get(member).add(this));
+	}
+	
+	@Override
+	public void push() {
+		System.out.println(this);
+	}
+	
+	@Override
 	public String toString() {
 		return new StringBuilder()
 				.append("\t[System")
@@ -30,5 +44,4 @@ public class SystemMessage extends Message {
 				.append("]\t")
 				.toString();
 	}
-
 }
