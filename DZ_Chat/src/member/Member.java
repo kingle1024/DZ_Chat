@@ -16,7 +16,7 @@ public class Member implements Comparable<Member>, Serializable{
 	public Member(String userId, String password, String name, int birth) {
 		this.userId = userId;
 		this.password = password;
-		this.name = name;
+		this.name = name; 
 		this.birth = birth;
 	}
 	

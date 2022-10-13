@@ -20,7 +20,7 @@ public class MemberDao{
 		MemberMap.put(userId, new Member(userId, password, name, birth));
 	}
 	
-	
+	 
 	// 키 중복 체크
 	public boolean containKey(String key) {
 		return MemberMap.containsKey(key);

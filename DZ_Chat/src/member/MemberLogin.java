@@ -17,7 +17,7 @@ public class MemberLogin {
 			System.out.println("\n1. 로그인 하세요.");
 			System.out.print("아이디 : ");
 			uid = scanner.nextLine();
-			System.out.print("비밀번호 : ");
+			System.out.print("비밀번호 : "); 
 			pwd = scanner.nextLine();
 			
 //			connect();
