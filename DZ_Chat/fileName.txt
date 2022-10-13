@@ -1,0 +1,6 @@
+while ((readBytes = is.read(buffer)) != -1) {
+while ((readBytes = is.read(buffer)) != -1) {
+가나
+
+다
+라

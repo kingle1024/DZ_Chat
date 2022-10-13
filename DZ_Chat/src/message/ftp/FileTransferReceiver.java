@@ -20,12 +20,20 @@ public class FileTransferReceiver {
 	public static final int DEFAULT_BUFFER_SIZE = 10000;
 	
 	public static void main(String[] args) {
-		System.out.println("----------------------------");
-		System.out.println("서버를 종료하려면 q를 입력하고 Enter 키를 입력하세요.");
-		System.out.println("----------------------------");
+		printInfo();
 		
 		startServer();
 		
+		exitLoop();
+		
+		stopServer();
+	}	
+	public static void printInfo() {
+		System.out.println("----------------------------");
+		System.out.println("서버를 종료하려면 q를 입력하고 Enter 키를 입력하세요.");
+		System.out.println("----------------------------");
+	}
+	public static void exitLoop() {
 		Scanner scanner = new Scanner(System.in);
 		while(true) {
 			String key = scanner.nextLine();
@@ -34,9 +42,6 @@ public class FileTransferReceiver {
 			}
 		}
 		scanner.close();
-		
-		//TCP 서버 종료
-		stopServer();
 	}
 	public static void startServer() {
 		int port = 50001; // int port =  9999;
@@ -50,28 +55,18 @@ public class FileTransferReceiver {
 					Socket socket = server.accept(); // 새로운 연결 소켓 생성 및 accept대기
 										
 					// 전달한 사용자 정보 표시
-					InetSocketAddress isaClient = 
-							(InetSocketAddress) socket.getRemoteSocketAddress();
-					System.out.println(
-							"A client(" + isaClient.getAddress().getHostAddress() + 
-							" is connected. (Port: " + isaClient.getPort() + ")");
+					showClientInfo(socket);
 				
 					// Client 메시지 확인
-					BufferedReader bufferedReader = 
-							new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					String clientMessage = bufferedReader.readLine();
-					System.out.println("클라이언트가 보내온 내용 :"+clientMessage);
+					String clientMessage = clientMessageReceive(socket);
 					
 					// 파일 전송 
 					if(clientMessage.startsWith("#fileSend")) {
-						String[] message = clientMessage.split(" ");
-						message[1] = fileNameBalance(message[1]);
-
-						saveFile(socket, message[1]);
-					}
+						fileSend(clientMessage, socket);
+					}										
 					
-					socket.close();
-					server.close();
+//					socket.close();
+//					server.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}	
@@ -79,6 +74,26 @@ public class FileTransferReceiver {
 		};	
 		
 		thread.start();
+	}
+	public static void showClientInfo(Socket socket) {
+		InetSocketAddress isaClient = 
+				(InetSocketAddress) socket.getRemoteSocketAddress();
+		System.out.println(
+				"A client(" + isaClient.getAddress().getHostAddress() + 
+				" is connected. (Port: " + isaClient.getPort() + ")");
+	}
+	public static String clientMessageReceive(Socket socket) throws IOException {
+		BufferedReader bufferedReader = 
+				new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		String clientMessage = bufferedReader.readLine();
+		System.out.println("클라이언트가 보내온 내용 :"+clientMessage);
+		
+		return clientMessage;
+	}
+	public static void fileSend(String clientMessage, Socket socket) throws IOException {
+		String[] message = clientMessage.split(" ");
+		message[1] = fileNameBalance(message[1]);						
+		saveFile(socket, message[1]);
 	}
 	public static void stopServer() {
 		try {
@@ -88,19 +103,20 @@ public class FileTransferReceiver {
 		}catch(IOException e1) {}
 	}
 	public static String saveFile(Socket socket, String filename) {		
-		// 서버에 파일 전송
+		// 서버에 파일 전송	
 		try {						
-			FileOutputStream fos = new FileOutputStream(filename);
+			System.out.println("내가 받은 :"+filename);
+			FileOutputStream fos = new FileOutputStream(filename);		
 			InputStream is = socket.getInputStream();			
-			
-			byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+
+			byte[] buffer = new byte[4096];
 			int readBytes;
 			
 			while ((readBytes = is.read(buffer)) != -1) {
 				fos.write(buffer, 0, readBytes);
-			}		
+			}
 			
-			fos.flush();			
+//			fos.flush();			
 						
 			is.close();
 			fos.close();
@@ -111,7 +127,7 @@ public class FileTransferReceiver {
 		
 		return "파일이 전송되었습니다.";
 	}
-	public static String fileNameBalance(String fileName) {		
+	public static String fileNameBalance(String fileName) throws IOException {		
 		String[] files = null;
 		try {
 			files = fileName.split("\\.");
@@ -123,21 +139,27 @@ public class FileTransferReceiver {
 		File file = null;
 		
 		int idx = 1;
-		StringBuffer sbFileName = new StringBuffer(fileName);
+		String path = "resources/abc/";
+		StringBuffer sbFileName = new StringBuffer(path + fileName);
+		
+		file = new File(path);
+		if(!new File(path).exists()) {
+			file.mkdirs();
+		}
 		
 		while(true) {
 			file = new File(sbFileName.toString());
+			System.out.println("경로:"+file.getAbsolutePath());
 			if (file.exists()) {
-//				System.out.println("파일이 존재 " + files[0]);			
-				sbFileName = 
-						new StringBuffer(files[0] + " ("+idx+")." + files[1]);				
-				idx++;				
-			}else {
+				sbFileName = new StringBuffer(
+							path + files[0] + " ("+idx+")." + files[1]);				
+				idx++;
+			}else {			
 				break;
-			}			
+			}
 		}
 		
-		System.out.println("fileName : "+sbFileName);
+		System.out.println("사용할 파일명 : "+sbFileName);
 		return sbFileName.toString();
 	}
 }

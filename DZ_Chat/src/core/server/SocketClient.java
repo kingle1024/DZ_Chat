@@ -1,0 +1,35 @@
+package core.server;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.Queue;
+
+import member.Member;
+import message.chat.Message;
+
+public class SocketClient {
+	private final Server server;
+	private final Socket socket;
+	private final InputStream is;
+	private final OutputStream os;
+	private final Member member;
+	
+	public SocketClient(Server server, Socket socket) throws IOException {
+		this.server = server;
+		this.socket = socket;
+		this.is = socket.getInputStream();
+		this.os = socket.getOutputStream();
+		member = null;
+		
+		if (Server.taskMap.containsKey(member)) {
+			Queue<Message> messageQue = Server.taskMap.get(member);
+			while (!messageQue.isEmpty()) {
+				messageQue.poll().send(os);
+			}
+		}
+	}
+	
+	
+}
