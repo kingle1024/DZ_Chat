@@ -20,4 +20,7 @@ public abstract class Message implements Serializable {
 		if (!Server.chatRoomMap.containsKey(chatRoomName)) throw new IllegalArgumentException();
 		chatRoom = Server.chatRoomMap.get(chatRoomName);
 	}
+	public void setChatRoom(ChatRoom chatRoom) {
+		this.chatRoom = chatRoom;
+	}
 }

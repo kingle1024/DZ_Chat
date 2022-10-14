@@ -28,7 +28,7 @@ public class ChatService extends Service {
 					System.out.println("chatService: " + socket.isConnected());
 					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
 					Message message = (Message) ois.readObject();
-					message.setChatRoom(chatRoom.getRoomName());
+					message.setChatRoom(chatRoom);
 					message.push();
 					System.out.println("[Server]" + message);
 				}
@@ -46,5 +46,9 @@ public class ChatService extends Service {
 	
 	public OutputStream getOs() {
 		return os;
+	}
+	
+	public boolean equalsUser(String name) {
+		return me.getName().equals(name);
 	}
 }

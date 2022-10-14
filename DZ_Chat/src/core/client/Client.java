@@ -31,26 +31,6 @@ public class Client {
 		oos.writeObject(message);
 		oos.flush();
 	}
-
-	public void receive() {
-		Thread thread = new Thread(() -> {
-			try {
-				while (true) {
-					ois = new ObjectInputStream(is);
-					Message message = (Message) ois.readObject();
-					System.out.println(message);
-				}
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		});
-		thread.start();
-	}
-
-	public void unconnect() throws IOException {
-		socket.close();
-		System.out.println("[클라이언트] 연결 종료");
-	}
 	
 	// Mock
 	public void login(int x) {
@@ -90,5 +70,25 @@ public class Client {
 			e.printStackTrace();
 		}
 		System.out.println("[클라이언트] 종료");
+	}
+	
+	public void receive() {
+		Thread thread = new Thread(() -> {
+			try {
+				while (true) {
+					ois = new ObjectInputStream(is);
+					Message message = (Message) ois.readObject();
+					System.out.println(message);
+				}
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		});
+		thread.start();
+	}
+	
+	public void unconnect() throws IOException {
+		socket.close();
+		System.out.println("[클라이언트] 연결 종료");
 	}
 }
