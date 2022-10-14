@@ -29,7 +29,6 @@ public class ChooseChatRoomClient extends Client {
 
 	@Override
 	public void run() {
-		System.out.println("HERE");
 		try {
 			Scanner scanner = new Scanner(System.in);
 			chatRoomName = scanner.nextLine();
