@@ -1,8 +1,7 @@
 package core.client;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.util.*;
 import java.net.Socket;
 
 import member.Member;
@@ -13,40 +12,37 @@ public class Client {
 	private static String SERVER_HOST = "192.168.30.84";
 	private static int PORT_NUMBER = 50_001;
 	private Socket socket;
-	private ObjectInputStream is;
-	private ObjectOutputStream os;
+	private InputStream is;
+	private OutputStream os;
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
 	private Member member;
 
 	public void connect() throws IOException {
 		System.out.println("[클라이언트] 서버 연결 시도");
 		socket = new Socket(SERVER_HOST, PORT_NUMBER);
-		is = new ObjectInputStream(socket.getInputStream());
-		
-		System.out.println("123");
-		os = new ObjectOutputStream(socket.getOutputStream());
+		is = socket.getInputStream();
+		os = socket.getOutputStream();
 		System.out.println("[클라이언트] 서버에 연결 성공");
 	}
 
 	public void send(Message message) throws IOException {
-		System.out.println("Client send");
-		os.writeObject(message);
-		os.flush();
+		oos = new ObjectOutputStream(os);
+		oos.writeObject(message);
+		oos.flush();
 	}
 
 	public void receive() {
-		System.out.println("[클라이언트] Receive");
 		Thread thread = new Thread(() -> {
 			try {
 				System.out.println(socket.isConnected());
 				while (true) {
-					System.out.println("Client wait");
-					Message message = (Message) is.readObject();
-					System.out.println("Receive Message");
+					ois = new ObjectInputStream(is);
+					Message message = (Message) ois.readObject();
 					System.out.println(message);
 				}
-			} catch (IOException e) {
+			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
-			} catch (ClassNotFoundException e1) {
 			}
 		});
 		thread.start();
@@ -75,23 +71,23 @@ public class Client {
 			client.login(1);
 			String chatRoomName = "TEST ROOM";
 			
-//			Scanner scanner = new Scanner(System.in);
+			Scanner scanner = new Scanner(System.in);
 			client.connect();
 			client.receive();
 			while (true) {
-//				String inputStr = scanner.nextLine();
-//				if ("q".equals(inputStr.toLowerCase()))
-//					break;
+				String inputStr = scanner.nextLine();
+				if ("q".equals(inputStr.toLowerCase()))
+					break;
 
 				// TODO Message send
-				Message message = new ChatMessage(chatRoomName, client.member, "HEEL");
+				Message message = new ChatMessage(chatRoomName, client.member, inputStr);
 //				Message message = new FileMessage(chatRoome, me, filePath(inputStr));
 				client.send(message);
 			}
 //			scanner.close();
 //			client.unconnect();
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println("[클라이언트] 종료");

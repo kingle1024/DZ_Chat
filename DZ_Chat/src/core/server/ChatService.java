@@ -1,9 +1,6 @@
 package core.server;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 
 import member.Member;
@@ -13,10 +10,14 @@ import message.chat.Message;
 public class ChatService extends Service {
 	private final Member me;
 	private final ChatRoom chatRoom;
-	public ChatService(Server server, Socket socket, ChatRoom chatRoom, Member me) {
+	private final InputStream is;
+	private final OutputStream os;
+	public ChatService(Server server, Socket socket, ChatRoom chatRoom, Member me) throws IOException {
 		super(server, socket);
 		this.chatRoom = chatRoom;
 		this.me = me;
+		this.is = socket.getInputStream();
+		this.os = socket.getOutputStream();
 	}
 
 	@Override
@@ -25,7 +26,7 @@ public class ChatService extends Service {
 			try {
 				while (true) {
 					System.out.println("chatService: " + socket.isConnected());
-					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
 					Message message = (Message) ois.readObject();
 					message.setChatRoom();
 					message.push();
@@ -41,5 +42,9 @@ public class ChatService extends Service {
 	
 	public Member getMe() {
 		return me;
+	}
+	
+	public OutputStream getOs() {
+		return os;
 	}
 }

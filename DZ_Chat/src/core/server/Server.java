@@ -28,11 +28,8 @@ public class Server {
 				while (true) {
 					Socket socket = serverSocket.accept();
 					System.out.println("Socket Accept");
-//					Service service = new ChatRoomListService(this, socket);
-					System.out.println("is socket connected: " + socket.isConnected());
 					Service service = new EntranceChatRoomService(this, socket, "TEST ROOM");
 					service.request();
-					
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -49,6 +46,7 @@ public class Server {
 
 	public static void main(String[] args) {
 		// Mock
+		System.out.println("Make TEST ROOM");
 		chatRoomMap.put("TEST ROOM", new ChatRoom("TEST ROOM"));
 
 		try {

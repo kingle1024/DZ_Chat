@@ -34,8 +34,6 @@ public class ChatMessage extends Message {
 //		dos.writeUTF(message);
 //		dos.flush();
 //		dos.close();
-		
-		System.out.println("Send: ");
 		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
 		oos.writeObject(new ChatMessage(this.chatRoomName, this.sender, message));
 		oos.flush();
@@ -46,7 +44,8 @@ public class ChatMessage extends Message {
 		System.out.println("message push: " + message);
 		chatRoom.getChatServiceList().stream().forEach(s -> {
 			try {
-				send(s.getSocket().getOutputStream());
+				System.out.println(s.getMe());
+				send(s.getOs());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

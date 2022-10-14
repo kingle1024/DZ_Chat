@@ -1,5 +1,6 @@
 package core.server;
 
+import java.io.*;
 import java.net.Socket;
 
 import member.Member;
@@ -17,10 +18,8 @@ public class EntranceChatRoomService extends Service {
 	}
 
 	@Override
-	public void request() {
-		System.out.println("Entrance Service Request:");
-		System.out.println("is socket connected: " + socket.isConnected());
-
+	public void request() throws IOException {
+		System.out.println("Entrance Service");
 		ChatService chatService = new ChatService(super.server, super.socket, chatRoom, super.me);
 		chatRoom.entrance(chatService);
 		chatService.request();
