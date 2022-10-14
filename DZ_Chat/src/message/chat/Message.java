@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import core.server.Server;
+
 public abstract class Message implements Serializable {
 	private static final long serialVersionUID = -2580100950897989232L;
 	protected ChatRoom chatRoom;
@@ -14,5 +16,8 @@ public abstract class Message implements Serializable {
 	}
 	public abstract void send(OutputStream os) throws IOException;
 	public abstract void push();
-	public abstract void setChatRoom();
+	public void setChatRoom(String chatRoomName) {
+		if (!Server.chatRoomMap.containsKey(chatRoomName)) throw new IllegalArgumentException();
+		chatRoom = Server.chatRoomMap.get(chatRoomName);
+	}
 }

@@ -15,18 +15,12 @@ public class ChatMessage extends Message {
 	private final Member sender;
 	private final String message;
 	private final String chatRoomName;
-	private ChatRoom chatRoom;
 	public ChatMessage(String chatRoomName, Member sender, String message) {
 		this.chatRoomName =chatRoomName;
 		this.sender = sender;
 		this.message = message;
 	}
-	
-	@Override
-	public void setChatRoom() {
-		if (!Server.chatRoomMap.containsKey(chatRoomName)) throw new IllegalArgumentException();
-		chatRoom = Server.chatRoomMap.get(chatRoomName);
-	}
+
 	
 	@Override
 	public void send(OutputStream os) throws IOException {

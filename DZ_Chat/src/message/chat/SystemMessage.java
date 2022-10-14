@@ -20,12 +20,6 @@ public class SystemMessage extends Message implements Serializable {
 	}
 	
 	@Override
-	public void setChatRoom() {
-		if (!Server.chatRoomMap.containsKey(chatRoomName)) throw new IllegalArgumentException();
-		chatRoom = Server.chatRoomMap.get(chatRoomName);
-	}
-	
-	@Override
 	public void send(OutputStream os) throws IOException {
 		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(os));
 		dos.writeUTF(message);

@@ -35,7 +35,6 @@ public class Client {
 	public void receive() {
 		Thread thread = new Thread(() -> {
 			try {
-				System.out.println(socket.isConnected());
 				while (true) {
 					ois = new ObjectInputStream(is);
 					Message message = (Message) ois.readObject();
@@ -68,7 +67,7 @@ public class Client {
 			Client client = new Client();
 			
 			// Mock
-			client.login(1);
+			client.login(999);
 			String chatRoomName = "TEST ROOM";
 			
 			Scanner scanner = new Scanner(System.in);
@@ -84,8 +83,8 @@ public class Client {
 //				Message message = new FileMessage(chatRoome, me, filePath(inputStr));
 				client.send(message);
 			}
-//			scanner.close();
-//			client.unconnect();
+			scanner.close();
+			client.unconnect();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

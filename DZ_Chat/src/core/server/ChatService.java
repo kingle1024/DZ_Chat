@@ -28,7 +28,7 @@ public class ChatService extends Service {
 					System.out.println("chatService: " + socket.isConnected());
 					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
 					Message message = (Message) ois.readObject();
-					message.setChatRoom();
+					message.setChatRoom(chatRoom.getRoomName());
 					message.push();
 					System.out.println("[Server]" + message);
 				}
