@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ch19.sec11.Member;
-
 public class MemberDao {
 
 	FileOutputStream fos = new FileOutputStream("./MemberFile.txt");
