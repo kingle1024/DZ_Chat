@@ -1,11 +1,9 @@
 package member;
 
-import java.io.DataInputStream;
 import java.util.Scanner;
 
 public class MemberRegister {
 
-	DataInputStream dis;
 	MemberDao dao;
 
 	public void register(Scanner scanner) {
@@ -40,8 +38,8 @@ public class MemberRegister {
 
 			Member member = new Member(uid, pwdChk, name, birth);
 
-			new MemberFile(member);
 			dao.registerMember(member);
+			dao.fileSave();
 			
 //			System.out.println("회원가입 완료");
 
