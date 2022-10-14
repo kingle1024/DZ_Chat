@@ -1,22 +1,20 @@
 package core.server;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 import member.Member;
 
 public abstract class Service {
-	protected final Server server;
-	protected final Socket socket;
+	protected final ObjectInputStream is;
+	protected final ObjectOutputStream os;
 	protected Member me;
-	
-	public Service(Server server, Socket socket) {
-		this.server = server;
-		this.socket = socket;
+
+	public Service(ObjectInputStream is, ObjectOutputStream os) throws IOException {
+		this.is = is;
+		this.os = os;
 	}
-	
+
 	public abstract void request() throws IOException;
-	public Socket getSocket() {
-		return socket;
-	}
+
 }

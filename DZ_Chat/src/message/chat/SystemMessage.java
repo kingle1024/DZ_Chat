@@ -3,6 +3,7 @@ package message.chat;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
@@ -20,18 +21,15 @@ public class SystemMessage extends Message implements Serializable {
 	}
 	
 	@Override
-	public void send(OutputStream os) throws IOException {
-		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(os));
-		dos.writeUTF(message);
-		dos.flush();
-		dos.close();
+	public void send(ObjectOutputStream os) throws IOException {
+
 	}
 	
 	@Override
 	public void push() {
 		chatRoom.getChatServiceList().stream().forEach(s -> {
 			try {
-				send(s.getSocket().getOutputStream());
+				send(s.getOs());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

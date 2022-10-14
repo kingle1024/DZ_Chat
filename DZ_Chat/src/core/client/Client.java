@@ -12,14 +12,16 @@ public abstract class Client {
 	private static final String SERVER_HOST = "192.168.30.84";
 	private static final int PORT_NUMBER = 50_001;
 	Socket socket;
-	InputStream is;
-	OutputStream os;
+	ObjectInputStream is;
+	ObjectOutputStream os;
 
 	public void connect() throws IOException {
 		System.out.println("[클라이언트] 서버 연결 시도");
 		socket = new Socket(SERVER_HOST, PORT_NUMBER);
-		is = socket.getInputStream();
-		os = socket.getOutputStream();
+		System.out.println("Socket 생성");
+		os = new ObjectOutputStream(socket.getOutputStream());
+		is = new ObjectInputStream(socket.getInputStream());
+
 		System.out.println("[클라이언트] 서버에 연결 성공");
 	}
 
@@ -30,7 +32,7 @@ public abstract class Client {
 
 	public abstract void receive() throws IOException, ClassNotFoundException;
 
-	public abstract void send(Message message) throws IOException;
+	public abstract void send(Object obj) throws IOException;
 
 	public abstract void run();
 }

@@ -1,24 +1,20 @@
 package core.client;
-import java.util.*;
 import java.io.*;
 
-import message.chat.ChatRoom;
 import message.chat.Message;
 
 public class ChatRoomListClient extends Client {
 
 	@Override
 	public void receive() throws IOException, ClassNotFoundException {
-		ObjectInputStream ois = new ObjectInputStream(is);
-		Integer num = (Integer) ois.readObject();
+		Integer num = (Integer) is.readObject();
 		for (int i = 1; i <= num; i++) {
-			System.out.println(i + ": " + ((String) ois.readObject()));
+			System.out.println(i + ": " + ((String) is.readObject()));
 		}
 	}
 
 	@Override
-	public void send(Message message) throws IOException {
-		// TODO Auto-generated method stub
+	public void send(Object obj) throws IOException {
 		
 	}
 

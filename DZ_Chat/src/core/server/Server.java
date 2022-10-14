@@ -1,15 +1,9 @@
 package core.server;
 
-import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import message.chat.ChatRoom;
 
@@ -27,10 +21,10 @@ public class Server {
 			try {
 				while (true) {
 					Socket socket = serverSocket.accept();
-					System.out.println("Socket Accept");
-//					Service service = new EntranceChatRoomService(this, socket, "TEST ROOM");
-					Service service = new GetChatRoomListService(this, socket);
-					service.request();
+					ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
+					ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
+					System.out.println("New Socket Accept");
+					new MapperService(is, os).request();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -40,7 +34,6 @@ public class Server {
 
 	public void stop() throws IOException {
 		serverSocket.close();
-		// TODO close all socket client
 		threadPool.shutdown();
 		System.out.println("[서버] 종료");
 	}
