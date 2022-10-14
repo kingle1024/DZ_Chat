@@ -67,7 +67,7 @@ public class Client {
 			Client client = new Client();
 			
 			// Mock
-			client.login(999);
+			client.login(1);
 			String chatRoomName = "TEST ROOM";
 			
 			Scanner scanner = new Scanner(System.in);

@@ -1,7 +1,6 @@
 package message.chat;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 import member.Member;
 
@@ -19,13 +18,13 @@ public class PrivateChatMessage extends Message {
 	}
 	@Override
 	public void send(OutputStream os) throws IOException {
-		// TODO Auto-generated method stub
-		
+		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
+//		oos.writeObject(message);
+//		oos.flush();
 	}
 
 	@Override
 	public void push() {
-		// TODO Auto-generated method stub
 		
 	}
 }
