@@ -3,9 +3,13 @@ package core.server;
 import java.io.*;
 import java.net.Socket;
 
-public class ChooseChatRoomService extends Service {
+public class ChooseChatRoomService extends Service<ObjectInputStream, OutputStream> {
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
 	public ChooseChatRoomService(ObjectInputStream is, ObjectOutputStream os, Object[] obj) throws IOException {
 		super(is, os);
+		ois = is;
+		oos = os;
 	}
 
 	@Override
@@ -15,11 +19,11 @@ public class ChooseChatRoomService extends Service {
 		try {
 			chatRoomName = (String) is.readObject();
 			if (!Server.chatRoomMap.containsKey(chatRoomName)) {
-				os.writeObject(Boolean.valueOf(false));
+				oos.writeObject(Boolean.valueOf(false));
 				os.flush();
 				return;
 			} else {
-				os.writeObject(Boolean.valueOf(true));
+				oos.writeObject(Boolean.valueOf(true));
 			}
 			System.out.println("CHOOSE SUCCESS");
 		} catch (ClassNotFoundException | IOException e) {

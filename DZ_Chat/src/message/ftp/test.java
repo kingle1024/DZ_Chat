@@ -1,8 +1,19 @@
 package message.ftp;
 
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class test {
 	public static void main(String[] args) {
-		ClientListening c = new ClientListening(50001, "/Users/ejy1024/test.txt");
 		
+		new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
 	}
 }

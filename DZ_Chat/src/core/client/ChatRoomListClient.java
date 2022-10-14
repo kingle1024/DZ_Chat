@@ -1,6 +1,7 @@
 package core.client;
 import java.io.*;
 
+import core.mapper.Command;
 import message.chat.Message;
 
 public class ChatRoomListClient extends Client {
@@ -21,10 +22,10 @@ public class ChatRoomListClient extends Client {
 	@Override
 	public void run() {
 		System.out.println("채팅방 목록");
-		Client client = new ChatRoomListClient();
 		try {
-			client.connect();
-			client.receive();	
+			connect();
+			send(new Command("GetChatRoomList"));
+			receive();	
 			
 		} catch (IOException e) {
 			

@@ -79,28 +79,45 @@ public class FtpService {
 		
 		FtpService ftp = new FtpService();
 		if(!ftp.fileValid(splitFileName)) return;
-		String regExp = "~ m|^(.*/)(.*)$|";
-		Pattern p = Pattern.compile(regExp);
-		Matcher m = p.matcher(splitFileName);
-		while(m.find()) {
-			System.out.println(m.group());
-		}
 		
 		File file = new File(splitFileName);
 						
-		int readBytes;
+		
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE]; // 4K가 적절하지 않나?
-		long totalReadBytes = 0;
+		
 		long fileSize = file.length();
 		
 		FileInputStream fis = new FileInputStream(file);
 		OutputStream os = socket.getOutputStream();
-		while ((readBytes = fis.read(buffer)) > 0) {
-			os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분				
-			totalReadBytes += readBytes;
-			System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-					+ (totalReadBytes * 100 / fileSize) + " %)");				
+		
+//		static boolean stop = false;
+		Thread thread = new Thread() {
+			@Override
+			public void run() {
+				try {
+					
+					int readBytes;
+					long totalReadBytes = 0;
+					while ((readBytes = fis.read(buffer)) > 0 && stop) {
+						os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분				
+						totalReadBytes += readBytes;
+						System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
+								+ (totalReadBytes * 100 / fileSize) + " %)");				
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		thread.start();
+		
+		try {
+			Thread.sleep(3000);
+		}catch(Exception e){
+			
 		}
+		stop = true;
 		
 		System.out.println("File transfer completed.");
 		

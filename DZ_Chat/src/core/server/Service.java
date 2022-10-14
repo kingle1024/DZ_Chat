@@ -5,12 +5,12 @@ import java.net.Socket;
 
 import member.Member;
 
-public abstract class Service {
-	protected final ObjectInputStream is;
-	protected final ObjectOutputStream os;
+public abstract class Service<I extends InputStream, O extends OutputStream> {
+	protected final I is;
+	protected final O os;
 	protected Member me;
 
-	public Service(ObjectInputStream is, ObjectOutputStream os) throws IOException {
+	public Service(I is, O os) throws IOException {
 		this.is = is;
 		this.os = os;
 	}

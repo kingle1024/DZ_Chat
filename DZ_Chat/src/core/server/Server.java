@@ -5,10 +5,12 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import member.Member;
 import message.chat.ChatRoom;
 
 public class Server {
 	public static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>()); 
+	public static final Map<String, Member> memberMap = Collections.synchronizedMap(new TreeMap<>());
 	static final ExecutorService threadPool = Executors.newFixedThreadPool(16);
 
 	private static final int PORT_NUMBER = 50_001;
