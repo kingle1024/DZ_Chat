@@ -74,5 +74,15 @@ public class MemberDao {
 		}
 		return MemberMap;
 	}
+	
+	public boolean checkMember(String userId, String pwd) {
+		if (!(containKey(userId) && getPwd(userId).equals(pwd))) {
+			System.out.println("회원 정보가 일치하지 않습니다.");
+			return false;
+		} else {
+			System.out.println(userId + "회원님 확인되었습니다.");
+			return true;
+		}
+	}
 
 }

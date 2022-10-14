@@ -28,7 +28,7 @@ public class MemberInfoChange {
 
 				System.out.print("비밀번호 : ");
 				pwd = scanner.nextLine();
-			} while (!(checkMember(uid, pwd)));
+			} while (!(dao.checkMember(uid, pwd)));
 
 			System.out.print("변경할 비밀번호 : ");
 			newPwd = scanner.nextLine();
@@ -40,16 +40,6 @@ public class MemberInfoChange {
 			e.printStackTrace();
 		}
 
-	}
-
-	private boolean checkMember(String uid, String pwd) {
-		if (!(dao.containKey(uid) && dao.getPwd(uid).equals(pwd))) {
-			System.out.println("회원 정보가 일치하지 않습니다.");
-			return false;
-		} else {
-			System.out.println(uid + "회원님 확인되었습니다.");
-			return true;
-		}
 	}
 
 	private void editFile(String uid, String pwd) throws Exception {
