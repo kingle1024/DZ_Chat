@@ -35,7 +35,7 @@ public class ChatClient extends Client {
 	}
 
 	public void run() {
-		System.out.println("[클라이언트] 시작");
+		System.out.println("채팅 시작");
 		try {
 			Client client = new ChatClient();
 			
@@ -62,6 +62,6 @@ public class ChatClient extends Client {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("[클라이언트] 종료");
+		System.out.println("채팅 종료");
 	}
 }

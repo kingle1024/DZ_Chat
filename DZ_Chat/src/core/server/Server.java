@@ -28,7 +28,8 @@ public class Server {
 				while (true) {
 					Socket socket = serverSocket.accept();
 					System.out.println("Socket Accept");
-					Service service = new EntranceChatRoomService(this, socket, "TEST ROOM");
+//					Service service = new EntranceChatRoomService(this, socket, "TEST ROOM");
+					Service service = new GetChatRoomListService(this, socket);
 					service.request();
 				}
 			} catch (IOException e) {
@@ -46,8 +47,9 @@ public class Server {
 
 	public static void main(String[] args) {
 		// Mock
-		System.out.println("Make TEST ROOM");
-		chatRoomMap.put("TEST ROOM", new ChatRoom("TEST ROOM"));
+		for (int i = 0; i < 20; i++) {
+			chatRoomMap.put("TEST ROOM" + i, new ChatRoom("TEST ROOM" + i));			
+		}
 
 		try {
 			Server server = new Server();

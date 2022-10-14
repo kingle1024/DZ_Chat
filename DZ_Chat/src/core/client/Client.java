@@ -28,7 +28,7 @@ public abstract class Client {
 		System.out.println("[클라이언트] 연결 종료");
 	}
 
-	public abstract void receive();
+	public abstract void receive() throws IOException, ClassNotFoundException;
 
 	public abstract void send(Message message) throws IOException;
 
