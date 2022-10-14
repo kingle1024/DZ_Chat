@@ -90,8 +90,9 @@ public class FileTransferReceiver {
 	}
 	public static void fileSend(String clientMessage, Socket socket) throws IOException {
 		String[] message = clientMessage.split(" ");
-		message[1] = fileNameBalance(message[1]);						
-		saveFile(socket, message[1]);
+		String filePathAndName = message[1];
+		String saveFilePath = fileNameBalance("resources/abc/", filePathAndName);						
+		saveFile(socket, saveFilePath);
 	}
 	public static void stopServer() {
 		try {
@@ -104,20 +105,11 @@ public class FileTransferReceiver {
 		// 서버에 파일 전송	
 		try {						
 			System.out.println("내가 받은 :"+filename);
-			FileOutputStream fos = new FileOutputStream(filename);		
-			InputStream is = socket.getInputStream();
-
-			byte[] buffer = new byte[4096];
-			int readBytes;
+			FtpService ftp = new FtpService();
+			ftp.saveSocketFile(socket, filename);			
 			
-			while ((readBytes = is.read(buffer)) != -1) {
-				fos.write(buffer, 0, readBytes);
-			}
+//			fos.flush();									
 			
-//			fos.flush();			
-						
-			is.close();
-			fos.close();
 		}catch(IOException e) {
 			e.printStackTrace();			
 			return "파일 전송에 실패하였습니다.";
@@ -125,7 +117,7 @@ public class FileTransferReceiver {
 		
 		return "파일이 전송되었습니다.";
 	}
-	public static String fileNameBalance(String fileName) throws IOException {		
+	public static String fileNameBalance(String path, String fileName) throws IOException {		
 		String[] files = null;
 		try {
 			files = fileName.split("\\.");
@@ -134,10 +126,10 @@ public class FileTransferReceiver {
 			return null;
 		}
 		
-		File file = null;
+		File file = new File(fileName);
+		fileName = file.getName();
 		
-		int idx = 1;
-		String path = "resources/abc/";
+		int idx = 1;		
 		StringBuffer sbFileName = new StringBuffer(path + fileName);
 		
 		file = new File(path);
@@ -147,7 +139,7 @@ public class FileTransferReceiver {
 		
 		while(true) {
 			file = new File(sbFileName.toString());
-			System.out.println("경로:"+file.getAbsolutePath());
+			
 			if (file.exists()) {
 				sbFileName = new StringBuffer(
 							path + files[0] + " ("+idx+")." + files[1]);				
@@ -157,7 +149,8 @@ public class FileTransferReceiver {
 			}
 		}
 		
-		System.out.println("사용할 파일명 : "+sbFileName);
+		System.out.println("사용할 파일위치와 파일명 : "+sbFileName.toString());
 		return sbFileName.toString();
 	}
+	
 }

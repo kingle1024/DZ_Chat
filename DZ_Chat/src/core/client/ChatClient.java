@@ -3,19 +3,24 @@ package core.client;
 import java.io.*;
 import java.util.Scanner;
 
+import core.mapper.Command;
 import member.Member;
 import message.chat.ChatMessage;
 import message.chat.Message;
 
 public class ChatClient extends Client {
-	private ObjectInputStream ois;
-	private ObjectOutputStream oos;
 	private Member member;
-
-	public void send(Message message) throws IOException {
-		oos = new ObjectOutputStream(os);
-		oos.writeObject(message);
-		oos.flush();
+	private String chatRoomName;
+	
+	public ChatClient(String chatRoomName) {
+		this.chatRoomName = chatRoomName;
+		System.out.println("ChatClient" + chatRoomName);
+	}
+	
+	@Override
+	public void send(Object obj) throws IOException {
+		os.writeObject(obj);
+		os.flush();
 	}
 	
 	@Override
@@ -23,8 +28,7 @@ public class ChatClient extends Client {
 		Thread thread = new Thread(() -> {
 			try {
 				while (true) {
-					ois = new ObjectInputStream(is);
-					Message message = (Message) ois.readObject();
+					Message message = (Message) is.readObject();
 					System.out.println(message);
 				}
 			} catch (IOException | ClassNotFoundException e) {
@@ -37,27 +41,24 @@ public class ChatClient extends Client {
 	public void run() {
 		System.out.println("채팅 시작");
 		try {
-			Client client = new ChatClient();
-			
 			// Mock
 			member = new Member("id", "pw", "name", 10);
-			String chatRoomName = "TEST ROOM";
 			
 			Scanner scanner = new Scanner(System.in);
-			client.connect();
-			client.receive();
-			while (true) {
+			connect();
+			send(new Command("ChatService", chatRoomName, member));
+			receive();
+			while (scanner.hasNext()) {
 				String inputStr = scanner.nextLine();
 				if ("q".equals(inputStr.toLowerCase()))
 					break;
 
-				// TODO Message send
-				Message message = new ChatMessage(chatRoomName, member, inputStr);
+				Message message = new ChatMessage(this.chatRoomName, member, inputStr);
 //				Message message = new FileMessage(chatRoome, me, filePath(inputStr));
-				client.send(message);
+				send(message);
 			}
 			scanner.close();
-			client.unconnect();
+			unconnect();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

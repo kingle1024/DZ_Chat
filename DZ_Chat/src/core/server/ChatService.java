@@ -10,24 +10,22 @@ import message.chat.Message;
 public class ChatService extends Service {
 	private final Member me;
 	private final ChatRoom chatRoom;
-	private final InputStream is;
-	private final OutputStream os;
-	public ChatService(Server server, Socket socket, ChatRoom chatRoom, Member me) throws IOException {
-		super(server, socket);
-		this.chatRoom = chatRoom;
-		this.me = me;
-		this.is = socket.getInputStream();
-		this.os = socket.getOutputStream();
+	public ChatService(ObjectInputStream is, ObjectOutputStream os, Object... args) throws IOException {
+		super(is, os);
+		String chatRoomName = (String) args[0];
+		this.chatRoom = Server.chatRoomMap.get(chatRoomName);
+		this.me = (Member) args[1];
+		System.out.println("ChatService: " + chatRoom);
 	}
 
 	@Override
 	public void request() {
+		System.out.println("Chat Service");
+		chatRoom.entrance(this);
 		Server.threadPool.execute(() -> {
 			try {
 				while (true) {
-					System.out.println("chatService: " + socket.isConnected());
-					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
-					Message message = (Message) ois.readObject();
+					Message message = (Message) is.readObject();
 					message.setChatRoom(chatRoom);
 					message.push();
 					System.out.println("[Server]" + message);
@@ -44,7 +42,7 @@ public class ChatService extends Service {
 		return me;
 	}
 	
-	public OutputStream getOs() {
+	public ObjectOutputStream getOs() {
 		return os;
 	}
 	

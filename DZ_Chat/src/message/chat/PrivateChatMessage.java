@@ -19,8 +19,8 @@ public class PrivateChatMessage extends Message {
 		this.to = to;
 	}
 	@Override
-	public void send(OutputStream os) throws IOException {
-		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
+	public void send(ObjectOutputStream oos) throws IOException {
+//		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
 		oos.writeObject(message);
 		oos.flush();
 	}

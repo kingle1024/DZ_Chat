@@ -9,9 +9,9 @@ public class Member implements Comparable<Member>, Serializable{
 	private String userId;
 	private String password;
 	private String name;
-	private int birth;
+	private String birth;
 	
-	public Member(String userId, String password, String name, int birth) {
+	public Member(String userId, String password, String name, String birth) {
 		this.userId = userId;
 		this.password = password;
 		this.name = name;
@@ -35,7 +35,7 @@ public class Member implements Comparable<Member>, Serializable{
 	}
 
 
-	public int getBirth() {
+	public String getBirth() {
 		return birth;
 	}
 	
@@ -64,7 +64,7 @@ public class Member implements Comparable<Member>, Serializable{
 	
 	@Override
 	public String toString() {
-		return userId + " " + password + " " + name + " " + birth;
+		return userId + "," + password + "," + name + "," + birth;
 	}
 	
 }

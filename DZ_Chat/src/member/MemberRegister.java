@@ -1,10 +1,12 @@
 package member;
 
 import java.util.Scanner;
+import message.ftp.FileCommon;
 
 public class MemberRegister {
 
 	MemberDao dao;
+	FileCommon fileCommon;
 
 	public void register(Scanner scanner) {
 		try {
@@ -12,9 +14,10 @@ public class MemberRegister {
 			String pwd;
 			String pwdChk;
 			String name;
-			int birth;
+			String birth;
 
 			dao = new MemberDao();
+			fileCommon = new FileCommon();
 
 			System.out.println("\n2. 회원가입 하세요.");
 			do {
@@ -34,12 +37,12 @@ public class MemberRegister {
 			name = scanner.nextLine();
 
 			System.out.print("생년월일(8자리 입력) : ");
-			birth = Integer.parseInt(scanner.nextLine());
+			birth = scanner.nextLine();
 
 			Member member = new Member(uid, pwdChk, name, birth);
 
 			dao.registerMember(member);
-			dao.fileSave();
+			fileCommon.saveContent("./memberFile.txt", member.toString() + "\n", true);
 			
 //			System.out.println("회원가입 완료");
 

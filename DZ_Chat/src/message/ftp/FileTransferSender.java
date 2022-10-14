@@ -46,6 +46,8 @@ public class FileTransferSender {
 //			chatMessage.send(socket.getOutputStream());
 			messageSend(input, socket);
 			
+//			Message chatMessage = new ChatMessage(null, null, input);			
+//			chatMessage.send(socket.getOutputStream());			
 											
 			//파일 보내는 부분 		
 			if(input.startsWith("#fileSend")){
