@@ -42,7 +42,7 @@ public class ChatClient extends Client {
 		System.out.println("채팅 시작");
 		try {
 			// Mock
-			member = new Member("id", "pw", "name", 10);
+			member = new Member("id", "pw", "name", "2022-10-14");
 			
 			Scanner scanner = new Scanner(System.in);
 			connect();

@@ -22,8 +22,7 @@ public class ChooseChatRoomClient extends Client {
 
 	@Override
 	public void send(Object obj) throws IOException {
-		os.writeObject(new Command("ChooseChatRoomService"));
-		os.writeObject((String) obj);
+		os.writeObject(obj);
 		os.flush();
 	}
 
@@ -33,6 +32,7 @@ public class ChooseChatRoomClient extends Client {
 			Scanner scanner = new Scanner(System.in);
 			chatRoomName = scanner.nextLine();
 			connect();
+			send(new Command("ChooseChatRoomService"));
 			send(chatRoomName);
 			receive();
 			unconnect();
