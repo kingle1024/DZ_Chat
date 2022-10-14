@@ -40,7 +40,7 @@ public class Task {
 		byte[] bytes = data.getBytes("UTF-8");
  		
 		DatagramPacket sendPacket = new DatagramPacket(bytes, 0, bytes.length, new InetSocketAddress(ipAddress, port));
- 		Server.datagramSocket.send(sendPacket);
+// 		Server.datagramSocket.send(sendPacket);
 	}
 	
 	@Override

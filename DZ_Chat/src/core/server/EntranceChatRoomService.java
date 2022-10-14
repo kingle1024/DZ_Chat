@@ -18,8 +18,15 @@ public class EntranceChatRoomService extends Service {
 
 	@Override
 	public void request() {
+		System.out.println("Entrance Service Request:");
+		System.out.println("is socket connected: " + socket.isConnected());
+
 		ChatService chatService = new ChatService(super.server, super.socket, chatRoom, super.me);
 		chatRoom.entrance(chatService);
 		chatService.request();
+	}
+	
+	public void sendEntranceMessage() {
+
 	}
 }

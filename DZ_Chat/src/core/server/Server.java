@@ -14,9 +14,8 @@ import java.util.concurrent.Executors;
 import message.chat.ChatRoom;
 
 public class Server {
-	static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>()); 
+	public static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>()); 
 	static final ExecutorService threadPool = Executors.newFixedThreadPool(16);
-	static DatagramSocket datagramSocket;
 
 	private static final int PORT_NUMBER = 50_001;
 	private ServerSocket serverSocket;
@@ -29,12 +28,14 @@ public class Server {
 				while (true) {
 					Socket socket = serverSocket.accept();
 					System.out.println("Socket Accept");
-					Service service = new ChatRoomListService(this, socket);
-					service = new EntranceChatRoomService(this, socket, "TEST ROOM");
+//					Service service = new ChatRoomListService(this, socket);
+					System.out.println("is socket connected: " + socket.isConnected());
+					Service service = new EntranceChatRoomService(this, socket, "TEST ROOM");
 					service.request();
 					
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		});
 	}
@@ -49,7 +50,7 @@ public class Server {
 	public static void main(String[] args) {
 		// Mock
 		chatRoomMap.put("TEST ROOM", new ChatRoom("TEST ROOM"));
-		System.out.println(chatRoomMap.get("TEST ROOM"));
+
 		try {
 			Server server = new Server();
 			server.start();
@@ -59,6 +60,7 @@ public class Server {
 			scanner.close();
 			server.stop();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

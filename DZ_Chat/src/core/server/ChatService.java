@@ -3,6 +3,7 @@ package core.server;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.net.Socket;
 
 import member.Member;
@@ -23,13 +24,15 @@ public class ChatService extends Service {
 		Server.threadPool.execute(() -> {
 			try {
 				while (true) {
-					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(super.socket.getInputStream()));
+					System.out.println("chatService: " + socket.isConnected());
+					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 					Message message = (Message) ois.readObject();
+					message.setChatRoom();
 					message.push();
 					System.out.println("[Server]" + message);
 				}
 			} catch (IOException e) {
-//				e.printStackTrace();
+				e.printStackTrace();
 			} catch (ClassNotFoundException cfe) {
 				cfe.printStackTrace();
 			}

@@ -11,10 +11,18 @@ import core.server.Server;
 public class SystemMessage extends Message implements Serializable {
 	private static final long serialVersionUID = 7033598494494691135L;
 	private final String message;
+	private ChatRoom chatRoom;
+	private final String chatRoomName;
 	
-	public SystemMessage(ChatRoom chatRoom, String message) {
-		super(chatRoom);
+	public SystemMessage(String chatRoomName, String message) {
+		this.chatRoomName = chatRoomName;
 		this.message = message;
+	}
+	
+	@Override
+	public void setChatRoom() {
+		if (!Server.chatRoomMap.containsKey(chatRoomName)) throw new IllegalArgumentException();
+		chatRoom = Server.chatRoomMap.get(chatRoomName);
 	}
 	
 	@Override
@@ -27,7 +35,14 @@ public class SystemMessage extends Message implements Serializable {
 	
 	@Override
 	public void push() {
-		System.out.println(this);
+		chatRoom.getChatServiceList().stream().forEach(s -> {
+			try {
+				send(s.getSocket().getOutputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	@Override
