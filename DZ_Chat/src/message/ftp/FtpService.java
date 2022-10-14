@@ -140,7 +140,8 @@ public class FtpService {
 		return downloadPath.toString();
 	}
 	public void showPicture(String[] inputArr, String osName, StringBuffer downloadPath) throws IOException, InterruptedException {
-		if(inputArr[1].contains("png") || inputArr[1].contains("jpg")) {
+		String fileName = inputArr[1];
+		if(fileName.contains("png") || fileName.contains("jpg") || fileName.contains("jpeg")) {
 			Process p = null;
 			if(osName.contains("mac")){		        
 				String[] cmd = {"/bin/sh","-c","open "+downloadPath.toString()};
@@ -152,22 +153,5 @@ public class FtpService {
             p.destroy();
 		}
 	}
-	public boolean memberInfoSave(String message) {
-		try{    
-            String filePath = "memberFile.txt";
-            FileOutputStream f = new FileOutputStream(filePath, true);              
-            String lineToAppend = message;
-            byte[] byteArr = lineToAppend.getBytes(); //converting string into byte array
-            f.write(byteArr);
-            f.close();
-            
-            //채팅시간, 유저아디@ip, 채팅내용            
-        }
-        catch(Exception e){
-            System.out.println(e);
-            return false;
-        }
-
-		return true;		
-	}
+	
 }
