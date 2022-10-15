@@ -4,6 +4,11 @@ import core.client.view.*;
 import java.util.*;
 
 public class Main {
+	private static boolean hasChatRoom(String chatRoomName) {
+		HasChatRoomClient hasChatClient = new HasChatRoomClient(chatRoomName);
+		hasChatClient.run();
+		return hasChatClient.getHasGetRoom();
+	}
 	public static View viewInit() {
 		System.out.println("View 생성");
 		Scanner scanner = new Scanner(System.in);
@@ -20,16 +25,19 @@ public class Main {
 		});
 		View deleteMember = new MenuChooseView("탈퇴");
 		View makeChatRoom = new TextInputView("채팅방 만들기", (str) -> {
-			new MakeChatRoomClient().run();
+			String chatRoomName = str.get(0);
+			if (hasChatRoom(chatRoomName)) {
+				System.out.println("이미 존재하는 채팅방 이름입니다.");
+			} else {
+				new MakeChatRoomClient(chatRoomName).run();
+				new ChatClient(chatRoomName).run();
+			}
 			return "로그인 성공";
 		}, "만들 채팅방 이름을 입력하세요.");
 		
 		View entranceChatRoom = new TextInputView("채팅방 입장", (str) -> {
 			String chatRoomName = str.get(0);
-			HasChatRoomClient hasChatClient = new HasChatRoomClient(chatRoomName);
-			hasChatClient.run();
-			if (hasChatClient.getHasGetRoomClient()) {
-				System.out.println("채팅방 입장aaaaaa");
+			if (hasChatRoom(chatRoomName)) {
 				new ChatClient(chatRoomName).run();
 			} else {
 				System.out.println("존재하지 않는 채팅방 입니다.");

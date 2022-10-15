@@ -39,7 +39,7 @@ public class PrivateChatMessage extends Message {
 	@Override
 	public String toString() {
 		return new StringBuilder("@")
-				.append(to)
+				.append(sender.getUserId())
 				.append(">")
 				.append(message)
 				.toString();

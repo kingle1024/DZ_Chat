@@ -6,14 +6,14 @@ import core.mapper.Command;
 
 public class HasChatRoomClient extends ObjectStreamClient {
 	private String chatRoomName;
-	private boolean hasChatRoomClient = false;
+	private boolean hasChatRoom = false;
 
 	public HasChatRoomClient(String chatRoomName) {
 		this.chatRoomName = chatRoomName;
 	}
 
-	public boolean getHasGetRoomClient() {
-		return hasChatRoomClient;
+	public boolean getHasGetRoom() {
+		return hasChatRoom;
 	}
 	
 	@Override
@@ -21,7 +21,7 @@ public class HasChatRoomClient extends ObjectStreamClient {
 		try {
 			connect(new Command("HasChatRoomService"));
 			send(chatRoomName);
-			hasChatRoomClient =(Boolean) receive();
+			hasChatRoom =(Boolean) receive();
 			unconnect();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
