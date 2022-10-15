@@ -9,8 +9,7 @@ public class ChooseChatRoomClient extends ObjectStreamClient {
 	private String chatRoomName;
 
 	@Override
-	public void run() throws IOException {
-
+	public void run() {
 		try {
 			Scanner scanner = new Scanner(System.in);
 			chatRoomName = scanner.nextLine();

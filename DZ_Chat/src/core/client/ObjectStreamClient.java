@@ -11,7 +11,7 @@ import member.Member;
 import message.chat.ChatMessage;
 import message.chat.Message;
 
-public abstract class ObjectStreamClient {
+public abstract class ObjectStreamClient implements Client {
 	private static final String SERVER_HOST = "192.168.45.74";
 	private static final int PORT_NUMBER = 50_001;
 	private Socket socket;
@@ -42,5 +42,5 @@ public abstract class ObjectStreamClient {
 		os.flush();
 	}
 
-	public abstract void run() throws IOException;
+	public abstract void run();
 }
