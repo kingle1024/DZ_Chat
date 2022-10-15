@@ -1,7 +1,9 @@
-package core.server;
+package core.service;
 
 import java.io.*;
 import java.net.Socket;
+
+import core.server.MainServer;
 
 public class ChooseChatRoomService extends ObjectStreamService {
 	public ChooseChatRoomService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
@@ -16,7 +18,7 @@ public class ChooseChatRoomService extends ObjectStreamService {
 		String chatRoomName;
 		try {
 			chatRoomName = (String) is.readObject();
-			if (!Server.chatRoomMap.containsKey(chatRoomName)) {
+			if (!MainServer.chatRoomMap.containsKey(chatRoomName)) {
 				os.writeObject(Boolean.valueOf(false));
 				os.flush();
 				return;

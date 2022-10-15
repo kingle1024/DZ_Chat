@@ -1,7 +1,9 @@
-package core.server;
+package core.service;
 
 import java.io.*;
 import java.net.Socket;
+
+import core.server.MainServer;
 
 public class GetChatRoomListService extends ObjectStreamService {
 	public GetChatRoomListService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
@@ -11,8 +13,8 @@ public class GetChatRoomListService extends ObjectStreamService {
 	@Override
 	public void request() throws IOException {
 		System.out.println("Get ChatRoom List");
-		os.writeObject(Integer.valueOf(Server.chatRoomMap.size()));
-		Server.chatRoomMap.keySet().stream().forEach(t -> {
+		os.writeObject(Integer.valueOf(MainServer.chatRoomMap.size()));
+		MainServer.chatRoomMap.keySet().stream().forEach(t -> {
 			try {
 				os.writeObject(t);
 			} catch (IOException e) {

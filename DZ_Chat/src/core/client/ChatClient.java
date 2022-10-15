@@ -33,12 +33,15 @@ public class ChatClient extends ObjectStreamClient {
 		System.out.println("채팅 메세지 수신 준비 완료");
 	}
 
-	private Message chatTypeResolve(String chat) {
+	private Message chatTypeResolve(String chat) throws IOException {
 		if (chat.startsWith("@")) {
 			int idx = chat.indexOf(' ');
 			String to = chat.substring(1, idx);
 			String msg = chat.substring(idx+1, chat.length());
 			return new PrivateChatMessage(chatRoomName, member, msg, to);
+		} else if (chat.startsWith("#exit")) {
+			unconnect();
+			
 		} else if (chat.startsWith("#flieSend")) {
 //			return new FileMessage();
 		} else if (chat.startsWith("#dir")) {

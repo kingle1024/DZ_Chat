@@ -3,7 +3,7 @@ package message.chat;
 import java.io.Serializable;
 import java.util.*;
 
-import core.server.ChatService;
+import core.service.ChatService;
 import member.Member;
 
 public class ChatRoom implements Serializable {

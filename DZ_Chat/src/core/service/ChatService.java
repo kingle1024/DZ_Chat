@@ -1,9 +1,10 @@
-package core.server;
+package core.service;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
+import core.server.MainServer;
 import member.Member;
 import message.chat.ChatRoom;
 import message.chat.Message;
@@ -18,14 +19,14 @@ public class ChatService extends ObjectStreamService {
 		super(is, os);
 		this.chatRoomName = (String) args[0];
 		this.me = (Member) args[1];
-		this.chatRoom = Server.chatRoomMap.get(chatRoomName);
+		this.chatRoom = MainServer.chatRoomMap.get(chatRoomName);
 	}
 
 	@Override
 	public void request() throws IOException {
 		System.out.println("Chat Service");
 		chatRoom.entrance(this);
-		Server.threadPool.execute(() -> {
+		MainServer.threadPool.execute(() -> {
 			try {
 				while (true) {
 					Message message = (Message) is.readObject();
@@ -37,7 +38,7 @@ public class ChatService extends ObjectStreamService {
 				chatRoom.getChatServiceList().remove(this);
 				new SystemMessage(chatRoom, me + "님이 퇴장하셨습니다. 남은 인원 수: " + chatRoom.size()).push();
 				if (chatRoom.size() == 0) {
-					Server.chatRoomMap.remove(chatRoomName);
+					MainServer.chatRoomMap.remove(chatRoomName);
 				}
 			} catch (ClassNotFoundException cfe) {
 				cfe.printStackTrace();

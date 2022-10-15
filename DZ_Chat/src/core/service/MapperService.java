@@ -1,4 +1,4 @@
-package core.server;
+package core.service;
 
 import java.io.*;
 import java.net.Socket;
@@ -18,8 +18,6 @@ public class MapperService extends ObjectStreamService {
 			
 			System.out.println("Receive Command: "+ cmd.getCommandType());
 			ObjectStreamService mapping = cmd.response(is, os);
-			if (mapping == null) System.out.println("Mapping Fail");
-			else System.out.println("Mapping");
 			mapping.request();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
