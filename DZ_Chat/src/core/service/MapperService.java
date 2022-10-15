@@ -3,7 +3,7 @@ package core.service;
 import java.io.*;
 import java.net.Socket;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 
 public class MapperService extends ObjectStreamService {
 	public MapperService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
@@ -14,7 +14,7 @@ public class MapperService extends ObjectStreamService {
 	public void request() throws IOException {
 		System.out.println("Mapper Service");
 		try {
-			Command cmd = (Command) is.readObject();
+			ServiceResolver cmd = (ServiceResolver) is.readObject();
 			
 			System.out.println("Receive Command: "+ cmd.getCommandType());
 			ObjectStreamService mapping = cmd.response(is, os);

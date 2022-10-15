@@ -3,7 +3,7 @@ package core.client;
 import java.io.*;
 import java.util.Scanner;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 
 public class ChooseChatRoomClient extends ObjectStreamClient {
 	private String chatRoomName;
@@ -13,7 +13,7 @@ public class ChooseChatRoomClient extends ObjectStreamClient {
 		try {
 			Scanner scanner = new Scanner(System.in);
 			chatRoomName = scanner.nextLine();
-			connect(new Command("ChooseChatRoomService"));
+			connect(new ServiceResolver("ChooseChatRoomService"));
 			send(chatRoomName);
 			if ((Boolean) receive()) {
 				unconnect();

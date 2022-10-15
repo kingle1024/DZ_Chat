@@ -9,7 +9,7 @@ public class MenuChooseView extends View {
 	
 	public MenuChooseView(String name) {
 		super(name);
-		ViewController.getInstance().add(this);
+		ViewMap.getInstance().add(this);
 	}
 	
 	private void printMenu() {

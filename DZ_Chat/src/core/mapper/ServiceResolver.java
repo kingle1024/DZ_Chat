@@ -5,11 +5,11 @@ import java.net.Socket;
 
 import core.service.ObjectStreamService;
 
-public class Command implements Serializable {
+public class ServiceResolver implements Serializable {
 	private static final long serialVersionUID = 6041049640297416804L;
 	private String commandType;
 	private Object[] args;
-	public Command(String commandType, Object... args) {
+	public ServiceResolver(String commandType, Object... args) {
 		this.commandType = commandType;
 		this.args = args;
 		System.out.println(commandType);

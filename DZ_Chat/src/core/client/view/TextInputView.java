@@ -11,7 +11,7 @@ public class TextInputView extends View {
 		this.keys = keys;
 		this.viewMapper = viewMapper;
 		values = new ArrayList<>();
-		ViewController.getInstance().add(this);
+		ViewMap.getInstance().add(this);
 	}
 	
 	@Override
@@ -21,6 +21,6 @@ public class TextInputView extends View {
 			System.out.print(key + ": ");
 			values.add(scanner.nextLine());
 		});
-		return ViewController.getInstance().getView(viewMapper.act(values));
+		return ViewMap.getInstance().getView(viewMapper.act(values));
 	}
 }

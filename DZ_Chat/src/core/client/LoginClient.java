@@ -3,7 +3,7 @@ package core.client;
 import java.io.*;
 import java.util.Scanner;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 
 public class LoginClient extends ObjectStreamClient {
 	@Override
@@ -13,7 +13,7 @@ public class LoginClient extends ObjectStreamClient {
 			while (true) {
 				String id = scanner.nextLine();
 				String pw = scanner.nextLine();
-				connect(new Command("LoginService"));
+				connect(new ServiceResolver("LoginService"));
 				send(id);
 				send(pw);
 				if ((Boolean) receive()) {

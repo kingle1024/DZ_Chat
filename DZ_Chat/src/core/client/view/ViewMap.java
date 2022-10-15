@@ -2,14 +2,14 @@ package core.client.view;
 
 import java.util.*;
 
-public class ViewController {
+public class ViewMap {
 	private static final Map<String, View> viewMap = new HashMap<>();
-	private static ViewController viewController;
+	private static ViewMap viewController;
 	
-	private ViewController() { }
+	private ViewMap() { }
 
-	public static ViewController getInstance() {
-		if (viewController == null) return viewController = new ViewController();
+	public static ViewMap getInstance() {
+		if (viewController == null) return viewController = new ViewMap();
 		return viewController;
 	}
 	

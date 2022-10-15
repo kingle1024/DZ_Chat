@@ -2,7 +2,7 @@ package core.client;
 
 import java.io.IOException;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 
 public class HasChatRoomClient extends ObjectStreamClient {
 	private String chatRoomName;
@@ -19,7 +19,7 @@ public class HasChatRoomClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			connect(new Command("HasChatRoomService"));
+			connect(new ServiceResolver("HasChatRoomService"));
 			send(chatRoomName);
 			hasChatRoom =(Boolean) receive();
 			unconnect();

@@ -3,7 +3,7 @@ package core.client;
 import java.io.*;
 import java.util.*;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 
 public class MakeChatRoomClient extends ObjectStreamClient {
 	private String chatRoomName;
@@ -14,7 +14,7 @@ public class MakeChatRoomClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			connect(new Command("MakeChatRoomService"));
+			connect(new ServiceResolver("MakeChatRoomService"));
 			send(chatRoomName);
 			unconnect();
 		} catch (IOException e) {

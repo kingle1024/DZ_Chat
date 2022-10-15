@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 import member.Member;
 import message.chat.ChatMessage;
 import message.chat.Message;
@@ -60,7 +60,7 @@ public class ChatClient extends ObjectStreamClient {
 			member = new Member("id"+random, "pw"+random, "name"+random, ""+random);
 			Scanner scanner = new Scanner(System.in);
 
-			connect(new Command("ChatService", chatRoomName, member));
+			connect(new ServiceResolver("ChatService", chatRoomName, member));
 			System.out.println("채팅방 입장");
 			listening();
 			while (scanner.hasNext()) {

@@ -16,7 +16,7 @@ public abstract class View {
 	
 	public void addSubView(View view) {
 		next.add(view);
-		ViewController.getInstance().add(view);
+		ViewMap.getInstance().add(view);
 	}
 	
 	public void setClient(Client client) {

@@ -1,7 +1,7 @@
 package core.client;
 import java.io.*;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 import message.chat.Message;
 
 public class GetChatRoomListClient extends ObjectStreamClient {
@@ -16,7 +16,7 @@ public class GetChatRoomListClient extends ObjectStreamClient {
 	public void run() {
 		System.out.println("채팅방 목록");
 		try {
-			connect(new Command("GetChatRoomListService"));
+			connect(new ServiceResolver("GetChatRoomListService"));
 			viewList();			
 		} catch (IOException e) {
 			

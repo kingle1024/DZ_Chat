@@ -3,7 +3,7 @@ package core.client;
 import java.io.*;
 import java.util.*;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 
 import java.net.Socket;
 
@@ -18,7 +18,7 @@ public abstract class ObjectStreamClient implements Client {
 	protected ObjectOutputStream os;
 	protected ObjectInputStream is;
 	
-	public void connect(Command command) throws IOException {
+	public void connect(ServiceResolver command) throws IOException {
 		System.out.println("[클라이언트] 서버 연결 시도");
 		socket = new Socket(SERVER_HOST, PORT_NUMBER);
 		System.out.println("Socket 생성");
