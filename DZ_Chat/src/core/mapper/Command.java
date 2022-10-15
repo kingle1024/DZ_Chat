@@ -12,6 +12,7 @@ public class Command implements Serializable {
 	public Command(String commandType, Object... args) {
 		this.commandType = commandType;
 		this.args = args;
+		System.out.println(commandType);
 	}
 	
 	public ObjectStreamService response(ObjectInputStream is, ObjectOutputStream os) {

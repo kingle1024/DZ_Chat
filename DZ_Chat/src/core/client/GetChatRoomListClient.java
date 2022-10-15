@@ -16,7 +16,7 @@ public class GetChatRoomListClient extends ObjectStreamClient {
 	public void run() {
 		System.out.println("채팅방 목록");
 		try {
-			connect(new Command("GetChatRoomList"));
+			connect(new Command("GetChatRoomListService"));
 			viewList();			
 		} catch (IOException e) {
 			

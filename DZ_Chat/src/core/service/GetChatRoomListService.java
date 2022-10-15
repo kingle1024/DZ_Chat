@@ -6,7 +6,7 @@ import java.net.Socket;
 import core.server.MainServer;
 
 public class GetChatRoomListService extends ObjectStreamService {
-	public GetChatRoomListService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
+	public GetChatRoomListService(ObjectInputStream is, ObjectOutputStream os, Object... obj) throws IOException {
 		super(is, os);
 	}
 

@@ -26,7 +26,7 @@ public class ChatClient extends ObjectStreamClient {
 					System.out.println(message);
 				}
 			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
+
 			}
 		});
 		thread.start();
@@ -73,7 +73,7 @@ public class ChatClient extends ObjectStreamClient {
 			unconnect();
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+
 		}
 		System.out.println("채팅 종료");
 	}
