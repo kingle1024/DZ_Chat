@@ -2,27 +2,27 @@ package core.client;
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 import core.mapper.Command;
 import member.Member;
 import message.chat.ChatMessage;
 import message.chat.Message;
+import message.chat.PrivateChatMessage;
 
 public class ChatClient extends ObjectStreamClient {
 	private Member member;
 	private String chatRoomName;
-	
 	public ChatClient(String chatRoomName) {
 		this.chatRoomName = chatRoomName;
 		System.out.println("채팅방: " + chatRoomName);
 	}
 	
-	@Override
-	public void receive() {
+	public void listening() {
 		Thread thread = new Thread(() -> {
 			try {
 				while (true) {
-					Message message = (Message) is.readObject();
+					String message = (String) is.readObject();
 					System.out.println(message);
 				}
 			} catch (IOException | ClassNotFoundException e) {
@@ -33,27 +33,40 @@ public class ChatClient extends ObjectStreamClient {
 		System.out.println("채팅 메세지 수신 준비 완료");
 	}
 
+	private Message chatTypeResolve(String chat) {
+		if (chat.startsWith("@")) {
+			int idx = chat.indexOf(' ');
+			String to = chat.substring(1, idx);
+			String msg = chat.substring(idx+1, chat.length());
+			return new PrivateChatMessage(chatRoomName, member, msg, to);
+		} else if (chat.startsWith("#flieSend")) {
+//			return new FileMessage();
+		} else if (chat.startsWith("#dir")) {
+//			return new DirMessage();
+		} else {
+			return new ChatMessage(this.chatRoomName, member, chat);
+		}
+		return null;
+	}
 	public void run() {
 		try {
 			System.out.println("채팅 시작");
 			
 			// Mock
-			member = new Member("id", "pw", "name", "2022-10-14");
+			int random = (int) (Math.random() * 1000);
+			member = new Member("id"+random, "pw"+random, "name"+random, ""+random);
 			Scanner scanner = new Scanner(System.in);
 
 			connect(new Command("ChatService", chatRoomName, member));
 			System.out.println("채팅방 입장");
-			receive();
+			listening();
 			while (scanner.hasNext()) {
-				String inputStr = scanner.nextLine();
-				if ("q".equals(inputStr.toLowerCase()))
+				String chat = scanner.nextLine();
+				if ("q".equals(chat.toLowerCase()))
 					break;
-
-				Message message = new ChatMessage(this.chatRoomName, member, inputStr);
-//				Message message = new FileMessage(chatRoome, me, filePath(inputStr));
+				Message message = chatTypeResolve(chat);
 				send(message);
 			}
-			scanner.close();
 			unconnect();
 			
 		} catch (IOException e) {

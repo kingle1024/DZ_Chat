@@ -18,6 +18,7 @@ public class ChatRoom implements Serializable {
 	
 	public void entrance(ChatService chatService) {
 		chatServiceList.add(chatService);
+		new SystemMessage(this, chatService.getMe() + "님이 입장하셨습니다. 인원 수: " + size()).push();
 	}
 	
 	public List<ChatService> getChatServiceList() {

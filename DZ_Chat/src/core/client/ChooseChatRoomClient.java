@@ -7,15 +7,6 @@ import core.mapper.Command;
 
 public class ChooseChatRoomClient extends ObjectStreamClient {
 	private String chatRoomName;
-	private Boolean correctChatName = false;
-	@Override
-	public void receive() throws IOException, ClassNotFoundException {
-		try {
-			correctChatName = (boolean) is.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public void run() throws IOException {
@@ -25,8 +16,7 @@ public class ChooseChatRoomClient extends ObjectStreamClient {
 			chatRoomName = scanner.nextLine();
 			connect(new Command("ChooseChatRoomService"));
 			send(chatRoomName);
-			receive();
-			if (correctChatName) {
+			if ((Boolean) receive()) {
 				unconnect();
 				new ChatClient(chatRoomName).run();
 			}			

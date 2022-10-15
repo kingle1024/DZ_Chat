@@ -36,6 +36,9 @@ public class ChatService extends ObjectStreamService {
 			} catch (IOException e) {
 				chatRoom.getChatServiceList().remove(this);
 				new SystemMessage(chatRoom, me + "님이 퇴장하셨습니다. 남은 인원 수: " + chatRoom.size()).push();
+				if (chatRoom.size() == 0) {
+					Server.chatRoomMap.remove(chatRoomName);
+				}
 			} catch (ClassNotFoundException cfe) {
 				cfe.printStackTrace();
 			}
@@ -52,8 +55,8 @@ public class ChatService extends ObjectStreamService {
 		return os;
 	}
 	
-	public boolean equalsUser(String name) {
-		return me.getName().equals(name);
+	public boolean equalsUser(String id) {
+		return me.getUserId().equals(id);
 	}
 	
 	@Override

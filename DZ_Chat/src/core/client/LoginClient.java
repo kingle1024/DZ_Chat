@@ -6,12 +6,6 @@ import java.util.Scanner;
 import core.mapper.Command;
 
 public class LoginClient extends ObjectStreamClient {
-	private Boolean loginSuccess = false;
-	@Override
-	public void receive() throws IOException, ClassNotFoundException {
-		loginSuccess = (Boolean) is.readObject();
-	}
-
 	@Override
 	public void run() throws IOException {
 		os = new ObjectOutputStream(new BufferedOutputStream(os));
@@ -27,8 +21,7 @@ public class LoginClient extends ObjectStreamClient {
 				is = new ObjectInputStream(new BufferedInputStream(super.is));
 				send(id);
 				send(pw);
-				receive();	
-				if (loginSuccess) {
+				if ((Boolean) receive()) {
 					unconnect();
 				} else {
 					System.out.println("틀렸다.");
@@ -40,7 +33,5 @@ public class LoginClient extends ObjectStreamClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
-
 }

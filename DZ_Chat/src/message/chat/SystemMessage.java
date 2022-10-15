@@ -29,7 +29,7 @@ public class SystemMessage extends Message implements Serializable {
 	
 	@Override
 	public void send(ObjectOutputStream os) throws IOException {
-		os.writeObject(new SystemMessage(chatRoom, message));
+		os.writeObject("\t[System: " + message + "]");
 		os.flush();
 	}
 	

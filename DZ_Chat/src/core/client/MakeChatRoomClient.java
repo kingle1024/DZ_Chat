@@ -6,14 +6,6 @@ import java.util.*;
 import core.mapper.Command;
 
 public class MakeChatRoomClient extends ObjectStreamClient {
-	private Boolean makeSuccess = false;
-	private ObjectOutputStream os;
-	private ObjectInputStream is;
-	@Override
-	public void receive() throws IOException, ClassNotFoundException {
-		makeSuccess = (Boolean) is.readObject();
-	}
-
 	@Override
 	public void send(Object obj) throws IOException {
 		os.writeObject(obj);
@@ -27,8 +19,7 @@ public class MakeChatRoomClient extends ObjectStreamClient {
 			while (true) {
 				String chatRoomName = scanner.nextLine();
 				connect(new Command(chatRoomName));
-				receive();
-				if (makeSuccess) { 
+				if ((Boolean) receive()) { 
 					unconnect();
 					new ChatClient(chatRoomName).run();
 					break;

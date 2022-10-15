@@ -64,7 +64,7 @@ public class Member implements Comparable<Member>, Serializable{
 	
 	@Override
 	public String toString() {
-		return userId + "," + password + "," + name + "," + birth;
+		return userId;
 	}
 	
 }

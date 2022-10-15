@@ -33,7 +33,9 @@ public abstract class ObjectStreamClient {
 		System.out.println("[클라이언트] 연결 종료");
 	}
 
-	public abstract void receive() throws IOException, ClassNotFoundException;
+	public Object receive() throws IOException, ClassNotFoundException {
+		return is.readObject();
+	}
 
 	public void send(Object obj) throws IOException {
 		os.writeObject(obj);
