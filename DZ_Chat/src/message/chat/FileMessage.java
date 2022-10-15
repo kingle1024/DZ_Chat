@@ -1,6 +1,7 @@
 package message.chat;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 public class FileMessage extends Message{
@@ -12,7 +13,6 @@ public class FileMessage extends Message{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
 	public void send(OutputStream os) throws IOException {
 		
 	}
@@ -24,6 +24,12 @@ public class FileMessage extends Message{
 
 	@Override
 	public void push() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void send(ObjectOutputStream os) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

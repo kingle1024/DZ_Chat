@@ -15,17 +15,16 @@ public class Server {
 
 	private static final int PORT_NUMBER = 50_001;
 	private ServerSocket serverSocket;
-
 	public void start() throws IOException {
 		serverSocket = new ServerSocket(PORT_NUMBER);
-		System.out.println("[서버] 시작");
+		System.out.println("[서버] 시작 " + InetAddress.getLocalHost() + ":" + PORT_NUMBER);
 		threadPool.execute(() -> {
 			try {
 				while (true) {
 					Socket socket = serverSocket.accept();
-					ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-					ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
 					System.out.println("New Socket Accept");
+					ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream()); 
+					ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
 					new MapperService(is, os).request();
 				}
 			} catch (IOException e) {

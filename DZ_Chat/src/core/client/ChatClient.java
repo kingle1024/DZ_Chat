@@ -8,19 +8,13 @@ import member.Member;
 import message.chat.ChatMessage;
 import message.chat.Message;
 
-public class ChatClient extends Client {
+public class ChatClient extends ObjectStreamClient {
 	private Member member;
 	private String chatRoomName;
 	
 	public ChatClient(String chatRoomName) {
 		this.chatRoomName = chatRoomName;
-		System.out.println("ChatClient" + chatRoomName);
-	}
-	
-	@Override
-	public void send(Object obj) throws IOException {
-		os.writeObject(obj);
-		os.flush();
+		System.out.println("채팅방: " + chatRoomName);
 	}
 	
 	@Override
@@ -36,17 +30,19 @@ public class ChatClient extends Client {
 			}
 		});
 		thread.start();
+		System.out.println("채팅 메세지 수신 준비 완료");
 	}
 
 	public void run() {
-		System.out.println("채팅 시작");
 		try {
+			System.out.println("채팅 시작");
+			
 			// Mock
 			member = new Member("id", "pw", "name", "2022-10-14");
-			
 			Scanner scanner = new Scanner(System.in);
-			connect();
-			send(new Command("ChatService", chatRoomName, member));
+
+			connect(new Command("ChatService", chatRoomName, member));
+			System.out.println("채팅방 입장");
 			receive();
 			while (scanner.hasNext()) {
 				String inputStr = scanner.nextLine();
@@ -60,7 +56,7 @@ public class ChatClient extends Client {
 			scanner.close();
 			unconnect();
 			
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		System.out.println("채팅 종료");

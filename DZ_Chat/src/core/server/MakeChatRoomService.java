@@ -1,10 +1,9 @@
 package core.server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.net.Socket;
 
-public class MakeChatRoomService extends Service {
+public class MakeChatRoomService extends ObjectStreamService {
 	public MakeChatRoomService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}

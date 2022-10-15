@@ -9,19 +9,21 @@ import message.chat.ChatRoom;
 import message.chat.Message;
 import message.chat.SystemMessage;
 
-public class ChatService extends Service<ObjectInputStream, ObjectOutputStream> {
+public class ChatService extends ObjectStreamService {
 	private final Member me;
 	private final String chatRoomName;
 	private final ChatRoom chatRoom;
+	
 	public ChatService(ObjectInputStream is, ObjectOutputStream os, Object... args) throws IOException {
 		super(is, os);
 		this.chatRoomName = (String) args[0];
-		this.chatRoom = Server.chatRoomMap.get(chatRoomName);
 		this.me = (Member) args[1];
+		this.chatRoom = Server.chatRoomMap.get(chatRoomName);
 	}
 
 	@Override
-	public void request() {
+	public void request() throws IOException {
+		System.out.println("Chat Service");
 		chatRoom.entrance(this);
 		Server.threadPool.execute(() -> {
 			try {

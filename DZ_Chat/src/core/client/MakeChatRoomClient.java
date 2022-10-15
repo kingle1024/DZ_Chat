@@ -1,12 +1,14 @@
 package core.client;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import core.mapper.Command;
 
-public class MakeChatRoomClient extends Client {
-	Boolean makeSuccess = false;
+public class MakeChatRoomClient extends ObjectStreamClient {
+	private Boolean makeSuccess = false;
+	private ObjectOutputStream os;
+	private ObjectInputStream is;
 	@Override
 	public void receive() throws IOException, ClassNotFoundException {
 		makeSuccess = (Boolean) is.readObject();
@@ -24,8 +26,7 @@ public class MakeChatRoomClient extends Client {
 		try {
 			while (true) {
 				String chatRoomName = scanner.nextLine();
-				connect();
-				send(new Command(chatRoomName));
+				connect(new Command(chatRoomName));
 				receive();
 				if (makeSuccess) { 
 					unconnect();

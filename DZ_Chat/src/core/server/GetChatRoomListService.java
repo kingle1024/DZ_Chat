@@ -3,7 +3,7 @@ package core.server;
 import java.io.*;
 import java.net.Socket;
 
-public class GetChatRoomListService extends Service<ObjectInputStream, ObjectOutputStream> {
+public class GetChatRoomListService extends ObjectStreamService {
 	public GetChatRoomListService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}

@@ -5,36 +5,31 @@ import java.util.Scanner;
 
 import core.mapper.Command;
 
-public class ChooseChatRoomClient extends Client {
+public class ChooseChatRoomClient extends ObjectStreamClient {
 	private String chatRoomName;
+	private Boolean correctChatName = false;
 	@Override
 	public void receive() throws IOException, ClassNotFoundException {
 		try {
-			Boolean correctChatName = (boolean) is.readObject();
-			if (correctChatName) {
-				unconnect();
-				new ChatClient(chatRoomName).run();
-			}
+			correctChatName = (boolean) is.readObject();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void send(Object obj) throws IOException {
-		os.writeObject(obj);
-		os.flush();
-	}
+	public void run() throws IOException {
 
-	@Override
-	public void run() {
 		try {
 			Scanner scanner = new Scanner(System.in);
 			chatRoomName = scanner.nextLine();
-			connect();
-			send(new Command("ChooseChatRoomService"));
+			connect(new Command("ChooseChatRoomService"));
 			send(chatRoomName);
 			receive();
+			if (correctChatName) {
+				unconnect();
+				new ChatClient(chatRoomName).run();
+			}			
 			unconnect();
 		} catch (IOException | ClassNotFoundException e) {
 			

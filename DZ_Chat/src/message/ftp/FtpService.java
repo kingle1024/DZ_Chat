@@ -13,13 +13,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class FtpService {
 	File file;
 	private int DEFAULT_BUFFER_SIZE = 10000;
@@ -98,7 +91,9 @@ public class FtpService {
 					
 					int readBytes;
 					long totalReadBytes = 0;
-					while ((readBytes = fis.read(buffer)) > 0 && stop) {
+					while ((readBytes = fis.read(buffer)) > 0 
+//							&& stop
+							) {
 						os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분				
 						totalReadBytes += readBytes;
 						System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
@@ -117,7 +112,7 @@ public class FtpService {
 		}catch(Exception e){
 			
 		}
-		stop = true;
+//		stop = true;
 		
 		System.out.println("File transfer completed.");
 		
