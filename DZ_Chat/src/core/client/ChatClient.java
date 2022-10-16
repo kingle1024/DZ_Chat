@@ -2,13 +2,9 @@ package core.client;
 
 import java.io.*;
 import java.util.Scanner;
-import java.util.StringTokenizer;
-
 import core.mapper.ServiceResolver;
 import member.Member;
-import message.chat.ChatMessage;
-import message.chat.Message;
-import message.chat.PrivateChatMessage;
+import message.chat.*;
 
 public class ChatClient extends ObjectStreamClient {
 	private Member member;
@@ -43,9 +39,9 @@ public class ChatClient extends ObjectStreamClient {
 			unconnect();
 			
 		} else if (chat.startsWith("#flieSend")) {
-//			return new FileMessage();
+//			return new FileMessage(chat);
 		} else if (chat.startsWith("#dir")) {
-//			return new DirMessage();
+			return new DirMessage(this.chatRoomName, member, chat);
 		} else {
 			return new ChatMessage(this.chatRoomName, member, chat);
 		}

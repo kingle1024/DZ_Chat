@@ -2,18 +2,13 @@ package message.ftp;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class FtpService {
@@ -47,25 +42,31 @@ public class FtpService {
 		is.close();
 		fos.close();
 	}
-	public void dir(String path) {
-		File file = new File("resources"+path+"/abc");
+	public String dir(String path) {
+		File file = new File("resources/room/"+path+"");
+		StringBuffer sb = new StringBuffer();
 		if(!file.exists()) {
-			System.out.println("폴더가 존재하지 않습니다.");
-			System.out.println("path:"+file.getAbsolutePath());
-			return;
+			sb.append("폴더에 파일이 존재하지 않습니다. ( "+file.getAbsolutePath()+")");
+			return sb.toString();
 		}
-		File[] contents = file.listFiles();			
-		System.out.println("<전송된 파일 목록>");
+		File[] contents = file.listFiles();
+		sb.append("<전송된 파일 목록>");
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd a HH:mm");
 		for(File f : contents) {
-			System.out.printf("%-25s", sdf.format(new Date(f.lastModified())));
+//			System.out.printf("%-25s", sdf.format(new Date(f.lastModified())));
+			sb.append(String.format("%-25s\n", sdf.format(new Date(f.lastModified()))));
 			if(f.isDirectory()) {
-				System.out.printf("%-10s%-20s", "<DIR>", f.getName());				
+//				System.out.printf("%-10s%-20s", "<DIR>", f.getName());
+				sb.append(String.format("%-10s%-20s", "<DIR>", f.getName()));
 			}else {
-				System.out.printf("%-20s", f.getName());
+//				System.out.printf("%-20s", f.getName());
+				sb.append(String.format("%-20s", f.getName()));
 			}
-			System.out.println();
+//			System.out.println();
+			sb.append("\n");
 		}
+		return sb.toString();
 	}
 	public void sendFile(String fileName, Socket socket) throws IOException{
 		// 파일 존재 여부 확인 
