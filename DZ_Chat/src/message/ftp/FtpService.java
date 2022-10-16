@@ -12,8 +12,7 @@ import java.util.Date;
 
 
 public class FtpService {
-	File file;
-	private int DEFAULT_BUFFER_SIZE = 10000;
+	private final int DEFAULT_BUFFER_SIZE = 4096;
 	public static boolean fileValid(String filePath) {
 		File file = new File(filePath);
 		
@@ -27,11 +26,12 @@ public class FtpService {
 	public void saveSocketFile(Socket socket, String saveFilePath) throws IOException {
 		saveFile(socket.getInputStream(), saveFilePath);
 	}
-	public void saveTargetFile(String targetFilePath, String saveFilePath) throws IOException {				
+	public void saveTargetFile(String targetFilePath, String saveFilePath) throws IOException {
+		System.out.println("FtpService > saveTargetFile : 파일 저장 위치 : "+saveFilePath);
 		saveFile(new FileInputStream(targetFilePath), saveFilePath);
 	}
 	public void saveFile(InputStream is, String saveFilePath) throws IOException {
-		byte[] buffer = new byte[4096];
+		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 		int readBytes;
 		FileOutputStream fos = new FileOutputStream(saveFilePath);
 		
@@ -44,15 +44,17 @@ public class FtpService {
 	}
 	public String dir(String path) {
 		File file = new File("resources/room/"+path+"");
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		if(!file.exists()) {
-			sb.append("폴더에 파일이 존재하지 않습니다. ( "+file.getAbsolutePath()+")");
+			sb.append("폴더에 파일이 존재하지 않습니다. ( ")
+					.append(file.getAbsolutePath()).append(")");
 			return sb.toString();
 		}
 		File[] contents = file.listFiles();
-		sb.append("<전송된 파일 목록>");
+		sb.append("<전송된 파일 목록>\n");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd a HH:mm");
+		assert contents != null;
 		for(File f : contents) {
 //			System.out.printf("%-25s", sdf.format(new Date(f.lastModified())));
 			sb.append(String.format("%-25s\n", sdf.format(new Date(f.lastModified()))));
@@ -78,7 +80,7 @@ public class FtpService {
 		System.out.println("sendFile1:"+splitFileName);
 		// 파일이 존재하는 경로
 		File file = new File(splitFileName);
-						
+
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE]; // 4K가 적절하지 않나?
 		long fileSize = file.length();
 		
@@ -133,9 +135,15 @@ public class FtpService {
 	}
 	public String getDownloadPath(String osName, StringBuffer downloadPath, String userName, String[] inputArr) {
 		if(osName.contains("window")){
-			downloadPath.append("C:\\Users\\"+userName+"\\Downloads\\");
+			downloadPath
+					.append("C:\\Users\\")
+					.append(userName)
+					.append("\\Downloads\\");
 		}else if(osName.contains("mac")) {
-			downloadPath.append("/Users/"+userName+"/Downloads/");
+			downloadPath
+					.append("/Users/")
+					.append(userName)
+					.append("/Downloads/");
 		}
 		// 파일명 넣기
 		downloadPath.append(inputArr[1]);
@@ -152,6 +160,7 @@ public class FtpService {
 			}else if(osName.contains("window")) {
 				p = Runtime.getRuntime().exec("cmd /c " + "mspaint "+downloadPath.toString());
 			}
+			assert p != null;
 			p.waitFor();
             p.destroy();
 		}

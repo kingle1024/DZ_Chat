@@ -21,7 +21,7 @@ public class DirMessage extends Message {
 	public void send(ObjectOutputStream oos) throws IOException {
 		FtpService ftp = new FtpService();
 
-		oos.writeObject(ftp.dir(String.valueOf(chatRoom.hashCode())));
+		oos.writeObject(ftp.dir(chatRoomName));
 		System.out.println("[System] "+ftp.dir(chatRoomName));
 		oos.flush();
 	}
