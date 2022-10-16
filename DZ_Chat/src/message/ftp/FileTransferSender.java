@@ -2,22 +2,12 @@ package message.ftp;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import message.chat.ChatMessage;
 import message.chat.Message;
@@ -25,39 +15,38 @@ import message.chat.Message;
 // 보내는 곳 (Client)
 public class FileTransferSender {
 	
-
-	public static void main(String[] args) throws Exception, SecurityException, Exception {
+	public void run(){
 		String serverIP = "localhost";
 		int port = 50001;
 
 		try {
 			// 서버 연결
 			Socket socket = new Socket(serverIP, port);
-			connectErrorCheck(socket);	
-			System.out.print("채팅 입력 (Ex #fileSend fileName.txt) : ");			
+			connectErrorCheck(socket);
+			System.out.print("채팅 입력 (Ex #fileSend fileName.txt) : ");
 			FtpService ftp = new FtpService();
-			
-//			messageSend(socket);
-//			
+
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 //			#fileSend fileName.txt
 			String input = br.readLine();
-//			Message chatMessage = new ChatMessage(null, null, input);			
-//			chatMessage.send(socket.getOutputStream());
+//			Message chatMessage = new ChatMessage(null, null, input);
+//			chatMessage.send(new ObjectOutputStream(socket.getOutputStream()));
 			messageSend(input, socket);
-			
-//			Message chatMessage = new ChatMessage(null, null, input);			
-//			chatMessage.send(socket.getOutputStream());			
-											
-			//파일 보내는 부분 		
+
+//			Message chatMessage = new ChatMessage(null, null, input);
+//			chatMessage.send(socket.getOutputStream());
+
+			//파일 보내는 부분
+			// #fileSend text.txt [1]
+			// socket [2]
 			if(input.startsWith("#fileSend")){
-				ftp.sendFile(input, socket);	
+				ftp.sendFile(input, socket);
 			}else if(input.startsWith("#fileSave")) {
 				saveFile(input, socket);
 			}
-			
-//			os.flush();			
-			
+
+//			os.flush();
+
 //			socket.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -65,7 +54,14 @@ public class FileTransferSender {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Err2");
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
+	}
+	public static void main(String[] args) throws Exception, SecurityException, Exception {
+
 	}
 	public static void saveFile(String input, Socket socket) throws ClassNotFoundException, Exception, SecurityException {
 		try {
@@ -101,7 +97,11 @@ public class FileTransferSender {
 	
 	public static void messageSend(String input, Socket socket) throws IOException {
 		BufferedWriter bufferedWriter = 
-				new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+				new BufferedWriter(
+						new OutputStreamWriter(
+								new ObjectOutputStream(socket.getOutputStream())
+						)
+				);
 //		bufferedWriter.write("#fileSend fileName.txt");
 		bufferedWriter.write(input);
 		bufferedWriter.newLine();
