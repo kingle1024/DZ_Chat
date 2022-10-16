@@ -28,7 +28,7 @@ public class MemberDelete {
 
 				System.out.print("비밀번호 : ");
 				pwd = scanner.nextLine();
-			} while (!(dao.checkMember(uid, pwd)));
+			} while (!(checkMember(uid, pwd)));
 
 			System.out.print("탈퇴하시겠습니까? (1 탈퇴 2 취소) : ");
 			check = scanner.nextInt();
@@ -42,6 +42,16 @@ public class MemberDelete {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private boolean checkMember(String uid, String pwd) {
+		if (!(dao.containKey(uid) && dao.getPwd(uid).equals(pwd))) {
+			System.out.println("회원 정보가 일치하지 않습니다.");
+			return false;
+		} else {
+			System.out.println(uid + "회원님 확인되었습니다.");
+			return true;
 		}
 	}
 

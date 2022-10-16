@@ -7,13 +7,13 @@ import java.util.TreeMap;
 
 public class MemberDao {
 
-	private Map<String, Member> MemberMap = new TreeMap<String, Member>();
-
+	private static Map<String, Member> MemberMap = new TreeMap<String, Member>();
+	
 	public MemberDao() {
 		String filePath = "./memberFile.txt";
 		readContent(filePath);
 	}
-
+	
 	// 파일에서 회원정보 받아와서 Map에 저장
 	public void readContent(String filePath) {
 		try {
@@ -83,6 +83,13 @@ public class MemberDao {
 			System.out.println(userId + "회원님 확인되었습니다.");
 			return true;
 		}
+	}
+	
+	public static boolean isCorrectPW(String userId, String password) {
+		if (MemberMap.get(userId).getPassword().equals(password)) {
+			return true;
+		}
+		return false;
 	}
 
 }

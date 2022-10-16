@@ -1,9 +1,7 @@
 package core.service;
 
 import java.io.*;
-import java.net.Socket;
-
-import core.server.MainServer;
+import member.MemberDao;
 
 public class LoginService extends ObjectStreamService {
 	public LoginService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
@@ -14,7 +12,7 @@ public class LoginService extends ObjectStreamService {
 		try {
 			String id = (String) is.readObject();
 			String pw = (String) is.readObject();
-			if (MainServer.memberMap.get(id).getPassword().equals(pw)) { // like... member.isCorrectPW(pw)
+			if (MemberDao.isCorrectPW(id, pw)) {
 				os.writeObject(Boolean.valueOf(true));
 			} else {
 				os.writeObject(Boolean.valueOf(false));
