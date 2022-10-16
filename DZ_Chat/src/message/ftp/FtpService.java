@@ -18,7 +18,7 @@ public class FtpService {
 		File file = new File(filePath);
 		
 		if (!file.exists()) {
-			System.out.println("File not Exist");
+			System.out.println("File not Exist : "+file.getAbsolutePath());
 			return false;
 		}
 		
@@ -68,14 +68,15 @@ public class FtpService {
 		}
 		return sb.toString();
 	}
-	public void sendFile(String fileName, Socket socket) throws IOException{
-		// 파일 존재 여부 확인 
-//		String FileName = "fileName.txt";		
+	public void sendFile(String fileName, String chatRoomName, Socket socket) throws IOException{
 		String[] input = fileName.split(" ");
 		String splitFileName = input[1];
+		String path = input[2];
+		splitFileName = "DZ_Chat/"+splitFileName;
 		
 		if(!fileValid(splitFileName)) return;
-		
+		System.out.println("sendFile1:"+splitFileName);
+		// 파일이 존재하는 경로
 		File file = new File(splitFileName);
 						
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE]; // 4K가 적절하지 않나?
@@ -83,44 +84,31 @@ public class FtpService {
 		
 		// 여기에 파일이 있음 
 		InputStream fis = new FileInputStream(file);
-		
+
 		// 앞으로 저장할 파일
-		OutputStream os = socket.getOutputStream(); 
-		
-//		static boolean stop = false;
-		Thread thread = new Thread() {
-			@Override
-			public void run() {
-				try {					
-					int readBytes;
-					long totalReadBytes = 0;
-					while ((readBytes = fis.read(buffer)) > 0 
-//							&& stop
-							) {
-						os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분				
-						totalReadBytes += readBytes;
-						System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-								+ (totalReadBytes * 100 / fileSize) + " %)");				
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
-		thread.start();
-		
+		OutputStream os = socket.getOutputStream();
+
 		try {
-			Thread.sleep(3000);
-		}catch(Exception e){
-			
+			int readBytes;
+			long totalReadBytes = 0;
+			while ((readBytes = fis.read(buffer)) > 0
+//							&& stop
+					) {
+				os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
+				totalReadBytes += readBytes;
+				System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
+						+ (totalReadBytes * 100 / fileSize) + " %)");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
+
 //		stop = true;
+		System.out.println("FtpService > sendFile 끝");
 		
-		System.out.println("File transfer completed.");
-		
-		fis.close();
-		os.close();
+//		fis.close();
+//		os.close();
 	}
 	public String getOs() {
 		String os = System.getProperty("os.name").toLowerCase();
