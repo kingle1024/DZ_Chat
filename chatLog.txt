@@ -1,0 +1,12 @@
+Pair [object=id124> 555, clazz=class message.chat.ChatMessage]
+Pair [object=id124> 6666, clazz=class message.chat.ChatMessage]
+Pair [object=id124> 123323, clazz=class message.chat.ChatMessage]
+Pair [object=id124> 14242414, clazz=class message.chat.ChatMessage]
+Pair [object=id124> 51355, clazz=class message.chat.ChatMessage]
+Pair [object=id124> 5, clazz=class message.chat.ChatMessage]
+id716> fddfkdnfdfls
+id716> dfd
+id716> fdfsfd
+id716> fdsgsdgsdg
+id716> sgsdg
+id716> dsg
