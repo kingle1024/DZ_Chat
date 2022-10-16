@@ -1,23 +1,18 @@
 package message.ftp;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
-import message.chat.ChatMessage;
-import message.chat.Message;
 
 // 보내는 곳 (Client)
 public class FtpClient {
 	
 	public void run(String chat, String chatRoomName) {
 		String serverIP = "localhost";
-		int port = 55551;
+		int port = 55_552;
 
 		try {
 			// 서버 연결
@@ -31,7 +26,7 @@ public class FtpClient {
 			String input = chat;
 //			Message chatMessage = new ChatMessage(null, null, input);
 //			chatMessage.send(new ObjectOutputStream(socket.getOutputStream()));
-			input = input+" "+chatRoomName;
+			input = input+" room/"+chatRoomName;
 			messageSend(input, socket);
 
 //			Message chatMessage = new ChatMessage(null, null, input);
@@ -41,6 +36,7 @@ public class FtpClient {
 			if(input.startsWith("#fileSend")){
 				ftp.sendFile(input, chatRoomName, socket);
 			}else if(input.startsWith("#fileSave")) {
+				// 파일 받기
 				saveFile(input, chatRoomName);
 			}
 
@@ -53,8 +49,6 @@ public class FtpClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Err2");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -65,7 +59,7 @@ public class FtpClient {
 //		fileTransferSender.run("#fileSend fileName.txt", "qq");
 		System.out.println("FileTransferSender main() 끝");
 	}
-	public static void saveFile(String input, String chatRoomName) throws ClassNotFoundException, Exception, SecurityException {
+	public static void saveFile(String input, String chatRoomName) throws Exception {
 		try {
 			FtpService ftp = new FtpService();
 			String[] inputArr = input.split(" ");
@@ -80,7 +74,7 @@ public class FtpClient {
 									downloadPath, 
 									userName, 
 									inputArr));
-			String filePath = "resources/room/"+chatRoomName+""+inputArr[1];
+			String filePath = "resources/room/"+chatRoomName+"/"+inputArr[1];
 			ftp.saveTargetFile(filePath, downloadPath.toString());
 			ftp.showPicture(inputArr, osName, downloadPath);
 			
