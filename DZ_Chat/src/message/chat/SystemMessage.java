@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import core.server.Server;
+import core.server.MainServer;
 
 public class SystemMessage extends Message implements Serializable {
 	private static final long serialVersionUID = 7033598494494691135L;
@@ -18,7 +18,7 @@ public class SystemMessage extends Message implements Serializable {
 	public SystemMessage(String chatRoomName, String message) {
 		this.chatRoomName = chatRoomName;
 		this.message = message;
-		this.chatRoom = Server.chatRoomMap.get(chatRoomName);
+		this.chatRoom = MainServer.chatRoomMap.get(chatRoomName);
 	}
 
 	public SystemMessage(ChatRoom chatRoom, String message) {
@@ -29,7 +29,7 @@ public class SystemMessage extends Message implements Serializable {
 	
 	@Override
 	public void send(ObjectOutputStream os) throws IOException {
-		os.writeObject(new SystemMessage(chatRoom, message));
+		os.writeObject("\t[System: " + message + "]");
 		os.flush();
 	}
 	

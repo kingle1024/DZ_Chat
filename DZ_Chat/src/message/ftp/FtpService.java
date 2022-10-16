@@ -15,16 +15,8 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import core.server.Service;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-public class FtpService extends Service{
-	public FtpService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
-		super(is, os);
-	}
-	
+public class FtpService {
 	File file;
 	private int DEFAULT_BUFFER_SIZE = 10000;
 	public static boolean fileValid(String filePath) {
@@ -101,7 +93,9 @@ public class FtpService extends Service{
 				try {					
 					int readBytes;
 					long totalReadBytes = 0;
-					while ((readBytes = fis.read(buffer)) > 0) {
+					while ((readBytes = fis.read(buffer)) > 0 
+//							&& stop
+							) {
 						os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분				
 						totalReadBytes += readBytes;
 						System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
@@ -120,7 +114,7 @@ public class FtpService extends Service{
 		}catch(Exception e){
 			
 		}
-		
+//		stop = true;
 		
 		System.out.println("File transfer completed.");
 		
@@ -173,10 +167,4 @@ public class FtpService extends Service{
             p.destroy();
 		}
 	}
-	@Override
-	public void request() throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

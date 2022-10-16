@@ -1,11 +1,11 @@
-package core.server;
+package core.service;
 
 import java.io.*;
+import java.net.Socket;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 
-public class MapperService extends Service {
-
+public class MapperService extends ObjectStreamService {
 	public MapperService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
@@ -14,8 +14,10 @@ public class MapperService extends Service {
 	public void request() throws IOException {
 		System.out.println("Mapper Service");
 		try {
-			Command cmd = (Command) is.readObject();
-			Service mapping = cmd.response(is, os);
+			ServiceResolver cmd = (ServiceResolver) is.readObject();
+			
+			System.out.println("Receive Command: "+ cmd.getCommandType());
+			ObjectStreamService mapping = cmd.response(is, os);
 			mapping.request();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();

@@ -1,23 +1,11 @@
 package core.client;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
-import core.mapper.Command;
+import core.mapper.ServiceResolver;
 
-public class LoginClient extends Client {
-	private Boolean loginSuccess = false;
-	@Override
-	public void receive() throws IOException, ClassNotFoundException {
-		loginSuccess = (Boolean) is.readObject();
-	}
-
-	@Override
-	public void send(Object obj) throws IOException {
-		os.writeObject(obj);
-		os.flush();
-	}
-
+public class LoginClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
@@ -25,28 +13,20 @@ public class LoginClient extends Client {
 			while (true) {
 				String id = scanner.nextLine();
 				String pw = scanner.nextLine();
-				
-				connect();
-				send(new Command("LoginService"));
+				connect(new ServiceResolver("LoginService"));
 				send(id);
 				send(pw);
-				receive();	
-				if (loginSuccess) {
+				if ((Boolean) receive()) {
 					unconnect();
-//					scanner.close(); (X)
-//					new ChatClient("asdf").run();
 				} else {
 					System.out.println("틀렸다.");
 					unconnect();
 				}
-				
 			}
 			
 		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
-
 }

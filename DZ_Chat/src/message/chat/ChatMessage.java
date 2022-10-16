@@ -18,14 +18,14 @@ public class ChatMessage extends Message {
 	
 	@Override
 	public void send(ObjectOutputStream oos) throws IOException {
-		oos.writeObject(new ChatMessage(this.chatRoomName, this.sender, message));
+		oos.writeObject(this.toString());
 		oos.flush();
 	}
 	
 	@Override
 	public void push() {
 		System.out.println("message push: " + message);
-		System.out.println("chatROom: " + chatRoom);
+		System.out.println("chatRoom: " + chatRoom);
 		chatRoom.getChatServiceList().stream().forEach(s -> {
 			try {
 				System.out.println(s.getMe());
