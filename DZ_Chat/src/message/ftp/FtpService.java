@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -13,14 +15,16 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import core.server.Service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class FtpService {
+public class FtpService extends Service{
+	public FtpService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
+		super(is, os);
+	}
+	
 	File file;
 	private int DEFAULT_BUFFER_SIZE = 10000;
 	public static boolean fileValid(String filePath) {
@@ -71,34 +75,33 @@ public class FtpService {
 			System.out.println();
 		}
 	}
-	public void sendFile(String fileName, Socket socket) throws IOException {
+	public void sendFile(String fileName, Socket socket) throws IOException{
 		// 파일 존재 여부 확인 
 //		String FileName = "fileName.txt";		
 		String[] input = fileName.split(" ");
 		String splitFileName = input[1];
 		
-		FtpService ftp = new FtpService();
-		if(!ftp.fileValid(splitFileName)) return;
+		if(!fileValid(splitFileName)) return;
 		
 		File file = new File(splitFileName);
 						
-		
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE]; // 4K가 적절하지 않나?
-		
 		long fileSize = file.length();
 		
-		FileInputStream fis = new FileInputStream(file);
-		OutputStream os = socket.getOutputStream();
+		// 여기에 파일이 있음 
+		InputStream fis = new FileInputStream(file);
+		
+		// 앞으로 저장할 파일
+		OutputStream os = socket.getOutputStream(); 
 		
 //		static boolean stop = false;
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
-				try {
-					
+				try {					
 					int readBytes;
 					long totalReadBytes = 0;
-					while ((readBytes = fis.read(buffer)) > 0 && stop) {
+					while ((readBytes = fis.read(buffer)) > 0) {
 						os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분				
 						totalReadBytes += readBytes;
 						System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
@@ -117,7 +120,7 @@ public class FtpService {
 		}catch(Exception e){
 			
 		}
-		stop = true;
+		
 		
 		System.out.println("File transfer completed.");
 		
@@ -169,6 +172,11 @@ public class FtpService {
 			p.waitFor();
             p.destroy();
 		}
+	}
+	@Override
+	public void request() throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
