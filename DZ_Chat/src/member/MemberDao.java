@@ -7,14 +7,20 @@ import message.ftp.FileCommon;
 
 public class MemberDao {
 	private static final MemberMap memberMap = MemberMap.getInstance();
-	private static final String filePath = ".DZ_Chat/resources/member/memberFile.txt";
+	private static final String filePath = "./DZ_Chat/resources/member/memberFile.txt";
+	private static MemberDao dao;
 
-	public MemberDao() {
-		readContent(filePath);
+	private MemberDao() {
+	}
+	
+	public static MemberDao getInstance() {
+		if (dao == null)
+			return dao = new MemberDao();
+		return dao;
 	}
 
 	// 파일에서 회원정보 받아와서 Map에 저장
-	public void readContent(String filePath) {
+	public void readContent() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 

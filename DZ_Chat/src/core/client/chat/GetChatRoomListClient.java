@@ -3,7 +3,6 @@ import java.io.*;
 
 import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
-import message.chat.Message;
 
 public class GetChatRoomListClient extends ObjectStreamClient {
 	public void viewList() throws IOException, ClassNotFoundException {
@@ -26,5 +25,4 @@ public class GetChatRoomListClient extends ObjectStreamClient {
 		}
 		
 	}
-
 }
