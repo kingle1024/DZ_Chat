@@ -39,7 +39,7 @@ public class ChatService extends ObjectStreamService  {
 				}
 			} catch (IOException e) {
 				chatRoom.getChatServiceList().remove(this);
-				new SystemMessage(chatRoom, me + "님이 퇴장하셨습니다. 남은 인원 수: " + chatRoom.size()).push();
+				new SystemMessage(chatRoom, me.nickname() + "님이 퇴장하셨습니다. 남은 인원 수: " + chatRoom.size()).push();
 				if (chatRoom.size() == 0) {
 					MainServer.chatRoomMap.remove(chatRoomName);
 				}

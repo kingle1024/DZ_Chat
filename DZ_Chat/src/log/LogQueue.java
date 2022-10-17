@@ -20,9 +20,9 @@ public class LogQueue {
 	public void add(NeedLog log) {
 		synchronized (monitor) {
 			que.add(log.toLog());
-		}
-		if (que.size() > 5) {
-			monitor.notify();
+			if (que.size() > 5) {
+				monitor.notify();
+			}
 		}
 	}
 	

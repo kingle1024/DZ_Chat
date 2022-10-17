@@ -10,7 +10,6 @@ public class Member implements Comparable<Member>, Serializable {
 	private String password;
 	private String name;
 	private String birth;
-	private String ip;
 
 	public Member(String userId, String password, String name, String birth) {
 		this.userId = userId;
@@ -43,10 +42,6 @@ public class Member implements Comparable<Member>, Serializable {
 		return password.equals(pw);
 	}
 	
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -75,7 +70,7 @@ public class Member implements Comparable<Member>, Serializable {
 	}
 
 	public String nickname() {
-		return name + "( " + ip + " )";
+		return name + "( " + userId + " )";
 	}
 
 }
