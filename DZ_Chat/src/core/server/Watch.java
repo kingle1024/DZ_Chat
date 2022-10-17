@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
@@ -30,9 +31,7 @@ public class Watch {
 	public static ExecutorService threadPool;
 	public static void main(String[] args) {
 		try {
-			System.out.println("CHANGE");
 			ProcessBuilder pb = new ProcessBuilder("java", "-cp", "./bin", "core.server.Main");
-			pb.inheritIO();
 			WatchService watcher = FileSystems.getDefault().newWatchService();
 			Path dir = FileSystems.getDefault().getPath("./bin");
 			registerRecursive(dir, watcher);
@@ -40,18 +39,37 @@ public class Watch {
 
 			while (true) {
 				Process process = pb.start();
-				InputStream is = process.getInputStream();
-				OutputStream os = process.getOutputStream();
+				System.out.println("Process");
+				InputStreamReader is = new InputStreamReader(process.getInputStream(), "EUC-KR");
+				OutputStreamWriter os = new OutputStreamWriter(process.getOutputStream(), "EUC-KR");
+					Thread thread = new Thread(() ->{
+						while (true) {
+							if (Thread.currentThread().isInterrupted()) return;
+							try {
+								char input = (char) is.read();
+								if (input != -1) System.out.print(input);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+					thread.start();
+				
 				try {
 					key = watcher.take();
 					System.out.println("Process RUN");
 					for (WatchEvent<?> event : key.pollEvents()) {
 						if (event.kind() == ENTRY_MODIFY) {
-							key.reset();
-							os.write("save".getBytes());
-							os.write("q".getBytes());
+							System.out.println("변경 감지");
+							os.write('s');
+							Thread.sleep(1);
+							os.write('q');
 							os.flush();
-//							process.destroy();
+
+							thread.interrupt();
+							process.destroy();
+							key.reset();
 						}
 					}
 				} catch (InterruptedException e) {

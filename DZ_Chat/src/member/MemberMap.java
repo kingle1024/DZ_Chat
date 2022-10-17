@@ -20,6 +20,10 @@ public class MemberMap {
 		return memberMap.values();
 	}
 
+	public int size() {
+		return memberMap.size();
+	}
+	
 	public void put(String key, Member value) {
 		memberMap.put(key, value);
 	}
