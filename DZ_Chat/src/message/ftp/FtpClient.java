@@ -1,40 +1,46 @@
 package message.ftp;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
+import property.Property;
+
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.*;
 
 // 보내는 곳 (Client)
-public class FtpClient {
-	
-	public void run(String chat, String chatRoomName) {
-		String serverIP = "localhost";
-		int port = 55_552;
+public class FtpClient extends Thread{
+	private volatile HashMap<String, Object> map;
+	public FtpClient(ThreadGroup threadGroup, String threadName, HashMap<String, Object> map) {
+		super(threadGroup, threadName);
+		this.map = map;
+	}
+
+	@Override
+	public void start() {
+		String chatRoomName = (String) map.get("chatRoomName");
+		String chat = (String) map.get("chat");
+		String serverIP = Property.list().get("IP");
+		String fileName = chat.split(" ")[1];
+
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("chatRoomAndFileName", chatRoomName+"/"+fileName);
+		map.put("chat", chat);
+
+		int port = Integer.parseInt(Property.list().get("FTP_PORT"));
+		System.out.println("FtpClient > port > "+port);
 
 		try {
 			// 서버 연결
 			System.out.println("FtpClient > run() > ");
 			Socket socket = new Socket(serverIP, port);
 			connectErrorCheck(socket);
-			FtpService ftp = new FtpService();
-
-			String input = chat;
-
-			input = input+" room/"+chatRoomName;
-			messageSend(input, socket);
 
 			//파일 보내는 부분
-			if(input.startsWith("#fileSend")){
-				ftp.sendFile(input, socket);
-				System.out.println("파일 전송이 완료되었습니다.");
-			}else if(input.startsWith("#fileSave")) {
-				// 파일 받기
-				saveFile(input, chatRoomName);
-				System.out.println("파일 저장이 완료되었습니다.");
-			}
+			System.out.println("FtpClient > startWith > " + chatRoomName);
+			// 파일 받기
+			saveFile(map);
+			System.out.println("파일 저장이 완료되었습니다.");
+
 
 //			os.flush();
 //			socket.close();
@@ -50,15 +56,12 @@ public class FtpClient {
 		}
 
 	}
-	public static void main(String[] args) throws Exception, SecurityException, Exception {
-//		FileTransferSender fileTransferSender = new FileTransferSender();
-//		fileTransferSender.run("#fileSend fileName.txt", "qq");
-		System.out.println("FileTransferSender main() 끝");
-	}
-	public static void saveFile(String input, String chatRoomName) throws Exception {
+	public static void saveFile(HashMap<String, Object> map) throws Exception {
+		String chatRoomAndFileName = (String) map.get("chatRoomAndFileName");
+		String chat = (String) map.get("chat");
 		try {
 			FtpService ftp = new FtpService();
-			String[] inputArr = input.split(" ");
+			String[] inputArr = chat.split(" ");
 			
 			String osName = System.getProperty("os.name").toLowerCase();				
 			String userName = System.getProperty("user.name");
@@ -70,7 +73,11 @@ public class FtpClient {
 									downloadPath, 
 									userName, 
 									inputArr));
-			String filePath = "resources/room/"+chatRoomName+"/"+inputArr[1];
+
+			String filePath = "resources/room/"+chatRoomAndFileName;
+
+			System.out.println("FtpClient > saveFile > filePath > "+chatRoomAndFileName);
+			System.out.println("downloadPath:"+downloadPath.toString());
 			ftp.saveTargetFile(filePath, downloadPath.toString());
 			ftp.showPicture(inputArr, osName, downloadPath);
 			
