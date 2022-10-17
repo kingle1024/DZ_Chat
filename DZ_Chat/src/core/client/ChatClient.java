@@ -47,8 +47,8 @@ public class ChatClient extends ObjectStreamClient {
 				}
 			};
 			thread.start();
-
-			return new ChatMessage(this.chatRoomName, member, "파일 전송 완료");
+			String message[] = chat.split(" ");
+			return new ChatMessage(this.chatRoomName, member, message[1]+" 파일이 전송되었습니다.");
 		} else if (chat.startsWith("#dir")) {
 			return new DirMessage(this.chatRoomName, member, chat);
 		} else {

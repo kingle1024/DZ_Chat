@@ -16,33 +16,29 @@ public class FtpClient {
 
 		try {
 			// 서버 연결
-			System.out.println("FileTransferSender");
+			System.out.println("FtpClient > run() > ");
 			Socket socket = new Socket(serverIP, port);
 			connectErrorCheck(socket);
 			FtpService ftp = new FtpService();
 
-//			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//			#fileSend fileName.txt
 			String input = chat;
-//			Message chatMessage = new ChatMessage(null, null, input);
-//			chatMessage.send(new ObjectOutputStream(socket.getOutputStream()));
+
 			input = input+" room/"+chatRoomName;
 			messageSend(input, socket);
-
-//			Message chatMessage = new ChatMessage(null, null, input);
-//			chatMessage.send(socket.getOutputStream());
 
 			//파일 보내는 부분
 			if(input.startsWith("#fileSend")){
 				ftp.sendFile(input, chatRoomName, socket);
+				System.out.println("파일 전송이 완료되었습니다.");
 			}else if(input.startsWith("#fileSave")) {
 				// 파일 받기
 				saveFile(input, chatRoomName);
+				System.out.println("파일 저장이 완료되었습니다.");
 			}
 
 //			os.flush();
-
 //			socket.close();
+//			System.out.println("FtpClient > run() > 끝");
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			System.out.println("Err1");
@@ -52,7 +48,7 @@ public class FtpClient {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		System.out.println("FileTransferSender > run() 끝");
+
 	}
 	public static void main(String[] args) throws Exception, SecurityException, Exception {
 //		FileTransferSender fileTransferSender = new FileTransferSender();
@@ -88,7 +84,6 @@ public class FtpClient {
 			System.out.println("Socket Connect Error.");
 			System.exit(0);
 		}
-		System.out.println("Server Connected");
 	}
 	
 	public static void messageSend(String input, Socket socket) throws IOException {
