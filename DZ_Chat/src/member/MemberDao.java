@@ -20,7 +20,7 @@ public class MemberDao {
 	}
 
 	// 파일에서 회원정보 받아와서 Map에 저장
-	public void readContent(String filePath) {
+	public void readContent() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 
