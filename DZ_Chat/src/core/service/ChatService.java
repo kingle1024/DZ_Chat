@@ -1,20 +1,21 @@
 package core.service;
 
 import java.io.*;
-import java.net.Socket;
 import java.util.Objects;
 
 import core.server.MainServer;
+import log.LogQueue;
 import member.Member;
 import message.chat.ChatRoom;
 import message.chat.Message;
 import message.chat.SystemMessage;
 
-public class ChatService extends ObjectStreamService {
+public class ChatService extends ObjectStreamService  {
 	private final Member me;
 	private final String chatRoomName;
 	private final ChatRoom chatRoom;
-	
+//	private NeedLog needLog = new NeedLog();
+	private LogQueue logQueue = LogQueue.getInstance();
 	public ChatService(ObjectInputStream is, ObjectOutputStream os, Object... args) throws IOException {
 		super(is, os);
 		this.chatRoomName = (String) args[0];
@@ -33,6 +34,7 @@ public class ChatService extends ObjectStreamService {
 					message.setChatRoom(chatRoom);
 					message.push();
 					System.out.println("[Server]" + message);
+					logQueue.add(message); //LogQueue
 				}
 			} catch (IOException e) {
 				chatRoom.getChatServiceList().remove(this);
@@ -45,8 +47,6 @@ public class ChatService extends ObjectStreamService {
 			}
 		});
 	}
-	
-
 
 	public Member getMe() {
 		return me;
@@ -76,4 +76,7 @@ public class ChatService extends ObjectStreamService {
 		ChatService other = (ChatService) obj;
 		return Objects.equals(chatRoomName, other.chatRoomName) && Objects.equals(me, other.me);
 	}
+	
+	
 }
+

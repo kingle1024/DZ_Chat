@@ -2,18 +2,18 @@ package message.chat;
 
 import java.io.*;
 
+import log.Log;
 import member.Member;
 
 public class PrivateChatMessage extends Message {
 	private static final long serialVersionUID = -286765041005171349L;
 	private final Member sender;
-	private final String message;
 	private final String chatRoomName;
 	private final String to;
 	public PrivateChatMessage(String chatRoomName, Member sender, String message, String to) {
+		super(message);
 		this.chatRoomName =chatRoomName;
 		this.sender = sender;
-		this.message = message;
 		this.to = to;
 	}
 	
@@ -43,5 +43,11 @@ public class PrivateChatMessage extends Message {
 				.append(">")
 				.append(message)
 				.toString();
+	}
+
+	@Override
+	public Log toLog() {
+		String logMessage = "PrivateMessage:" + sender.getUserId() + ":" + message;
+		return new Log("chatlog.txt", logMessage); 
 	}
 }

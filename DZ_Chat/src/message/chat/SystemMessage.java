@@ -1,30 +1,25 @@
 package message.chat;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 import core.server.MainServer;
+import log.Log;
 
 public class SystemMessage extends Message implements Serializable {
 	private static final long serialVersionUID = 7033598494494691135L;
-	private final String message;
 	private final ChatRoom chatRoom;
 	private final String chatRoomName;
 	
 	public SystemMessage(String chatRoomName, String message) {
+		super(message);
 		this.chatRoomName = chatRoomName;
-		this.message = message;
 		this.chatRoom = MainServer.chatRoomMap.get(chatRoomName);
 	}
 
 	public SystemMessage(ChatRoom chatRoom, String message) {
+		super(message);
 		this.chatRoom = chatRoom;
 		this.chatRoomName = chatRoom.getRoomName();
-		this.message = message;
 	}
 	
 	@Override
@@ -53,5 +48,11 @@ public class SystemMessage extends Message implements Serializable {
 				.append(message)
 				.append("]\t")
 				.toString();
+	}
+
+	@Override
+	public Log toLog() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

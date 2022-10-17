@@ -1,73 +1,61 @@
 package message.ftp;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import message.chat.ChatMessage;
-import message.chat.Message;
 
 // 보내는 곳 (Client)
-public class FileTransferSender {
+public class FtpClient {
 	
-
-	public static void main(String[] args) throws Exception, SecurityException, Exception {
+	public void run(String chat, String chatRoomName) {
 		String serverIP = "localhost";
-		int port = 50001;
+		int port = 55_552;
 
 		try {
 			// 서버 연결
+			System.out.println("FtpClient > run() > ");
 			Socket socket = new Socket(serverIP, port);
-			connectErrorCheck(socket);	
-			System.out.print("채팅 입력 (Ex #fileSend fileName.txt) : ");			
+			connectErrorCheck(socket);
 			FtpService ftp = new FtpService();
-			
-//			messageSend(socket);
-//			
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//			#fileSend fileName.txt
-			String input = br.readLine();
-//			Message chatMessage = new ChatMessage(null, null, input);			
-//			chatMessage.send(socket.getOutputStream());
+
+			String input = chat;
+
+			input = input+" room/"+chatRoomName;
 			messageSend(input, socket);
-			
-//			Message chatMessage = new ChatMessage(null, null, input);			
-//			chatMessage.send(socket.getOutputStream());			
-											
-			//파일 보내는 부분 		
+
+			//파일 보내는 부분
 			if(input.startsWith("#fileSend")){
-				ftp.sendFile(input, socket);	
+				ftp.sendFile(input, socket);
+				System.out.println("파일 전송이 완료되었습니다.");
 			}else if(input.startsWith("#fileSave")) {
-				saveFile(input, socket);
+				// 파일 받기
+				saveFile(input, chatRoomName);
+				System.out.println("파일 저장이 완료되었습니다.");
 			}
-			
-//			os.flush();			
-			
+
+//			os.flush();
 //			socket.close();
+//			System.out.println("FtpClient > run() > 끝");
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			System.out.println("Err1");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Err2");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
+
 	}
-	public static void saveFile(String input, Socket socket) throws ClassNotFoundException, Exception, SecurityException {
+	public static void main(String[] args) throws Exception, SecurityException, Exception {
+//		FileTransferSender fileTransferSender = new FileTransferSender();
+//		fileTransferSender.run("#fileSend fileName.txt", "qq");
+		System.out.println("FileTransferSender main() 끝");
+	}
+	public static void saveFile(String input, String chatRoomName) throws Exception {
 		try {
 			FtpService ftp = new FtpService();
 			String[] inputArr = input.split(" ");
@@ -82,8 +70,8 @@ public class FileTransferSender {
 									downloadPath, 
 									userName, 
 									inputArr));
-			
-			ftp.saveTargetFile(inputArr[1], downloadPath.toString());			
+			String filePath = "resources/room/"+chatRoomName+"/"+inputArr[1];
+			ftp.saveTargetFile(filePath, downloadPath.toString());
 			ftp.showPicture(inputArr, osName, downloadPath);
 			
 		}catch(IOException e) {
@@ -96,16 +84,19 @@ public class FileTransferSender {
 			System.out.println("Socket Connect Error.");
 			System.exit(0);
 		}
-		System.out.println("Server Connected");
 	}
 	
 	public static void messageSend(String input, Socket socket) throws IOException {
 		BufferedWriter bufferedWriter = 
-				new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+				new BufferedWriter(
+						new OutputStreamWriter(
+								new ObjectOutputStream(socket.getOutputStream())
+						)
+				);
 //		bufferedWriter.write("#fileSend fileName.txt");
 		bufferedWriter.write(input);
 		bufferedWriter.newLine();
 		bufferedWriter.flush();
-		System.out.println("메시지 전송 완료");
+//		System.out.println("메시지 전송 완료");
 	}		
 }
