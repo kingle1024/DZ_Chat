@@ -28,7 +28,7 @@ public class FtpClient {
 
 			//파일 보내는 부분
 			if(input.startsWith("#fileSend")){
-				ftp.sendFile(input, chatRoomName, socket);
+				ftp.sendFile(input, socket);
 				System.out.println("파일 전송이 완료되었습니다.");
 			}else if(input.startsWith("#fileSave")) {
 				// 파일 받기

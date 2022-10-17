@@ -35,12 +35,12 @@ public class FtpService {
 		int readBytes;
 		FileOutputStream fos = new FileOutputStream(saveFilePath);
 		long totalReadBytes = 0;
-
+		long fileSize = is.available();
 		while ((readBytes = is.read(buffer)) != -1) {
 			fos.write(buffer, 0, readBytes);
 			totalReadBytes += readBytes;
-			System.out.println("saveFile In progress: " + totalReadBytes + "/" + 1 + " Byte(s) ("
-					+ (totalReadBytes * 100 / 1) + " %)");
+			System.out.println("saveFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
+					+ (totalReadBytes * 100 / fileSize) + " %)");
 		}
 		/*
 		while ((readBytes = fis.read(buffer)) > 0
@@ -86,7 +86,7 @@ public class FtpService {
 		}
 		return sb.toString();
 	}
-	public void sendFile(String fileName, String chatRoomName, Socket socket) throws IOException{
+	public void sendFile(String fileName, Socket socket) throws IOException{
 		String[] input = fileName.split(" ");
 		String splitFileName = input[1];
 		splitFileName = "DZ_Chat/"+splitFileName;
