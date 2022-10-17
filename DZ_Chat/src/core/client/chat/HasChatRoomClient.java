@@ -20,7 +20,7 @@ public class HasChatRoomClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			connect(new ServiceResolver("HasChatRoomService"));
+			connect(new ServiceResolver("chat.HasChatRoomService"));
 			send(chatRoomName);
 			hasChatRoom =(Boolean) receive();
 			unconnect();

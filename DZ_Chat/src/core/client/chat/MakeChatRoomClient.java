@@ -15,7 +15,7 @@ public class MakeChatRoomClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			connect(new ServiceResolver("MakeChatRoomService"));
+			connect(new ServiceResolver("chat.MakeChatRoomService"));
 			send(chatRoomName);
 			unconnect();
 		} catch (IOException e) {

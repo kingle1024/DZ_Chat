@@ -67,7 +67,7 @@ public class ChatClient extends ObjectStreamClient {
 			member = new Member("id"+random, "pw"+random, "name"+random, ""+random);
 			Scanner scanner = new Scanner(System.in);
 
-			connect(new ServiceResolver("ChatService", chatRoomName, member));
+			connect(new ServiceResolver("chat.ChatService", chatRoomName, member));
 			System.out.println("채팅방 입장");
 			listening();
 			while (scanner.hasNext()) {

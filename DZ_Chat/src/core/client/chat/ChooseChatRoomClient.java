@@ -14,7 +14,7 @@ public class ChooseChatRoomClient extends ObjectStreamClient {
 		try {
 			Scanner scanner = new Scanner(System.in);
 			chatRoomName = scanner.nextLine();
-			connect(new ServiceResolver("ChooseChatRoomService"));
+			connect(new ServiceResolver("chat.ChooseChatRoomService"));
 			send(chatRoomName);
 			if ((Boolean) receive()) {
 				unconnect();
