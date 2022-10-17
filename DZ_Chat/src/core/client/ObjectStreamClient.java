@@ -1,19 +1,13 @@
 package core.client;
 
 import java.io.*;
-import java.util.*;
-
 import core.mapper.ServiceResolver;
-
 import java.net.Socket;
-
-import member.Member;
-import message.chat.ChatMessage;
-import message.chat.Message;
+import property.Property;
 
 public abstract class ObjectStreamClient implements Client {
 	private static final String SERVER_HOST = "localhost";
-	private static final int PORT_NUMBER = 50_001;
+	private static final int PORT_NUMBER = Integer.parseInt(Property.list().get("SERVER_PORT"));
 	private Socket socket;
 	protected ObjectOutputStream os;
 	protected ObjectInputStream is;
