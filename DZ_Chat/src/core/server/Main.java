@@ -17,12 +17,12 @@ public class Main {
 	public static void main(String[] args) {
 //		System.out.println("server.Main.main");
 		
-		Thread memberSave = new Thread(() -> {
-			while (true) {
-				if (Thread.currentThread().isInterrupted()) return;
-				save();
-			}
-		});
+//		Thread memberSave = new Thread(() -> {
+//			while (true) {
+//				if (Thread.currentThread().isInterrupted()) return;
+//				save();
+//			}
+//		});
 		
 		
 		// Mock ChatRoom
@@ -40,19 +40,21 @@ public class Main {
 			server.start();
 //         FtpServer.startServer();
 
+			Scanner scanner = new Scanner(System.in);
 			while (true) {
 				InputStreamReader is = new InputStreamReader(System.in);
 				char input = (char) is.read();
+//				String input = scanner.nextLine();
 				System.out.println("INPUT: " + input);
 				if ('q' == input)
 					break;
 				if ('s' == input)
-					memberSave.start();
+					save();
 			}
 
 //         FtpServer.stopServer();
 			server.stop();
-			memberSave.interrupt();
+//			memberSave.interrupt();
 
 		} catch (IOException e) {
 			System.out.println("IOException" + e);

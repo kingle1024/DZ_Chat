@@ -37,7 +37,7 @@ public class DirMessage extends Message {
 			}
 		});
 	}
-
+	
 	@Override
 	public Log toLog() {
 		String DirMessage = "Dir:" + sender.getUserId() + ":" + message;

@@ -3,6 +3,7 @@ package core.server;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,39 +42,47 @@ public class Watch {
 				Process process = pb.start();
 				System.out.println("Process");
 				InputStreamReader is = new InputStreamReader(process.getInputStream(), "EUC-KR");
-				OutputStreamWriter os = new OutputStreamWriter(process.getOutputStream(), "EUC-KR");
-					Thread thread = new Thread(() ->{
-						while (true) {
-							if (Thread.currentThread().isInterrupted()) return;
-							try {
-								char input = (char) is.read();
-								if (input != -1) System.out.print(input);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					});
-					thread.start();
-				
-				try {
-					key = watcher.take();
-					System.out.println("Process RUN");
-					for (WatchEvent<?> event : key.pollEvents()) {
-						if (event.kind() == ENTRY_MODIFY) {
-							System.out.println("변경 감지");
-							os.write('s');
-							Thread.sleep(1);
-							os.write('q');
-							os.flush();
-
-							thread.interrupt();
-							process.destroy();
-							key.reset();
+				BufferedWriter os = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), "EUC-KR"));
+				Thread thread = new Thread(() ->{
+					while (true) {
+						if (Thread.currentThread().isInterrupted()) return;
+						try {
+							char input = (char) is.read();
+							if (input != -1) System.out.print(input);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					}
-				} catch (InterruptedException e) {
+				});
+				thread.start();
+
+				try {
+					os.write("안녕하세요");
+					os.flush();
+				} catch (Exception e) {
+					
 				}
+				
+					
+//				try {
+//					key = watcher.take();
+//					System.out.println("Process RUN");
+//					for (WatchEvent<?> event : key.pollEvents()) {
+//						if (event.kind() == ENTRY_MODIFY) {
+//							System.out.println("변경 감지");
+//							os.write('s');
+//							Thread.sleep(1);
+//							os.write('q');
+//							os.flush();
+//
+//							thread.interrupt();
+//							process.destroy();
+//							key.reset();
+//						}
+//					}
+//				} catch (InterruptedException e) {
+//				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
