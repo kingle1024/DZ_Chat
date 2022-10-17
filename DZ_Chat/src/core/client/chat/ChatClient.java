@@ -1,17 +1,18 @@
 package core.client.chat;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 import member.Member;
 import message.chat.*;
-import message.ftp.FtpClient;
 
 public class ChatClient extends ObjectStreamClient {
 	private Member me;
 	private String chatRoomName;
+	ThreadGroup threadGroup;
 
 	public ChatClient(String chatRoomName, Member me) {
 		this.chatRoomName = chatRoomName;
@@ -27,7 +28,7 @@ public class ChatClient extends ObjectStreamClient {
 					System.out.println(message);
 				}
 			} catch (IOException | ClassNotFoundException e) {
-
+				e.printStackTrace();
 			}
 		});
 		thread.start();
@@ -43,16 +44,13 @@ public class ChatClient extends ObjectStreamClient {
 		} else if (chat.startsWith("#exit")) {
 			unconnect();
 		} else if (chat.startsWith("#file")) {
-			Thread thread = new Thread() {
-				@Override
-				public void run() {
-					FtpClient ftpClient = new FtpClient();
-					ftpClient.run(chat, chatRoomName);
-				}
-			};
-			thread.start();
-			String message[] = chat.split(" ");
-			return new ChatMessage(this.chatRoomName, me, message[1] + " 파일이 전송되었습니다.");
+			String[] message = chat.split(" ");
+			boolean result = fileMessage(chat);
+			if(!result){
+				return new PrivateChatMessage(this.chatRoomName, me, message[1] + " 파일 전송 취소", "privateMan");
+			}else{
+				return new ChatMessage(this.chatRoomName, me, message[1] + " 파일이 전송되었습니다.");
+			}
 		} else if (chat.startsWith("#dir")) {
 			return new DirMessage(this.chatRoomName, me, chat);
 		} else {
@@ -81,8 +79,22 @@ public class ChatClient extends ObjectStreamClient {
 			unconnect();
 
 		} catch (IOException e) {
-
+			e.printStackTrace();
 		}
 		System.out.println("채팅 종료");
+	}
+	public boolean fileMessage(String chat) throws IOException {
+		if(threadGroup == null){
+			threadGroup = new ThreadGroup(me.getUserId()+chatRoomName);
+		}
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("chat", chat);
+		map.put("chatRoomName", this.chatRoomName);
+		map.put("threadGroup", threadGroup);
+
+		FileMessage fileMessage = new FileMessage();
+		fileMessage.run(map);
+
+		return true;
 	}
 }

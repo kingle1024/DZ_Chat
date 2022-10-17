@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 public class FtpService {
-	private final int DEFAULT_BUFFER_SIZE = 4096;
+	private final int DEFAULT_BUFFER_SIZE = 4;
 	public static boolean fileValid(String filePath) {
 		File file = new File(filePath);
 		
@@ -42,16 +42,6 @@ public class FtpService {
 			System.out.println("saveFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
 					+ (totalReadBytes * 100 / fileSize) + " %)");
 		}
-		/*
-		while ((readBytes = fis.read(buffer)) > 0
-//							&& stop
-					) {
-				os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
-				totalReadBytes += readBytes;
-				System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-						+ (totalReadBytes * 100 / fileSize) + " %)");
-			}
-		 */
 
 		is.close();
 		fos.close();
@@ -72,16 +62,12 @@ public class FtpService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd a HH:mm");
 		assert contents != null;
 		for(File f : contents) {
-//			System.out.printf("%-25s", sdf.format(new Date(f.lastModified())));
 			sb.append(String.format("%-25s", sdf.format(new Date(f.lastModified()))));
 			if(f.isDirectory()) {
-//				System.out.printf("%-10s%-20s", "<DIR>", f.getName());
 				sb.append(String.format("%-10s%-20s", "<DIR>", f.getName()));
 			}else {
-//				System.out.printf("%-20s", f.getName());
 				sb.append(String.format("%-20s", f.getName()));
 			}
-//			System.out.println();
 			sb.append("\n");
 		}
 		return sb.toString();
@@ -97,7 +83,7 @@ public class FtpService {
 		File file = new File(splitFileName);
 		System.out.println("FtpService > sendFile() > 보내는 파일 위치 > "+file.getAbsolutePath());
 
-		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE]; // 4K가 적절하지 않나?
+		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 		long fileSize = file.length();
 		
 		// 여기에 파일이 있음 
@@ -110,8 +96,8 @@ public class FtpService {
 			int readBytes;
 			long totalReadBytes = 0;
 			while ((readBytes = fis.read(buffer)) > 0
-//							&& stop
 					) {
+				Thread.sleep(1000);
 				os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
 				totalReadBytes += readBytes;
 				System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
@@ -119,9 +105,10 @@ public class FtpService {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
 
-//		stop = true;
 //		System.out.println("FtpService > sendFile 끝");
 		
 //		fis.close();
