@@ -14,14 +14,14 @@ public class MemberManager {
 		return memberManager;
 	}
 	
-	public boolean register(Member member, String pwChk) {
-		if (!memberMap.checkPw(member.getPassword(), pwChk)) {
+	public boolean register(Member tmpMember, String pwChk) {
+		if (!tmpMember.validatePw(pwChk)) {
 			return false;
 		}
-		if (memberMap.containKey(member.getUserId())) {
+		if (memberMap.containKey(tmpMember.getUserId())) {
 			return false;
 		}
-		memberMap.put(member.getUserId(), member);
+		memberMap.put(tmpMember.getUserId(), tmpMember);
 		//파일에 넣기
 		return true;
 	}
@@ -30,9 +30,10 @@ public class MemberManager {
 		if (!memberMap.containKey(id)) {
 			return null;
 		}
-		if (!memberMap.checkMember(id, pw))
+		Member member = memberMap.get(id);
+		if (!member.validatePw(pw))
 			return null;
-		return memberMap.get(id);
+		return member;
 	}
 
 	public boolean delete(Member member, String pw) {
@@ -48,5 +49,14 @@ public class MemberManager {
 			return memberMap.getpw(id);
 		}
 		return null;
+	}
+	
+	//정보수정 확인 - MemberMap 47-53
+	public boolean edit(Member me, String validatePw, String newPw) {
+		if (!me.validatePw(validatePw)) {
+			return false;
+		}
+		me.setPassword(newPw);
+		return true;
 	}
 }

@@ -2,12 +2,13 @@ package member;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Map.*;
+
+import message.ftp.FileCommon;
 
 public class MemberDao {
 	private static final MemberMap memberMap = MemberMap.getInstance();
-	
+
 	public MemberDao() {
 		String filePath = "./memberFile.txt";
 		readContent(filePath);
@@ -20,7 +21,7 @@ public class MemberDao {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 
 			String readStr = "";
-			String[] splitStr = null; // new String[MemberMap.size()];
+			String[] splitStr = null;
 			while ((readStr = br.readLine()) != null) {
 
 				splitStr = readStr.split(",");
@@ -33,6 +34,14 @@ public class MemberDao {
 		}
 	}
 
+	
+	public void WriteContent() {
+		FileCommon fileCommon = new FileCommon();
+		
+		for(Member member : memberMap.values()) {
+			fileCommon.saveContent("./memberFile.txt", member.toString() + "\n", true);
+		}
 
+	}
 
 }

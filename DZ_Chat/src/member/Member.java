@@ -40,6 +40,10 @@ public class Member implements Comparable<Member>, Serializable {
 		return birth;
 	}
 
+	public boolean validatePw(String pw) {
+		return password.equals(pw);
+	}
+	
 	//equals, hashCode, compareTo
 	@Override
 	public boolean equals(Object obj) {
