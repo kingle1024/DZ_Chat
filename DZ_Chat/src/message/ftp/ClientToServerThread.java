@@ -1,5 +1,7 @@
 package message.ftp;
 
+import property.Property;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
@@ -42,7 +44,7 @@ public class ClientToServerThread extends Thread{
                     .append(map.get("chatRoomName")).append("/")
                     .append(originFile.getName());
 
-            byte[] buffer = new byte[4096];
+            byte[] buffer = new byte[Integer.parseInt(Property.list().get("DEFAULT_BUFFER_SIZE"))];
             File originFileTarget = new File(originFilePath);
             System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > "+originFilePath);
             long fileSize = originFileTarget.length();
@@ -57,7 +59,7 @@ public class ClientToServerThread extends Thread{
             int cnt = 0;
             int loopTime = 3;
             while ((readBytes = fis.read(buffer)) > 0) {
-                Thread.sleep(1);
+                Thread.sleep(1000);
                 os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
                 totalReadBytes += readBytes;
                 if(cnt % loopTime == 0) {

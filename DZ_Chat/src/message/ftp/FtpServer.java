@@ -43,6 +43,7 @@ public class FtpServer extends Server {
 					}
 				}
 			} catch (IOException e) {
+				System.out.println("FtpServer > start() > IOException");
 				e.printStackTrace();
 			}
 		});

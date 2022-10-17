@@ -39,12 +39,11 @@ public class FtpClient extends Thread{
 			System.out.println("FtpClient > startWith > " + chatRoomName);
 			// 파일 받기
 			saveFile(map);
-			System.out.println("파일 저장이 완료되었습니다.");
+			System.out.println("FtpClient > start() > 파일 저장이 완료되었습니다.");
 
 
 //			os.flush();
 //			socket.close();
-//			System.out.println("FtpClient > run() > 끝");
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			System.out.println("Err1");
@@ -77,7 +76,7 @@ public class FtpClient extends Thread{
 			String filePath = "resources/room/"+chatRoomAndFileName;
 
 			System.out.println("FtpClient > saveFile > filePath > "+chatRoomAndFileName);
-			System.out.println("downloadPath:"+downloadPath.toString());
+			System.out.println("downloadPath:"+downloadPath);
 			ftp.saveTargetFile(filePath, downloadPath.toString());
 			ftp.showPicture(inputArr, osName, downloadPath);
 			

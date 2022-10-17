@@ -1,5 +1,7 @@
 package message.ftp;
 
+import property.Property;
+
 import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -7,7 +9,7 @@ import java.util.Date;
 
 
 public class FtpService {
-	private final int DEFAULT_BUFFER_SIZE = 4096;
+	private final int DEFAULT_BUFFER_SIZE = Integer.parseInt(Property.list().get("DEFAULT_BUFFER_SIZE"));
 	public static boolean fileValid(String filePath) {
 		File file = new File(filePath);
 		
@@ -166,10 +168,10 @@ public class FtpService {
 	}
 	public void fileSend(String clientMessage, Socket socket) {
 		String[] message = clientMessage.split(" ");
-		System.out.println("FtpService > fileSend > message > "+message[1]);
+		System.out.println("FtpService > fileSend > message[1] > "+message[1]);
 		File file = new File(message[1]);
 		String fileName = file.getName();
-		System.out.println("FtpService > fileSend > message > "+message[2]);
+		System.out.println("FtpService > fileSend > message[2] > "+message[2]);
 		String roomName = message[2];
 		FileCommon fileCommon = new FileCommon();
 		String saveFilePath = fileCommon.fileNameBalance("resources/"+roomName+"/", fileName);
