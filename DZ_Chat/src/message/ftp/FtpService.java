@@ -17,7 +17,7 @@ public class FtpService {
 		File file = new File(filePath);
 		
 		if (!file.exists()) {
-			System.out.println("File not Exist : "+file.getAbsolutePath());
+			System.out.println("파일이 존재하지 않습니다 : "+file.getAbsolutePath());
 			return false;
 		}
 		
@@ -34,10 +34,24 @@ public class FtpService {
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 		int readBytes;
 		FileOutputStream fos = new FileOutputStream(saveFilePath);
-		
+		long totalReadBytes = 0;
+
 		while ((readBytes = is.read(buffer)) != -1) {
 			fos.write(buffer, 0, readBytes);
+			totalReadBytes += readBytes;
+			System.out.println("saveFile In progress: " + totalReadBytes + "/" + 1 + " Byte(s) ("
+					+ (totalReadBytes * 100 / 1) + " %)");
 		}
+		/*
+		while ((readBytes = fis.read(buffer)) > 0
+//							&& stop
+					) {
+				os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
+				totalReadBytes += readBytes;
+				System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
+						+ (totalReadBytes * 100 / fileSize) + " %)");
+			}
+		 */
 
 		is.close();
 		fos.close();
@@ -51,13 +65,15 @@ public class FtpService {
 			return sb.toString();
 		}
 		File[] contents = file.listFiles();
-		sb.append("<전송된 파일 목록>\n");
+		sb.append("<전송된 파일 목록> ")
+				.append(path)
+				.append("\n");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd a HH:mm");
 		assert contents != null;
 		for(File f : contents) {
 //			System.out.printf("%-25s", sdf.format(new Date(f.lastModified())));
-			sb.append(String.format("%-25s\n", sdf.format(new Date(f.lastModified()))));
+			sb.append(String.format("%-25s", sdf.format(new Date(f.lastModified()))));
 			if(f.isDirectory()) {
 //				System.out.printf("%-10s%-20s", "<DIR>", f.getName());
 				sb.append(String.format("%-10s%-20s", "<DIR>", f.getName()));
@@ -73,13 +89,13 @@ public class FtpService {
 	public void sendFile(String fileName, String chatRoomName, Socket socket) throws IOException{
 		String[] input = fileName.split(" ");
 		String splitFileName = input[1];
-		String path = input[2];
 		splitFileName = "DZ_Chat/"+splitFileName;
 		
 		if(!fileValid(splitFileName)) return;
-		System.out.println("sendFile1:"+splitFileName);
+
 		// 파일이 존재하는 경로
 		File file = new File(splitFileName);
+		System.out.println("FtpService > sendFile() > 보내는 파일 위치 > "+file.getAbsolutePath());
 
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE]; // 4K가 적절하지 않나?
 		long fileSize = file.length();
@@ -98,19 +114,18 @@ public class FtpService {
 					) {
 				os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
 				totalReadBytes += readBytes;
-				System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
+				System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
 						+ (totalReadBytes * 100 / fileSize) + " %)");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-
 //		stop = true;
-		System.out.println("FtpService > sendFile 끝");
+//		System.out.println("FtpService > sendFile 끝");
 		
 //		fis.close();
-//		os.close();
+		os.close(); // close 안하면 파일에 안씀
 	}
 	public String getOs() {
 		String os = System.getProperty("os.name").toLowerCase();
