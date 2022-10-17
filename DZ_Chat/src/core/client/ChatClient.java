@@ -5,6 +5,7 @@ import java.util.Scanner;
 import core.mapper.ServiceResolver;
 import member.Member;
 import message.chat.*;
+import message.ftp.FtpClient;
 
 public class ChatClient extends ObjectStreamClient {
 	private Member member;
@@ -37,9 +38,17 @@ public class ChatClient extends ObjectStreamClient {
 			return new PrivateChatMessage(chatRoomName, member, msg, to);
 		} else if (chat.startsWith("#exit")) {
 			unconnect();
-			
-		} else if (chat.startsWith("#flieSend")) {
-//			return new FileMessage(chat);
+		} else if (chat.startsWith("#file")) {
+			Thread thread = new Thread() {
+				@Override
+				public void run() {
+					FtpClient ftpClient = new FtpClient();
+					ftpClient.run(chat, chatRoomName);
+				}
+			};
+			thread.start();
+
+			return new ChatMessage(this.chatRoomName, member, "파일 전송 완료");
 		} else if (chat.startsWith("#dir")) {
 			return new DirMessage(this.chatRoomName, member, chat);
 		} else {

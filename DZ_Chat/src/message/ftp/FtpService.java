@@ -12,13 +12,12 @@ import java.util.Date;
 
 
 public class FtpService {
-	File file;
-	private int DEFAULT_BUFFER_SIZE = 10000;
+	private final int DEFAULT_BUFFER_SIZE = 4096;
 	public static boolean fileValid(String filePath) {
 		File file = new File(filePath);
 		
 		if (!file.exists()) {
-			System.out.println("File not Exist");
+			System.out.println("File not Exist : "+file.getAbsolutePath());
 			return false;
 		}
 		
@@ -27,11 +26,12 @@ public class FtpService {
 	public void saveSocketFile(Socket socket, String saveFilePath) throws IOException {
 		saveFile(socket.getInputStream(), saveFilePath);
 	}
-	public void saveTargetFile(String targetFilePath, String saveFilePath) throws IOException {				
+	public void saveTargetFile(String targetFilePath, String saveFilePath) throws IOException {
+		System.out.println("FtpService > saveTargetFile : 파일 저장 위치 : "+saveFilePath);
 		saveFile(new FileInputStream(targetFilePath), saveFilePath);
 	}
 	public void saveFile(InputStream is, String saveFilePath) throws IOException {
-		byte[] buffer = new byte[4096];
+		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 		int readBytes;
 		FileOutputStream fos = new FileOutputStream(saveFilePath);
 		
@@ -44,15 +44,17 @@ public class FtpService {
 	}
 	public String dir(String path) {
 		File file = new File("resources/room/"+path+"");
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		if(!file.exists()) {
-			sb.append("폴더에 파일이 존재하지 않습니다. ( "+file.getAbsolutePath()+")");
+			sb.append("폴더에 파일이 존재하지 않습니다. ( ")
+					.append(file.getAbsolutePath()).append(")");
 			return sb.toString();
 		}
 		File[] contents = file.listFiles();
-		sb.append("<전송된 파일 목록>");
+		sb.append("<전송된 파일 목록>\n");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd a HH:mm");
+		assert contents != null;
 		for(File f : contents) {
 //			System.out.printf("%-25s", sdf.format(new Date(f.lastModified())));
 			sb.append(String.format("%-25s\n", sdf.format(new Date(f.lastModified()))));
@@ -68,59 +70,47 @@ public class FtpService {
 		}
 		return sb.toString();
 	}
-	public void sendFile(String fileName, Socket socket) throws IOException{
-		// 파일 존재 여부 확인 
-//		String FileName = "fileName.txt";		
+	public void sendFile(String fileName, String chatRoomName, Socket socket) throws IOException{
 		String[] input = fileName.split(" ");
 		String splitFileName = input[1];
+		String path = input[2];
+		splitFileName = "DZ_Chat/"+splitFileName;
 		
 		if(!fileValid(splitFileName)) return;
-		
+		System.out.println("sendFile1:"+splitFileName);
+		// 파일이 존재하는 경로
 		File file = new File(splitFileName);
-						
+
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE]; // 4K가 적절하지 않나?
 		long fileSize = file.length();
 		
 		// 여기에 파일이 있음 
 		InputStream fis = new FileInputStream(file);
-		
+
 		// 앞으로 저장할 파일
-		OutputStream os = socket.getOutputStream(); 
-		
-//		static boolean stop = false;
-		Thread thread = new Thread() {
-			@Override
-			public void run() {
-				try {					
-					int readBytes;
-					long totalReadBytes = 0;
-					while ((readBytes = fis.read(buffer)) > 0 
-//							&& stop
-							) {
-						os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분				
-						totalReadBytes += readBytes;
-						System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-								+ (totalReadBytes * 100 / fileSize) + " %)");				
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
-		thread.start();
-		
+		OutputStream os = socket.getOutputStream();
+
 		try {
-			Thread.sleep(3000);
-		}catch(Exception e){
-			
+			int readBytes;
+			long totalReadBytes = 0;
+			while ((readBytes = fis.read(buffer)) > 0
+//							&& stop
+					) {
+				os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
+				totalReadBytes += readBytes;
+				System.out.println("In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
+						+ (totalReadBytes * 100 / fileSize) + " %)");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
+
 //		stop = true;
+		System.out.println("FtpService > sendFile 끝");
 		
-		System.out.println("File transfer completed.");
-		
-		fis.close();
-		os.close();
+//		fis.close();
+//		os.close();
 	}
 	public String getOs() {
 		String os = System.getProperty("os.name").toLowerCase();
@@ -145,9 +135,15 @@ public class FtpService {
 	}
 	public String getDownloadPath(String osName, StringBuffer downloadPath, String userName, String[] inputArr) {
 		if(osName.contains("window")){
-			downloadPath.append("C:\\Users\\"+userName+"\\Downloads\\");
+			downloadPath
+					.append("C:\\Users\\")
+					.append(userName)
+					.append("\\Downloads\\");
 		}else if(osName.contains("mac")) {
-			downloadPath.append("/Users/"+userName+"/Downloads/");
+			downloadPath
+					.append("/Users/")
+					.append(userName)
+					.append("/Downloads/");
 		}
 		// 파일명 넣기
 		downloadPath.append(inputArr[1]);
@@ -164,6 +160,7 @@ public class FtpService {
 			}else if(osName.contains("window")) {
 				p = Runtime.getRuntime().exec("cmd /c " + "mspaint "+downloadPath.toString());
 			}
+			assert p != null;
 			p.waitFor();
             p.destroy();
 		}
