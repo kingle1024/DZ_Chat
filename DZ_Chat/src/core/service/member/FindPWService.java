@@ -9,7 +9,7 @@ import member.MemberManager;
 
 public class FindPWService extends ObjectStreamService {
 	private static final MemberManager memberManager = MemberManager.getInstance();
-	public FindPWService(ObjectInputStream is, ObjectOutputStream os, Object...objects) throws IOException {
+	public FindPWService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
 	

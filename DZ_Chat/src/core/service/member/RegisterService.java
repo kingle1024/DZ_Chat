@@ -7,7 +7,7 @@ import member.*;
 
 public class RegisterService extends ObjectStreamService {
 	private static final MemberManager memberManager = MemberManager.getInstance();
-	public RegisterService(ObjectInputStream is, ObjectOutputStream os, Object...objects) throws IOException {
+	public RegisterService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
 	
