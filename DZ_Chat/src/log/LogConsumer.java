@@ -4,13 +4,12 @@ import java.io.FileOutputStream;
 
 public class LogConsumer implements Runnable {
 	private static final LogQueue logQueue = LogQueue.getInstance();
+	private static final Object monitor = logQueue.getMonitor();
 	@Override
 	public void run() {
 		try {
 			while (!Thread.currentThread().isInterrupted()) {
-				
 				appendInfo(logQueue.poll());
-				
 			}
 		} catch (Exception e) {
 			
@@ -39,5 +38,11 @@ public class LogConsumer implements Runnable {
 		}
 		// 회원정보, 채팅로그,
 
+	}
+	
+	public void consumeAllLog() {
+		synchronized (monitor) {
+			monitor.notify();
+		}
 	}
 }

@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class LogQueue {
 	private static LogQueue logQueue;
 	private ConcurrentLinkedQueue<Log> que = new ConcurrentLinkedQueue<>();
-	static final Object monitor  = new Object(); 
+	private static final Object monitor  = new Object(); 
 	private LogQueue() {}
 
 	public static LogQueue getInstance() {
@@ -35,4 +35,7 @@ public class LogQueue {
 		}
 	}
 
+	public Object getMonitor() {
+		return monitor;
+	}
 }

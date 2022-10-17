@@ -11,7 +11,7 @@ import message.chat.ChatRoom;
 
 public class MainServer extends Server {
 	public MainServer(int port) throws UnknownHostException {
-		super(port);
+		super(port);			
 	}
 
 	public static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>()); 

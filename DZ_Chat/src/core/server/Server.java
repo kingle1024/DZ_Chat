@@ -9,7 +9,7 @@ public abstract class Server {
 	protected final int PORT_NUMBER;
 	public Server(int port) throws UnknownHostException {
 		HOST = InetAddress.getLocalHost();
-		PORT_NUMBER = port;
+		PORT_NUMBER = port;	
 	}
 	public abstract void start() throws IOException;
 	public abstract void stop() throws IOException;
