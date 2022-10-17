@@ -6,7 +6,7 @@ import java.net.Socket;
 import property.Property;
 
 public abstract class ObjectStreamClient implements Client {
-	private static final String SERVER_HOST = "localhost";
+	private static final String SERVER_HOST = Property.list().get("IP");
 	private static final int PORT_NUMBER = Integer.parseInt(Property.list().get("SERVER_PORT"));
 	private Socket socket;
 	protected ObjectOutputStream os;
