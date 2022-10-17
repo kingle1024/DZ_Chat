@@ -22,7 +22,7 @@ public class UpdatePWClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			connect(new ServiceResolver("UpdatePWService"));
+			connect(new ServiceResolver("member.UpdatePWService"));
 			send(me);
 			send(validatePW);
 			send(newPW);

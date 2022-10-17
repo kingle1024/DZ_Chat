@@ -20,7 +20,7 @@ public class DeleteClient extends ObjectStreamClient {
 	public void run() {
 		try {
 			while (true) {
-				connect(new ServiceResolver("DeleteService"));
+				connect(new ServiceResolver("member.DeleteService"));
 				send(me);
 				send(pw);
 				deleteSuccess = (Boolean) receive();

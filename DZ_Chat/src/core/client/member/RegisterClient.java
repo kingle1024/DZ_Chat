@@ -19,7 +19,7 @@ public class RegisterClient extends ObjectStreamClient {
 	public void run() {
 		try {
 			while (true) {
-				connect(new ServiceResolver("RegisterService"));
+				connect(new ServiceResolver("member.RegisterService"));
 				send(tmpMember);
 				send(pwChk);
 				registerSuccess = (Boolean) receive();
