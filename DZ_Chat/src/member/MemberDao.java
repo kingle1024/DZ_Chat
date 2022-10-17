@@ -37,7 +37,5 @@ public class MemberDao {
 		for (Member member : memberMap.values()) {
 			fileCommon.saveContent(filePath, member.toString() + "\n", true);
 		}
-
 	}
-
 }

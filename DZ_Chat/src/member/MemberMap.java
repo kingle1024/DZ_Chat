@@ -32,7 +32,6 @@ public class MemberMap {
 		return memberMap.containsKey(key);
 	}
 
-	// 키 값에 해당하는 비밀번호 value 값 가져오기
 	public String getpw(String id) {
 		return memberMap.get(id).getPassword();
 	}

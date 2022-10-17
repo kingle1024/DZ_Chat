@@ -25,7 +25,6 @@ public class MemberManager {
 			return false;
 		}
 		memberMap.put(tmpMember.getUserId(), tmpMember);
-		// 파일에 넣기
 		System.out.println("회원가입성공:" + tmpMember);
 		return true;
 	}
