@@ -1,15 +1,16 @@
 package core.service.member;
 
 import java.io.*;
-
 import core.service.ObjectStreamService;
 import member.*;
 
 public class LoginService extends ObjectStreamService {
 	private static final MemberManager memberManager = MemberManager.getInstance();
+
 	public LoginService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
+
 	@Override
 	public void request() throws IOException {
 		try {

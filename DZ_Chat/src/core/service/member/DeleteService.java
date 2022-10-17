@@ -3,7 +3,6 @@ package core.service.member;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import core.service.ObjectStreamService;
 import member.Member;
 import member.MemberManager;

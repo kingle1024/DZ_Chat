@@ -7,14 +7,20 @@ import message.ftp.FileCommon;
 
 public class MemberDao {
 	private static final MemberMap memberMap = MemberMap.getInstance();
-	private static final String filePath = ".DZ_Chat/resources/member/memberFile.txt";
+	private static final String filePath = "./DZ_Chat/resources/member/memberFile.txt";
+	private static MemberDao dao;
 
-	public MemberDao() {
-		readContent(filePath);
+	private MemberDao() {
+	}
+	
+	public static MemberDao getInstance() {
+		if (dao == null)
+			return dao = new MemberDao();
+		return dao;
 	}
 
-	//파일에서 회원정보 받아와서 Map에 저장
-	public void readContent(String filePath) {
+	// 파일에서 회원정보 받아와서 Map에 저장
+	public void readContent() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 
@@ -30,14 +36,12 @@ public class MemberDao {
 		}
 	}
 
-	// Map에 있는 정보 파일에 쓰기 - 종료시 한번 반영하도록
+	// Map에 있는 정보 파일에 쓰기 - 서버 종료 시 한번 반영하도록
 	public void WriteContent() {
 		FileCommon fileCommon = new FileCommon();
 
 		for (Member member : memberMap.values()) {
 			fileCommon.saveContent(filePath, member.toString() + "\n", true);
 		}
-
 	}
-
 }

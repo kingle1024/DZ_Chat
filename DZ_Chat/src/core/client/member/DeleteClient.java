@@ -1,7 +1,6 @@
 package core.client.member;
 
 import java.io.IOException;
-
 import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 import member.Member;
