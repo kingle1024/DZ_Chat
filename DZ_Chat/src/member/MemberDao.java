@@ -7,7 +7,7 @@ import message.ftp.FileCommon;
 
 public class MemberDao {
 	private static final MemberMap memberMap = MemberMap.getInstance();
-	private static final String filePath = "./DZ_Chat/resources/member/memberFile.txt";
+	private static final String filePath = "./resources/member/memberFile.txt";
 	private static MemberDao dao;
 
 	private MemberDao() {

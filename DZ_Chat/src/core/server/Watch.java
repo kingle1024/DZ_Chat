@@ -42,7 +42,7 @@ public class Watch {
 				Process process = pb.start();
 				System.out.println("Process");
 				InputStreamReader is = new InputStreamReader(process.getInputStream(), "EUC-KR");
-				BufferedWriter os = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), "EUC-KR"));
+				OutputStreamWriter os = new OutputStreamWriter(process.getOutputStream(), "EUC-KR");
 				Thread thread = new Thread(() ->{
 					while (true) {
 						if (Thread.currentThread().isInterrupted()) return;
@@ -55,34 +55,24 @@ public class Watch {
 						}
 					}
 				});
-				thread.start();
-
+				thread.start();					
 				try {
-					os.write("안녕하세요");
-					os.flush();
-				} catch (Exception e) {
-					
+					key = watcher.take();
+					System.out.println("Process RUN");
+					for (WatchEvent<?> event : key.pollEvents()) {
+						if (event.kind() == ENTRY_MODIFY) {
+							System.out.println("변경 감지");
+							os.write("q\n");
+							os.flush();
+							os.close();
+							Thread.sleep(3);
+							thread.interrupt();
+							process.destroy();
+							key.reset();
+						}
+					}
+				} catch (InterruptedException e) {
 				}
-				
-					
-//				try {
-//					key = watcher.take();
-//					System.out.println("Process RUN");
-//					for (WatchEvent<?> event : key.pollEvents()) {
-//						if (event.kind() == ENTRY_MODIFY) {
-//							System.out.println("변경 감지");
-//							os.write('s');
-//							Thread.sleep(1);
-//							os.write('q');
-//							os.flush();
-//
-//							thread.interrupt();
-//							process.destroy();
-//							key.reset();
-//						}
-//					}
-//				} catch (InterruptedException e) {
-//				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
