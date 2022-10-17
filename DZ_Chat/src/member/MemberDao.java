@@ -23,7 +23,6 @@ public class MemberDao {
 	public void readContent() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
-
 			String readStr = "";
 			String[] splitStr = null;
 
@@ -33,13 +32,14 @@ public class MemberDao {
 			}
 			br.close();
 		} catch (Exception e) {
+			System.out.println("Exception");
 		}
 	}
 
 	// Map에 있는 정보 파일에 쓰기 - 서버 종료 시 한번 반영하도록
-	public void WriteContent() {
+	public void writeContent() {
 		FileCommon fileCommon = new FileCommon();
-
+		fileCommon.saveContent(filePath, "", false);		
 		for (Member member : memberMap.values()) {
 			fileCommon.saveContent(filePath, member.toString() + "\n", true);
 		}

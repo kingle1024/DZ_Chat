@@ -41,7 +41,7 @@ public class ChatMessage extends Message implements NeedLog {
 	@Override
 	public String toString() {
 		return new StringBuilder()
-				.append(sender.toString())
+				.append(sender.nickname())
 				.append("> ")
 				.append(message)
 				.toString();

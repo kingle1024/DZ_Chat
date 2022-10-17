@@ -1,6 +1,6 @@
 package message.chat;
 
-import message.ftp.ClientToServer;
+//import message.ftp.ClientToServer;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -33,9 +33,9 @@ public class FileMessage {
         threadMap.put("fileName", input.toString());
         threadMap.put("socket", socket);
 
-        ClientToServer clientToServer =
-                new ClientToServer(threadGroup, fileName, threadMap);
-        clientToServer.start();
+//        ClientToServer clientToServer =
+//                new ClientToServer(threadGroup, fileName, threadMap);
+//        clientToServer.start();
 
         // #fileStop aa
         if(chat.startsWith("#fileStop")) {
