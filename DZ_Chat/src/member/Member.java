@@ -10,6 +10,7 @@ public class Member implements Comparable<Member>, Serializable {
 	private String password;
 	private String name;
 	private String birth;
+	private String ip;
 
 	//생성자 함수
 	public Member(String userId, String password, String name, String birth) {
@@ -26,6 +27,10 @@ public class Member implements Comparable<Member>, Serializable {
 
 	public String getPassword() {
 		return password;
+	}
+	
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public void setPassword(String password) {
@@ -74,7 +79,7 @@ public class Member implements Comparable<Member>, Serializable {
 	}
 
 	public String nickname() {
-		return name + "( " + userId + " )";
+		return name + "( " + ip + " )";
 	}
 
 }
