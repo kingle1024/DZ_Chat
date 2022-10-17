@@ -3,6 +3,6 @@ package core.client.view;
 import java.util.*;
 
 @FunctionalInterface
-public interface ViewMapper {
+public interface StringActor {
 	String act(List<String> values);
 }

@@ -19,12 +19,10 @@ public class DeleteClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			while (true) {
-				connect(new ServiceResolver("member.DeleteService"));
-				send(me);
-				send(pw);
-				deleteSuccess = (Boolean) receive();
-			}
+			connect(new ServiceResolver("member.DeleteService"));
+			send(me);
+			send(pw);
+			deleteSuccess = (Boolean) receive();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

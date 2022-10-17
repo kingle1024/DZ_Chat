@@ -21,7 +21,7 @@ public class MemberMap {
 	}
 
 	public void put(String key, Member value) {
-		map.put(key, value);
+		memberMap.put(key, value);
 	}
 	
 	public Member get(String id) {

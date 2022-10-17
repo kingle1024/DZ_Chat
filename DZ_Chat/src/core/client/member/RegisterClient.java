@@ -18,12 +18,10 @@ public class RegisterClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			while (true) {
-				connect(new ServiceResolver("member.RegisterService"));
-				send(tmpMember);
-				send(pwChk);
-				registerSuccess = (Boolean) receive();
-			}
+			connect(new ServiceResolver("member.RegisterService"));
+			send(tmpMember);
+			send(pwChk);
+			registerSuccess = (Boolean) receive();
 		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

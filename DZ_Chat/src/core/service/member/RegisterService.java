@@ -17,6 +17,7 @@ public class RegisterService extends ObjectStreamService {
 			System.out.println("member.RegisterService");
 			Member tmpMember = (Member) is.readObject();
 			String pwChk = (String) is.readObject();
+			System.out.println(tmpMember);
 			os.writeObject(Boolean.valueOf(memberManager.register(tmpMember, pwChk)));
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();

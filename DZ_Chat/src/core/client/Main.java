@@ -42,12 +42,13 @@ public class Main {
 			String name = str.get(3);
 			String birth = str.get(4);
 			Member tmp = new Member(id, pw, name, birth);
+			System.out.println(tmp);
 			RegisterClient registerClient = new RegisterClient(tmp, pwChk);
 			registerClient.run();
 			if (registerClient.getRegisterSuccess()) {
 				return "로그인";
 			} else {
-				System.out.println("비밀번호가 일치하지 않습니다.");
+				System.out.println("회원가입 실패");
 				return "회원가입";
 			}
 		}, "id", "pw", "pwChk", "name", "birth");
@@ -58,7 +59,9 @@ public class Main {
 		}, "id");
 
 		View successLogin = new MenuChooseView("로그인 성공");
-		View userInfo = new MenuChooseView("회원정보");
+		View userInfo = new MenuChooseView("회원정보", () -> {
+			System.out.println(me);
+		});
 		View getChatRoomList = new TextInputView("채팅방 목록", (str) -> {
 			new GetChatRoomListClient().run();
 			return "로그인 성공";
@@ -70,7 +73,7 @@ public class Main {
 				System.out.println("이미 존재하는 채팅방 이름입니다.");
 			} else {
 				new MakeChatRoomClient(chatRoomName).run();
-				new ChatClient(chatRoomName).run();
+				new ChatClient(chatRoomName, me).run();
 			}
 			return "로그인 성공";
 		}, "만들 채팅방 이름을 입력하세요.");
@@ -78,7 +81,7 @@ public class Main {
 		View entranceChatRoom = new TextInputView("채팅방 입장", (str) -> {
 			String chatRoomName = str.get(0);
 			if (hasChatRoom(chatRoomName)) {
-				new ChatClient(chatRoomName).run();
+				new ChatClient(chatRoomName, me).run();
 			} else {
 				System.out.println("존재하지 않는 채팅방 입니다.");
 			}
@@ -91,12 +94,14 @@ public class Main {
 			UpdatePWClient updatePWClient = new UpdatePWClient(me, validatePW, newPW);
 			updatePWClient.run();
 			if (updatePWClient.getUpdateSuccess()) {
+				me.setPassword(newPW);
 				return "로그인 성공";	
 			} else {
+				System.out.println("비밀번호 불일치");
 				return "회원 비밀번호 수정";
 			}
 			
-		}, "기존 비밀번호 입력: ", "새로운 비밀번호 입력: ");
+		}, "기존 비밀번호 입력", "새로운 비밀번호 입력");
 		View deleteMember = new TextInputView("탈퇴", (str) -> {
 	         String pw = str.get(0);
 	         DeleteClient deleteClient = new DeleteClient(me, pw);

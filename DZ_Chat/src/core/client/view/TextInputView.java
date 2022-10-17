@@ -5,11 +5,11 @@ import java.util.*;
 public class TextInputView extends View {
 	private String[] keys;
 	private List<String> values;
-	private ViewMapper viewMapper;
-	public TextInputView(String name, ViewMapper viewMapper, String... keys) {
+	private StringActor stringActor;
+	public TextInputView(String name, StringActor stringActor, String... keys) {
 		super(name);
 		this.keys = keys;
-		this.viewMapper = viewMapper;
+		this.stringActor= stringActor;
 		values = new ArrayList<>();
 		ViewMap.getInstance().add(this);
 	}
@@ -21,6 +21,6 @@ public class TextInputView extends View {
 			System.out.print(key + ": ");
 			values.add(scanner.nextLine());
 		});
-		return ViewMap.getInstance().getView(viewMapper.act(values));
+		return ViewMap.getInstance().getView(stringActor.act(values));
 	}
 }

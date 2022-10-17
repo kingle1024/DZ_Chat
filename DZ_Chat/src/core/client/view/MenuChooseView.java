@@ -6,7 +6,13 @@ import core.client.Client;
 
 public class MenuChooseView extends View {
 	private Client client;
+	private VoidActor voidActor;
 	
+	public MenuChooseView(String name, VoidActor voidActor) {
+		super(name);
+		this.voidActor = voidActor;
+		ViewMap.getInstance().add(this);
+	}
 	public MenuChooseView(String name) {
 		super(name);
 		ViewMap.getInstance().add(this);
@@ -25,6 +31,7 @@ public class MenuChooseView extends View {
 	
 	@Override
 	public View act() {
+		if (voidActor != null) voidActor.act();
 		printMenu();
 		Scanner scanner = new Scanner(System.in);
 		int choose = Integer.parseInt(scanner.nextLine());
