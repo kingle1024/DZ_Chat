@@ -9,7 +9,7 @@ import core.service.ObjectStreamService;
 
 public class HasChatRoomService extends ObjectStreamService {
 
-	public HasChatRoomService(ObjectInputStream is, ObjectOutputStream os, Object...objects ) throws IOException {
+	public HasChatRoomService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
 

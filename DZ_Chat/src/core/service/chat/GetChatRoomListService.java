@@ -7,7 +7,7 @@ import core.server.MainServer;
 import core.service.ObjectStreamService;
 
 public class GetChatRoomListService extends ObjectStreamService {
-	public GetChatRoomListService(ObjectInputStream is, ObjectOutputStream os, Object... obj) throws IOException {
+	public GetChatRoomListService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
 

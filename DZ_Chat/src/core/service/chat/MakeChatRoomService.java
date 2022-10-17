@@ -8,7 +8,7 @@ import core.service.ObjectStreamService;
 import message.chat.ChatRoom;
 
 public class MakeChatRoomService extends ObjectStreamService {
-	public MakeChatRoomService(ObjectInputStream is, ObjectOutputStream os, Object...objects) throws IOException {
+	public MakeChatRoomService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
 	@Override
