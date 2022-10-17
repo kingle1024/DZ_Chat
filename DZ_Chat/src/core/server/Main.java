@@ -15,22 +15,12 @@ public class Main {
 	private static final MemberDao memberDao = MemberDao.getInstance();
 
 	public static void main(String[] args) {
-//		System.out.println("server.Main.main");
-		
-//		Thread memberSave = new Thread(() -> {
-//			while (true) {
-//				if (Thread.currentThread().isInterrupted()) return;
-//				save();
-//			}
-//		});
-		
-		
+		System.out.println("change");
 		// Mock ChatRoom
 		for (int i = 0; i < 10; i++) {
 			MainServer.chatRoomMap.put("TEST ROOM" + i, new ChatRoom("TEST ROOM" + i));
 		}
 		try {
-			System.out.println("readContent");
 			memberDao.readContent();
 			System.out.println("server.Main" + memberMap.size());
 			for (Member m : memberMap.values()) {
@@ -42,19 +32,17 @@ public class Main {
 
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
-				InputStreamReader is = new InputStreamReader(System.in);
-				char input = (char) is.read();
-//				String input = scanner.nextLine();
+				System.out.println("Wait Scanner read");
+				String input = scanner.next();
 				System.out.println("INPUT: " + input);
-				if ('q' == input)
+				if ("q".equals(input)) {
+					exit();
 					break;
-				if ('s' == input)
-					save();
+				}
 			}
 
 //         FtpServer.stopServer();
-			server.stop();
-//			memberSave.interrupt();
+//			server.stop();
 
 		} catch (IOException e) {
 			System.out.println("IOException" + e);
@@ -63,7 +51,8 @@ public class Main {
 		}
 	}
 
-	public static void save() {
+	public static void exit() {
+		System.out.println("exit call");
 		// log
 		memberDao.writeContent();
 		System.out.println("SAVE COMMAND");

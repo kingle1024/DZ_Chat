@@ -23,6 +23,7 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import log.LogConsumer;
 
@@ -40,9 +41,8 @@ public class Watch {
 
 			while (true) {
 				Process process = pb.start();
-				System.out.println("Process");
 				InputStreamReader is = new InputStreamReader(process.getInputStream(), "EUC-KR");
-				BufferedWriter os = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), "EUC-KR"));
+				OutputStreamWriter os = new OutputStreamWriter(process.getOutputStream(), "EUC-KR");
 				Thread thread = new Thread(() ->{
 					while (true) {
 						if (Thread.currentThread().isInterrupted()) return;
@@ -50,39 +50,28 @@ public class Watch {
 							char input = (char) is.read();
 							if (input != -1) System.out.print(input);
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
 					}
 				});
-				thread.start();
-
+				thread.start();					
 				try {
-					os.write("안녕하세요");
-					os.flush();
-				} catch (Exception e) {
-					
+					key = watcher.take();
+					System.out.println("Process RUN");
+					for (WatchEvent<?> event : key.pollEvents()) {
+						if (event.kind() == ENTRY_MODIFY) {
+							System.out.println("변경 감지");
+							os.write("q\n");
+							os.flush();
+							os.close();
+							thread.interrupt();
+							process.waitFor(3000, TimeUnit.MILLISECONDS);
+							process.destroy();
+						}
+					}
+					key.reset();
+					System.out.println("key.reset()");
+				} catch (InterruptedException e) {
 				}
-				
-					
-//				try {
-//					key = watcher.take();
-//					System.out.println("Process RUN");
-//					for (WatchEvent<?> event : key.pollEvents()) {
-//						if (event.kind() == ENTRY_MODIFY) {
-//							System.out.println("변경 감지");
-//							os.write('s');
-//							Thread.sleep(1);
-//							os.write('q');
-//							os.flush();
-//
-//							thread.interrupt();
-//							process.destroy();
-//							key.reset();
-//						}
-//					}
-//				} catch (InterruptedException e) {
-//				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

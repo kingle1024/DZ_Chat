@@ -23,7 +23,7 @@ public class MainServer extends Server {
    @Override
    public void start() throws IOException {
       serverSocket = new ServerSocket(PORT_NUMBER);
-      System.out.println("[서버] 시작 " + HOST + ":" + PORT_NUMBER);
+      System.out.println("[Main Server] Start " + HOST + ":" + PORT_NUMBER);
 //      System.out.println("안녕");
       threadPool.execute(() -> {
          try {
