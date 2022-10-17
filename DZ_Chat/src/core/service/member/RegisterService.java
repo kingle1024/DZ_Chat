@@ -14,7 +14,7 @@ public class RegisterService extends ObjectStreamService {
 	@Override
 	public void request() throws IOException {
 		try {
-			System.out.println("Register Service");
+			System.out.println("member.RegisterService");
 			Member tmpMember = (Member) is.readObject();
 			String pwChk = (String) is.readObject();
 			os.writeObject(Boolean.valueOf(memberManager.register(tmpMember, pwChk)));

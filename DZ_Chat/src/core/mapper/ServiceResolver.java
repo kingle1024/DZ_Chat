@@ -23,6 +23,7 @@ public class ServiceResolver implements Serializable {
 						.getConstructor(ObjectInputStream.class, ObjectOutputStream.class, Object[].class)
 						.newInstance(is, os, args);
 			} else {
+				System.out.println("HERE");
 				return (ObjectStreamService) Class.forName("core.service." + commandType)
 						.getConstructor(ObjectInputStream.class, ObjectOutputStream.class)
 						.newInstance(is, os, args);
