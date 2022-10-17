@@ -1,23 +1,18 @@
 package message.ftp;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 public class FtpService {
-	private final int DEFAULT_BUFFER_SIZE = 4;
+	private final int DEFAULT_BUFFER_SIZE = 4096;
 	public static boolean fileValid(String filePath) {
 		File file = new File(filePath);
 		
 		if (!file.exists()) {
-			System.out.println("파일이 존재하지 않습니다 : "+file.getAbsolutePath());
+			System.out.println("보낼 파일이 존재하지 않습니다 > "+file.getAbsolutePath());
 			return false;
 		}
 		
@@ -30,21 +25,29 @@ public class FtpService {
 		System.out.println("FtpService > saveTargetFile : 파일 저장 위치 : "+saveFilePath);
 		saveFile(new FileInputStream(targetFilePath), saveFilePath);
 	}
-	public void saveFile(InputStream is, String saveFilePath) throws IOException {
+	public void saveFile(InputStream is, String saveFilePath) {
 		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 		int readBytes;
-		FileOutputStream fos = new FileOutputStream(saveFilePath);
-		long totalReadBytes = 0;
-		long fileSize = is.available();
-		while ((readBytes = is.read(buffer)) != -1) {
-			fos.write(buffer, 0, readBytes);
-			totalReadBytes += readBytes;
-			System.out.println("saveFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-					+ (totalReadBytes * 100 / fileSize) + " %)");
+		FileOutputStream fos = null;
+
+		try {
+			fos = new FileOutputStream(saveFilePath);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
 		}
 
-		is.close();
-		fos.close();
+		try {
+			while ((readBytes = is.read(buffer)) != -1) {
+				fos.write(buffer, 0, readBytes);
+			}
+
+			is.close();
+			fos.close();
+		} catch (IOException e) {
+			System.out.println("saveFile IOException > "+e);
+			throw new RuntimeException(e);
+		}
+		System.out.println("FtpService > saveFile 끝 ");
 	}
 	public String dir(String path) {
 		File file = new File("resources/room/"+path+"");
@@ -55,7 +58,7 @@ public class FtpService {
 			return sb.toString();
 		}
 		File[] contents = file.listFiles();
-		sb.append("<전송된 파일 목록> ")
+		sb.append("<파일 목록> ")
 				.append(path)
 				.append("\n");
 
@@ -72,48 +75,7 @@ public class FtpService {
 		}
 		return sb.toString();
 	}
-	public void sendFile(String fileName, Socket socket) throws IOException{
-		String[] input = fileName.split(" ");
-		String splitFileName = input[1];
-		splitFileName = "DZ_Chat/"+splitFileName;
-		
-		if(!fileValid(splitFileName)) return;
 
-		// 파일이 존재하는 경로
-		File file = new File(splitFileName);
-		System.out.println("FtpService > sendFile() > 보내는 파일 위치 > "+file.getAbsolutePath());
-
-		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-		long fileSize = file.length();
-		
-		// 여기에 파일이 있음 
-		InputStream fis = new FileInputStream(file);
-
-		// 앞으로 저장할 파일
-		OutputStream os = socket.getOutputStream();
-
-		try {
-			int readBytes;
-			long totalReadBytes = 0;
-			while ((readBytes = fis.read(buffer)) > 0
-					) {
-				Thread.sleep(1000);
-				os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
-				totalReadBytes += readBytes;
-				System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-						+ (totalReadBytes * 100 / fileSize) + " %)");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-
-//		System.out.println("FtpService > sendFile 끝");
-		
-//		fis.close();
-		os.close(); // close 안하면 파일에 안씀
-	}
 	public String getOs() {
 		String os = System.getProperty("os.name").toLowerCase();
 
@@ -135,20 +97,29 @@ public class FtpService {
         }
         return null;
 	}
-	public String getDownloadPath(String osName, StringBuffer downloadPath, String userName, String[] inputArr) {
+	public String getOsPath(String osName, String userName){
+		StringBuilder osPath = new StringBuilder();
 		if(osName.contains("window")){
-			downloadPath
+			osPath
 					.append("C:\\Users\\")
-					.append(userName)
-					.append("\\Downloads\\");
+					.append(userName);
 		}else if(osName.contains("mac")) {
-			downloadPath
+			osPath
 					.append("/Users/")
-					.append(userName)
-					.append("/Downloads/");
+					.append(userName);
 		}
-		// 파일명 넣기
-		downloadPath.append(inputArr[1]);
+		return osPath.toString();
+	}
+	public String getDownloadPath(String osName, StringBuffer downloadPath, String userName, String[] inputArr) {
+		String osPath = getOsPath(osName, userName);
+		downloadPath.append(osPath);
+		if(osName.contains("window")){
+			downloadPath.append("\\Downloads\\");
+		}else if(osName.contains("mac")){
+			downloadPath.append("/Downloads/");
+		}
+		String fileName = inputArr[1];
+		downloadPath.append(fileName);
 		
 		return downloadPath.toString();
 	}
@@ -165,6 +136,48 @@ public class FtpService {
 			assert p != null;
 			p.waitFor();
             p.destroy();
+		}
+	}
+	public boolean saveFileToServer(Socket socket, String filename) {
+		// 서버에 파일 전송
+		try {
+			System.out.println("FtpServer > saveFile > 내가 받은 파일 경로 :"+filename);
+			FtpService ftp = new FtpService();
+			ftp.saveSocketFile(socket, filename);
+		}catch(IOException e) {
+			e.printStackTrace();
+			System.out.println("파일 전송에 실패하였습니다.");
+			return false;
+		}
+
+		return true;
+	}
+	public String clientMessageReceive(Socket socket) throws IOException {
+		BufferedReader bufferedReader =
+				new BufferedReader(
+						new InputStreamReader(
+								new ObjectInputStream(socket.getInputStream())
+						)
+				);
+		String clientMessage = bufferedReader.readLine();
+		System.out.println("클라이언트가 보내온 내용 :"+clientMessage);
+
+		return clientMessage;
+	}
+	public void fileSend(String clientMessage, Socket socket) {
+		String[] message = clientMessage.split(" ");
+		System.out.println("FtpService > fileSend > message > "+message[1]);
+		File file = new File(message[1]);
+		String fileName = file.getName();
+		System.out.println("FtpService > fileSend > message > "+message[2]);
+		String roomName = message[2];
+		FileCommon fileCommon = new FileCommon();
+		String saveFilePath = fileCommon.fileNameBalance("resources/"+roomName+"/", fileName);
+		FtpService ftpService = new FtpService();
+		if(ftpService.saveFileToServer(socket, saveFilePath)){
+			System.out.println("FtpServer > fileSend : 파일 전송 성공");
+		}else{
+			System.out.println("파일 전송 실패 ");
 		}
 	}
 }
