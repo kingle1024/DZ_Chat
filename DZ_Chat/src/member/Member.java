@@ -12,7 +12,7 @@ public class Member implements Comparable<Member>, Serializable {
 	private String birth;
 	private String ip;
 
-	//생성자 함수
+	// 생성자 함수
 	public Member(String userId, String password, String name, String birth) {
 		this.userId = userId;
 		this.password = password;
@@ -20,17 +20,13 @@ public class Member implements Comparable<Member>, Serializable {
 		this.birth = birth;
 	}
 
-	//Getter, Setter
+	// Getter, Setter
 	public String getUserId() {
 		return userId;
 	}
 
 	public String getPassword() {
 		return password;
-	}
-	
-	public void setIp(String ip) {
-		this.ip = ip;
 	}
 
 	public void setPassword(String password) {
@@ -49,7 +45,11 @@ public class Member implements Comparable<Member>, Serializable {
 		return password.equals(pw);
 	}
 	
-	//equals, hashCode, compareTo
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+	
+	// equals, hashCode, compareTo
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -72,7 +72,7 @@ public class Member implements Comparable<Member>, Serializable {
 		return this.getName().compareTo(o.getName());
 	}
 
-	//toString 파일 저장 형식(, 구분자 이용)
+	// toString 파일 저장 형식(, 구분자 이용)
 	@Override
 	public String toString() {
 		return userId + "," + password + "," + name + "," + birth;

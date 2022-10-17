@@ -13,7 +13,7 @@ public class MemberDao {
 		readContent(filePath);
 	}
 
-	//파일에서 회원정보 받아와서 Map에 저장
+	// 파일에서 회원정보 받아와서 Map에 저장
 	public void readContent(String filePath) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
@@ -30,7 +30,7 @@ public class MemberDao {
 		}
 	}
 
-	// Map에 있는 정보 파일에 쓰기 - 종료시 한번 반영하도록
+	// Map에 있는 정보 파일에 쓰기 - 서버 종료 시 한번 반영하도록
 	public void WriteContent() {
 		FileCommon fileCommon = new FileCommon();
 

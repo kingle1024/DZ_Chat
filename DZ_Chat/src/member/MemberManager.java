@@ -20,7 +20,7 @@ public class MemberManager {
 			System.out.println("회원가입실패:비밀번호불일치");
 			return false;
 		}
-		if (memberMap.containKey(tmpMember.getUserId())) {
+		if (memberMap.containsKey(tmpMember.getUserId())) {
 			System.out.println("회원가입실패:이미존재하는회원");
 			return false;
 		}
@@ -32,7 +32,7 @@ public class MemberManager {
 
 	// 로그인
 	public Member login(String id, String pw) {
-		if (!memberMap.containKey(id)) {
+		if (!memberMap.containsKey(id)) {
 			return null;
 		}
 		Member member = memberMap.get(id);
@@ -52,7 +52,7 @@ public class MemberManager {
 
 	// 비밀번호 찾기
 	public String findPw(String id) {
-		if (memberMap.containKey(id)) {
+		if (memberMap.containsKey(id)) {
 			return memberMap.getpw(id);
 		}
 		return null;
