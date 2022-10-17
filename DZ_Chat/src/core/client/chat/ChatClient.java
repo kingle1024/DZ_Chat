@@ -29,7 +29,7 @@ public class ChatClient extends ObjectStreamClient {
 					System.out.println(message);
 				}
 			} catch (IOException | ClassNotFoundException e) {
-//				e.printStackTrace();
+				e.printStackTrace();
 			}
 		});
 		thread.start();
@@ -47,11 +47,13 @@ public class ChatClient extends ObjectStreamClient {
 			unconnect();
 		} else if (chat.startsWith("#file")) {
 			String[] message = chat.split(" ");
+			String fileName = message[1];
 			boolean result = fileMessage(chat);
+
 			if(!result){
-				return new PrivateChatMessage(this.chatRoomName, me, message[1] + " 파일 전송 취소", "privateMan");
+				return new PrivateChatMessage(this.chatRoomName, me, fileName + " 파일 전송 취소", "privateMan");
 			}else{
-				return new ChatMessage(this.chatRoomName, me, message[1] + " 파일이 전송되었습니다.");
+				return new ChatMessage(this.chatRoomName, me, fileName + " 파일 전송");
 			}
 		} else if (chat.startsWith("#dir")) {
 			return new DirMessage(this.chatRoomName, me, chat);
@@ -95,9 +97,7 @@ public class ChatClient extends ObjectStreamClient {
 		map.put("threadGroup", threadGroup);
 
 		FileMessage fileMessage = new FileMessage();
-		fileMessage.run(map);
-
-		return true;
+		return fileMessage.run(map);
 	}
 	
 	public boolean getSendExit() {
