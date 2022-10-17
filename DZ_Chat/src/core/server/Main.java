@@ -42,7 +42,7 @@ public class Main {
 			}
 
 //         FtpServer.stopServer();
-			server.stop();
+//			server.stop();
 
 		} catch (IOException e) {
 			System.out.println("IOException" + e);

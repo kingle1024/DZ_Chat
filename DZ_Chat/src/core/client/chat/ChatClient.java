@@ -12,6 +12,7 @@ import message.chat.*;
 public class ChatClient extends ObjectStreamClient {
 	private Member me;
 	private String chatRoomName;
+	private boolean sendExit = false;
 	ThreadGroup threadGroup;
 
 	public ChatClient(String chatRoomName, Member me) {
@@ -28,7 +29,7 @@ public class ChatClient extends ObjectStreamClient {
 					System.out.println(message);
 				}
 			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		});
 		thread.start();
@@ -42,6 +43,7 @@ public class ChatClient extends ObjectStreamClient {
 			String msg = chat.substring(idx + 1, chat.length());
 			return new PrivateChatMessage(chatRoomName, me, msg, to);
 		} else if (chat.startsWith("#exit")) {
+			sendExit = true;
 			unconnect();
 		} else if (chat.startsWith("#file")) {
 			String[] message = chat.split(" ");
@@ -79,7 +81,7 @@ public class ChatClient extends ObjectStreamClient {
 			unconnect();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 		}
 		System.out.println("채팅 종료");
 	}
@@ -96,5 +98,9 @@ public class ChatClient extends ObjectStreamClient {
 		fileMessage.run(map);
 
 		return true;
+	}
+	
+	public boolean getSendExit() {
+		return sendExit;
 	}
 }

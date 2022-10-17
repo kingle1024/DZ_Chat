@@ -23,6 +23,7 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import log.LogConsumer;
 
@@ -40,7 +41,6 @@ public class Watch {
 
 			while (true) {
 				Process process = pb.start();
-				System.out.println("Process");
 				InputStreamReader is = new InputStreamReader(process.getInputStream(), "EUC-KR");
 				OutputStreamWriter os = new OutputStreamWriter(process.getOutputStream(), "EUC-KR");
 				Thread thread = new Thread(() ->{
@@ -50,8 +50,6 @@ public class Watch {
 							char input = (char) is.read();
 							if (input != -1) System.out.print(input);
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
 					}
 				});
@@ -65,12 +63,13 @@ public class Watch {
 							os.write("q\n");
 							os.flush();
 							os.close();
-							Thread.sleep(3);
 							thread.interrupt();
+							process.waitFor(3000, TimeUnit.MILLISECONDS);
 							process.destroy();
-							key.reset();
 						}
 					}
+					key.reset();
+					System.out.println("key.reset()");
 				} catch (InterruptedException e) {
 				}
 			}

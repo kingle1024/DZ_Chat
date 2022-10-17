@@ -19,7 +19,7 @@ public class Main {
 	}
 
 	public static View viewInit() {
-		System.out.println("View 생성");
+//		System.out.println("View 생성");
 		Scanner scanner = new Scanner(System.in);
 		View main = new MenuChooseView("메인화면");
 		View login = new TextInputView("로그인", (str) -> {
@@ -81,7 +81,12 @@ public class Main {
 		View entranceChatRoom = new TextInputView("채팅방 입장", (str) -> {
 			String chatRoomName = str.get(0);
 			if (hasChatRoom(chatRoomName)) {
-				new ChatClient(chatRoomName, me).run();
+				ChatClient client = new ChatClient(chatRoomName, me);
+				client.run();
+//				while (client.getSendExit()) {
+//					client = new ChatClient(chatRoomName, me);
+//					client.run();
+//				}
 			} else {
 				System.out.println("존재하지 않는 채팅방 입니다.");
 			}
