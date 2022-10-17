@@ -1,8 +1,9 @@
-package core.client;
+package core.client.chat;
 
 import java.io.*;
 import java.util.Scanner;
 
+import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 
 public class ChooseChatRoomClient extends ObjectStreamClient {

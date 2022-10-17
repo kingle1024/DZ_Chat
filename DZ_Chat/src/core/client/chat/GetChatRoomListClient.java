@@ -1,6 +1,7 @@
-package core.client;
+package core.client.chat;
 import java.io.*;
 
+import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 import message.chat.Message;
 

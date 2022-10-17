@@ -1,5 +1,9 @@
 package core.client;
 
+import core.client.chat.ChatClient;
+import core.client.chat.GetChatRoomListClient;
+import core.client.chat.HasChatRoomClient;
+import core.client.chat.MakeChatRoomClient;
 import core.client.member.*;
 import core.client.view.*;
 import member.Member;

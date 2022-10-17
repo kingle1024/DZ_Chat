@@ -1,9 +1,10 @@
-package core.service;
+package core.service.chat;
 
 import java.io.*;
 import java.net.Socket;
 
 import core.server.MainServer;
+import core.service.ObjectStreamService;
 import message.chat.ChatRoom;
 
 public class MakeChatRoomService extends ObjectStreamService {

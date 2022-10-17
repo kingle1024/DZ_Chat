@@ -1,7 +1,8 @@
-package core.client;
+package core.client.chat;
 
 import java.io.IOException;
 
+import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 
 public class HasChatRoomClient extends ObjectStreamClient {

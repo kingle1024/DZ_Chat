@@ -1,9 +1,10 @@
-package core.service;
+package core.service.chat;
 
 import java.io.*;
 import java.util.Objects;
 
 import core.server.MainServer;
+import core.service.ObjectStreamService;
 import log.LogQueue;
 import member.Member;
 import message.chat.ChatRoom;
