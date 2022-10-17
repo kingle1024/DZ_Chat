@@ -23,7 +23,6 @@ public class RegisterClient extends ObjectStreamClient {
 			send(pwChk);
 			registerSuccess = (Boolean) receive();
 		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

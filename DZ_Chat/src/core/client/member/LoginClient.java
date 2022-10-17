@@ -1,9 +1,6 @@
 package core.client.member;
 
 import java.io.*;
-import java.util.Scanner;
-
-import core.client.Main;
 import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 import member.Member;
@@ -12,12 +9,12 @@ public class LoginClient extends ObjectStreamClient {
 	private Member member;
 	private String id;
 	private String pw;
-	
+
 	public LoginClient(String id, String pw) {
 		this.id = id;
 		this.pw = pw;
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -32,11 +29,10 @@ public class LoginClient extends ObjectStreamClient {
 			}
 			unconnect();
 		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Member getMember() {
 		return member;
 	}
