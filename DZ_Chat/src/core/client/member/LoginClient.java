@@ -21,19 +21,16 @@ public class LoginClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			while (true) {
-				connect(new ServiceResolver("member.LoginService"));
-				send(id);
-				send(pw);
-				member = (Member) receive();
-				if (member != null) {
-					System.out.println("로그인 성공했습니다.");
-				} else {
-					System.out.println("로그인 실패했습니다.");
-				}
-				unconnect();
+			connect(new ServiceResolver("member.LoginService"));
+			send(id);
+			send(pw);
+			member = (Member) receive();
+			if (member != null) {
+				System.out.println("로그인 성공했습니다.");
+			} else {
+				System.out.println("로그인 실패했습니다.");
 			}
-			
+			unconnect();
 		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

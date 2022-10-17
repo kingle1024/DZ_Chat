@@ -7,13 +7,14 @@ import member.*;
 
 public class RegisterService extends ObjectStreamService {
 	private static final MemberManager memberManager = MemberManager.getInstance();
-	public RegisterService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
+	public RegisterService(ObjectInputStream is, ObjectOutputStream os, Object...objects) throws IOException {
 		super(is, os);
 	}
 	
 	@Override
 	public void request() throws IOException {
 		try {
+			System.out.println("Register Service");
 			Member tmpMember = (Member) is.readObject();
 			String pwChk = (String) is.readObject();
 			os.writeObject(Boolean.valueOf(memberManager.register(tmpMember, pwChk)));

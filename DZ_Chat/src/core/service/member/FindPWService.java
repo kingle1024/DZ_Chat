@@ -18,7 +18,6 @@ public class FindPWService extends ObjectStreamService {
 		try {
 			String id = (String) is.readObject();
 			os.writeObject(memberManager.findPw(id));
-			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -7,7 +7,7 @@ import member.*;
 
 public class LoginService extends ObjectStreamService {
 	private static final MemberManager memberManager = MemberManager.getInstance();
-	public LoginService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
+	public LoginService(ObjectInputStream is, ObjectOutputStream os, Object...obj) throws IOException {
 		super(is, os);
 	}
 	@Override

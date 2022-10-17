@@ -39,9 +39,11 @@ public class Main {
 			String birth = str.get(4);
 			Member tmp = new Member(id, pw, name, birth);
 			RegisterClient registerClient = new RegisterClient(tmp, pwChk);
+			registerClient.run();
 			if (registerClient.getRegisterSuccess()) {
 				return "로그인";
 			} else {
+				System.out.println("비밀번호가 일치하지 않습니다.");
 				return "회원가입";
 			}
 		}, "id", "pw", "pwChk", "name", "birth");
@@ -118,13 +120,14 @@ public class Main {
 
 		getChatRoomList.addSubView(entranceChatRoom);
 
-		return successLogin;
+		return main;
 	}
 
 	public static void main(String[] args) {
 		System.out.println("클라이언트 시작");
 		View view = viewInit();
 		while (true) {
+			System.out.println(view.getName());
 			view = view.act();
 		}
 	}

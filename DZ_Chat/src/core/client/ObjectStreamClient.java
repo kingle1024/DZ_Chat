@@ -12,7 +12,7 @@ import message.chat.ChatMessage;
 import message.chat.Message;
 
 public abstract class ObjectStreamClient implements Client {
-	private static final String SERVER_HOST = "localhost";
+	private static final String SERVER_HOST = "192.168.30.84";
 	private static final int PORT_NUMBER = 50_001;
 	private Socket socket;
 	protected ObjectOutputStream os;

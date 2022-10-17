@@ -16,7 +16,7 @@ public class MapperService extends ObjectStreamService {
 		try {
 			ServiceResolver cmd = (ServiceResolver) is.readObject();
 			
-			System.out.println("Receive Command: "+ cmd.getCommandType());
+			System.out.println("Receive ServiceResolver: "+ cmd.getCommandType());
 			ObjectStreamService mapping = cmd.response(is, os);
 			mapping.request();
 		} catch (ClassNotFoundException | IOException e) {

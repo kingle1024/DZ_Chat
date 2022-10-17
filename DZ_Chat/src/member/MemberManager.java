@@ -17,13 +17,16 @@ public class MemberManager {
 	// 회원 가입
 	public boolean register(Member tmpMember, String pwChk) {
 		if (!tmpMember.validatePw(pwChk)) {
+			System.out.println("회원가입실패:비밀번호불일치");
 			return false;
 		}
 		if (memberMap.containKey(tmpMember.getUserId())) {
+			System.out.println("회원가입실패:이미존재하는회원");
 			return false;
 		}
 		memberMap.put(tmpMember.getUserId(), tmpMember);
 		// 파일에 넣기
+		System.out.println("회원가입성공:" + tmpMember);
 		return true;
 	}
 
