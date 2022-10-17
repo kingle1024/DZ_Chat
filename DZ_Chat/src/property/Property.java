@@ -1,7 +1,7 @@
 package property;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
@@ -10,7 +10,7 @@ public class Property {
     public static HashMap<String, String> list() {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("/Users/ejy1024/git/DZ_Chat/DZ_Chat/resources/application.properties"));
+            properties.load(new FileInputStream("resources/application.properties"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -20,5 +20,11 @@ public class Property {
             map.put(key.toString(), properties.getProperty((String)key));
         }
         return map;
+    }
+
+    public static void main(String[] args) {
+        File file = new File("resource");
+
+        System.out.println(file.getAbsolutePath());
     }
 }
