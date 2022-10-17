@@ -34,7 +34,7 @@ public class ChatService extends ObjectStreamService  {
 					message.setChatRoom(chatRoom);
 					message.push();
 					System.out.println("[Server]" + message);
-					logQueue.add(message);
+					logQueue.add(message); //LogQueue
 				}
 			} catch (IOException e) {
 				chatRoom.getChatServiceList().remove(this);

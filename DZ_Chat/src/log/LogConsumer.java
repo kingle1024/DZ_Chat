@@ -8,7 +8,9 @@ public class LogConsumer implements Runnable {
 	public void run() {
 		try {
 			while (!Thread.currentThread().isInterrupted()) {
+				
 				appendInfo(logQueue.poll());
+				
 			}
 		} catch (Exception e) {
 			
@@ -25,7 +27,7 @@ public class LogConsumer implements Runnable {
 			String filePath = log.getPath();
 			FileOutputStream f = new FileOutputStream(filePath, true);
 //            String lineToAppend = "\r\nThe quick brown fox jumps over the lazy dog";  
-			String lineToAppend = log.getMessage();
+			String lineToAppend = log.getLog();
 			byte[] byteArr = lineToAppend.getBytes(); // converting string into byte array
 			f.write(byteArr);
 			f.close();

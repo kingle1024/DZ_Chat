@@ -17,11 +17,12 @@ public class Log {
 		this.path = path;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getLog() {
+		return log;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setLog(String log) {
+		this.log = log;
 	}
+
 }

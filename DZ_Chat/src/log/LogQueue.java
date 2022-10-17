@@ -13,7 +13,7 @@ public class LogQueue {
 			synchronized (monitor) {
 				return logQueue = new LogQueue();
 			}
-		}
+		}	
 		return logQueue;
 	}
 	
