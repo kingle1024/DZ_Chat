@@ -47,7 +47,7 @@ public class Main {
 		}, "id", "pw", "pwChk", "name", "birth");
 		View findpw = new TextInputView("비밀번호 찾기", (str) -> {
 			String id = str.get(0);
-			memberManager.findPw(id);
+			new FindPWClient(id).run();
 			return "메인화면";
 		}, "id");
 
@@ -57,16 +57,7 @@ public class Main {
 			new GetChatRoomListClient().run();
 			return "로그인 성공";
 		});
-		View deleteMember = new TextInputView("탈퇴", (str) -> {
-			String pw = str.get(0);
-			if (memberManager.delete(me, pw)) {
-				me = null;
-				return "메인화면";
-			} else {
-				return "탈퇴";
-			}
 
-		}, "pw");
 		View makeChatRoom = new TextInputView("채팅방 만들기", (str) -> {
 			String chatRoomName = str.get(0);
 			if (hasChatRoom(chatRoomName)) {
@@ -87,6 +78,31 @@ public class Main {
 			}
 			return "로그인 성공";
 		}, "입장할 채팅방 이름을 입력하세요.");
+		
+		View updateMember = new TextInputView("회원 비밀번호 수정", (str) -> {
+			String validatePW = str.get(0);
+			String newPW = str.get(1);
+			UpdatePWClient updatePWClient = new UpdatePWClient(me, validatePW, newPW);
+			updatePWClient.run();
+			if (updatePWClient.getUpdateSuccess()) {
+				return "로그인 성공";	
+			} else {
+				return "회원 비밀번호 수정";
+			}
+			
+		}, "기존 비밀번호 입력: ", "새로운 비밀번호 입력: ");
+		View deleteMember = new TextInputView("탈퇴", (str) -> {
+	         String pw = str.get(0);
+	         DeleteClient deleteClient = new DeleteClient(me, pw);
+	         deleteClient.run();
+	         if (deleteClient.getDeleteSuccess()) {
+	            me = null;
+	            return "메인화면";
+	         } else {
+	            return "탈퇴";
+	         }
+
+	      }, "pw");
 
 		main.addSubView(login);
 		main.addSubView(register);
@@ -96,7 +112,9 @@ public class Main {
 		successLogin.addSubView(getChatRoomList);
 		successLogin.addSubView(entranceChatRoom);
 		successLogin.addSubView(makeChatRoom);
-		successLogin.addSubView(deleteMember);
+
+		userInfo.addSubView(updateMember);
+		userInfo.addSubView(deleteMember);
 
 		getChatRoomList.addSubView(entranceChatRoom);
 
