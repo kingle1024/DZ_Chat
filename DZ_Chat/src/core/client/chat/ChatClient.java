@@ -47,6 +47,11 @@ public class ChatClient extends ObjectStreamClient {
 			unconnect();
 		} else if (chat.startsWith("#file")) {
 			String[] message = chat.split(" ");
+			if(message.length == 1){
+				message = new String[3];
+				message[1] = "temp";
+				message[2] = "temp2";
+			}
 			String fileName = message[1];
 			boolean result = fileMessage(chat);
 
