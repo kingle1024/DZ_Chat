@@ -5,13 +5,15 @@ import java.util.Objects;
 
 import core.server.MainServer;
 import core.service.ObjectStreamService;
+import log.Log;
 import log.LogQueue;
+import log.NeedLog;
 import member.Member;
 import message.chat.ChatRoom;
 import message.chat.Message;
 import message.chat.SystemMessage;
 
-public class ChatService extends ObjectStreamService  {
+public class ChatService extends ObjectStreamService implements NeedLog {
 	private final Member me;
 	private final String chatRoomName;
 	private final ChatRoom chatRoom;
@@ -77,7 +79,11 @@ public class ChatService extends ObjectStreamService  {
 		ChatService other = (ChatService) obj;
 		return Objects.equals(chatRoomName, other.chatRoomName) && Objects.equals(me, other.me);
 	}
-	
-	
+
+
+	@Override
+	public Log toLog() {
+		return null;
+	}
 }
 
