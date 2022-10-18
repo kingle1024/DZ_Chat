@@ -15,7 +15,7 @@ public class Main {
 	private static final MemberDao memberDao = MemberDao.getInstance();
 
 	public static void main(String[] args) {
-//		System.out.println("change");
+		System.out.println("change");
 		// Mock ChatRoom
 		for (int i = 0; i < 10; i++) {
 			MainServer.chatRoomMap.put("TEST ROOM" + i, new ChatRoom("TEST ROOM" + i));

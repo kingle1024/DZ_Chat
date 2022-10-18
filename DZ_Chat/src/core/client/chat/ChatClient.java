@@ -27,13 +27,13 @@ public class ChatClient extends ObjectStreamClient {
 
 	public void listening() {
 		Thread thread = new Thread(() -> {
-			try {
-				while (true) {
-					String message = (String) is.readObject();
+			while (true) {
+				String message;
+				try {
+					message = (String) is.readObject();
 					System.out.println(message);
+				} catch (ClassNotFoundException | IOException e) {
 				}
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
 			}
 		});
 		thread.start();
