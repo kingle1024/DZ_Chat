@@ -3,6 +3,7 @@ package core.client.chat;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
@@ -13,6 +14,9 @@ public class ChatClient extends ObjectStreamClient {
 	private Member me;
 	private String chatRoomName;
 	private boolean sendExit = false;
+	private boolean isConnected = false;
+	private static final Object monitor = new Object();
+	private ConcurrentLinkedQueue<String> ccque = new ConcurrentLinkedQueue<>();
 	ThreadGroup threadGroup;
 
 	public ChatClient(String chatRoomName, Member me) {
@@ -69,28 +73,43 @@ public class ChatClient extends ObjectStreamClient {
 	}
 
 	public void run() {
-		try {
-			System.out.println("채팅 시작");
-
-			// Mock
-			Scanner scanner = new Scanner(System.in);
-
-			connect(new ServiceResolver("chat.ChatService", chatRoomName, me));
-			System.out.println("채팅방 입장");
-			listening();
-			while (scanner.hasNext()) {
-				String chat = scanner.nextLine();
-				if ("q".equals(chat.toLowerCase()))
-					break;
-				Message message = chatTypeResolve(chat);
-				send(message);
+		Thread messageWrite = new Thread(() -> {
+			synchronized (monitor) {
+				while (!ccque.isEmpty() && isConnected) {
+					try {
+						send(chatTypeResolve(ccque.poll()));
+					} catch (IOException e) {
+					}
+				}
 			}
-			unconnect();
+		});
+		System.out.println("채팅 시작");
+		Scanner scanner = new Scanner(System.in);
+		while (true) {
+			try {
+				System.out.println("채팅방 입장");
+				while (true) {
+					connect(new ServiceResolver("chat.ChatService", chatRoomName, me));
+					isConnected = true;
+					listening();
+					while (scanner.hasNext()) {
+						String chat = scanner.nextLine();
+						synchronized (monitor) {
+							ccque.add(chat);
+						}
 
-		} catch (IOException e) {
-			
+					}
+				}
+			} catch (IOException e) {
+				if (sendExit) {
+					System.out.println("채팅 종료");
+					return;
+				} else {
+					System.out.println("서버와 재접속");
+					isConnected = false;
+				}
+			}
 		}
-		System.out.println("채팅 종료");
 	}
 	public boolean fileMessage(String chat) throws IOException {
 		if(threadGroup == null){
@@ -104,7 +123,7 @@ public class ChatClient extends ObjectStreamClient {
 		FileMessage fileMessage = new FileMessage();
 		return fileMessage.run(map);
 	}
-	
+
 	public boolean getSendExit() {
 		return sendExit;
 	}
