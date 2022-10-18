@@ -26,10 +26,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import log.LogConsumer;
+import property.Property;
 
 public class Watch {
-	private static final String HOST = "localhost";
-	private static final int PORT_NUMBER = 50_001;
+	private static final String HOST = Property.list().get("IP");
+	private static final int PORT_NUMBER = Integer.parseInt(Property.list().get("SERVER_PORT"));
 	public static ExecutorService threadPool;
 	public static void main(String[] args) {
 		try {
@@ -63,8 +64,8 @@ public class Watch {
 							os.write("q\n");
 							os.flush();
 							os.close();
-							Thread.sleep(3000);
 							thread.interrupt();
+							process.waitFor(3000, TimeUnit.MILLISECONDS);
 							process.destroy();
 						}
 					}
