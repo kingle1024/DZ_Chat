@@ -30,6 +30,7 @@ public class ChatService extends ObjectStreamService implements NeedLog {
 	public void request() throws IOException {
 		System.out.println("Chat Service");
 		chatRoom.entrance(this);
+		new SystemMessage(chatRoom, me.nickname() + "님이 입장하셨습니다. 인원 수: " + chatRoom.size()).push();
 		MainServer.threadPool.execute(() -> {
 			try {
 				while (true) {
