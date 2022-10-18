@@ -73,29 +73,29 @@ public class ChatClient extends ObjectStreamClient {
 	}
 
 	public void run() {
-		Thread messageConsumer = new Thread(() -> {
-			while (true) {
-				if (ccque.isEmpty())
-					try {
-						synchronized (monitor) {
-							monitor.wait();	
-						}
-					} catch (InterruptedException e1) {
-					}
-				System.out.println("ccque.size()" + ccque.size());
-				synchronized (monitor) {
-					while (!ccque.isEmpty() && isConnected) {
-						try {
-							send(chatTypeResolve(ccque.poll()));
-							System.out.println("ccque 뻄");
-						} catch (IOException e) {
-						}
-					}
-					monitor.notify();
-				}
-			}
-		});
-		messageConsumer.start();
+//		Thread messageConsumer = new Thread(() -> {
+//			while (true) {
+//				if (ccque.isEmpty())
+//					try {
+//						synchronized (monitor) {
+//							monitor.wait();	
+//						}
+//					} catch (InterruptedException e1) {
+//					}
+//				System.out.println("ccque.size()" + ccque.size());
+//				synchronized (monitor) {
+//					while (!ccque.isEmpty() && isConnected) {
+//						try {
+//							send(chatTypeResolve(ccque.poll()));
+//							System.out.println("ccque 뻄");
+//						} catch (IOException e) {
+//						}
+//					}
+//					monitor.notify();
+//				}
+//			}
+//		});
+//		messageConsumer.start();
 		System.out.println("채팅 시작");
 		Scanner scanner = new Scanner(System.in);
 		while (true) {
@@ -107,12 +107,11 @@ public class ChatClient extends ObjectStreamClient {
 					listening();
 					while (scanner.hasNext()) {
 						String chat = scanner.nextLine();
-						synchronized (monitor) {
-							ccque.add(chat);
-							System.out.println("큐 넣음");
-							monitor.notify();
-						}
-//						send(chatTypeResolve(chat));
+//						synchronized (monitor) {
+//							ccque.add(chat);
+//							monitor.notify();
+//						}
+						send(chatTypeResolve(chat));
 					}
 				}
 			} catch (IOException e) {
