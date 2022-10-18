@@ -63,8 +63,8 @@ public class Watch {
 							os.write("q\n");
 							os.flush();
 							os.close();
+							Thread.sleep(3000);
 							thread.interrupt();
-							process.waitFor(3000, TimeUnit.MILLISECONDS);
 							process.destroy();
 						}
 					}
