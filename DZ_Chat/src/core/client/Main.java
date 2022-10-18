@@ -31,7 +31,7 @@ public class Main {
 				me = loginClient.getMember();
 				return "로그인 성공";
 			} else {
-				return "로그인";
+				return "메인화면";
 			}
 
 		}, "id", "pw");
@@ -49,7 +49,7 @@ public class Main {
 				return "로그인";
 			} else {
 				System.out.println("회원가입 실패");
-				return "회원가입";
+				return "메인화면";
 			}
 		}, "id", "pw", "pwChk", "name", "birth");
 		View findpw = new TextInputView("비밀번호 찾기", (str) -> {
@@ -103,7 +103,7 @@ public class Main {
 				return "로그인 성공";	
 			} else {
 				System.out.println("비밀번호 불일치");
-				return "회원 비밀번호 수정";
+				return "회원정보";
 			}
 			
 		}, "기존 비밀번호 입력", "새로운 비밀번호 입력");
@@ -115,7 +115,7 @@ public class Main {
 	            me = null;
 	            return "메인화면";
 	         } else {
-	            return "탈퇴";
+	            return "회원정보";
 	         }
 
 	      }, "pw");
