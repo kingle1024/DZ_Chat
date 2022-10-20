@@ -42,7 +42,6 @@ public class Main {
 			String name = str.get(3);
 			String birth = str.get(4);
 			Member tmp = new Member(id, pw, name, birth);
-			System.out.println("HERE" + tmp);
 			RegisterClient registerClient = new RegisterClient(tmp, pwChk);
 			registerClient.run();
 			if (registerClient.getRegisterSuccess()) {
