@@ -1,7 +1,6 @@
 package core.server;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import member.Member;
@@ -9,6 +8,7 @@ import member.MemberDao;
 import member.MemberMap;
 import message.chat.ChatRoom;
 import message.ftp.FtpServer;
+import property.Property;
 
 public class Main {
 	private static final MemberMap memberMap = MemberMap.getInstance();
@@ -26,9 +26,11 @@ public class Main {
 			for (Member m : memberMap.values()) {
 				System.out.println(m);
 			}
-			Server server = new MainServer(50_001);
+			Server server = new MainServer(Integer.parseInt(Property.list().get("SERVER_PORT")));
 			server.start();
-//         FtpServer.startServer();
+
+			FtpServer ftpServer = new FtpServer(Integer.parseInt(Property.list().get("FTP_PORT")));
+			ftpServer.start();
 
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
@@ -41,8 +43,8 @@ public class Main {
 				}
 			}
 
-//         FtpServer.stopServer();
-//			server.stop();
+			ftpServer.stop();
+			server.stop();
 
 		} catch (IOException e) {
 			System.out.println("IOException" + e);
