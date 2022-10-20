@@ -3,9 +3,9 @@ package message.chat;
 import java.io.*;
 
 import log.Log;
-import log.LogQueue;
 import log.NeedLog;
 import member.Member;
+import property.Property;
 
 public class ChatMessage extends Message implements NeedLog {
 	private static final long serialVersionUID = -4472963080600091036L;
@@ -50,6 +50,6 @@ public class ChatMessage extends Message implements NeedLog {
 	@Override
 	public Log toLog() {
 		String logMessage = "ChatMessage:" + sender.getUserId() + ":" + message;
-		return new Log("chatlog.txt", logMessage);
+		return new Log(Property.client().get("CHAT_LOG_FILE"), logMessage);
 	}
 }

@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import log.Log;
 import member.Member;
 import message.ftp.FtpService;
+import property.Property;
 
 public class DirMessage extends Message {
 	private static final long serialVersionUID = 1326688109607339081L;
@@ -41,7 +42,7 @@ public class DirMessage extends Message {
 	@Override
 	public Log toLog() {
 		String DirMessage = "Dir:" + sender.getUserId() + ":" + message;
-		return new Log("Dir.txt", DirMessage); 
+		return new Log(Property.server().get("DIR_LOG_FILE"), DirMessage);
 	}
 
 }

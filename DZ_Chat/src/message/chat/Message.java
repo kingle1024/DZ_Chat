@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import core.server.MainServer;
 import log.Log;
 import log.NeedLog;
+import property.Property;
 
 public abstract class Message implements Serializable, NeedLog {
 	private static final long serialVersionUID = -2580100950897989232L;
@@ -27,6 +28,6 @@ public abstract class Message implements Serializable, NeedLog {
 	}
 	
 	public Log toLog() {
-		return new Log(chatRoom.getRoomName() + "/" + "chatlog.txt", message); //폴더이름
+		return new Log(chatRoom.getRoomName() + "/" + Property.server().get("CHAT_LOG_FILE"), message); //폴더이름
 	}
 }

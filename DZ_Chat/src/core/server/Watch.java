@@ -29,9 +29,8 @@ import log.LogConsumer;
 import property.Property;
 
 public class Watch {
-	private static final String HOST = Property.list().get("IP");
-	private static final int PORT_NUMBER = Integer.parseInt(Property.list().get("SERVER_PORT"));
-	public static ExecutorService threadPool;
+	private static final String HOST = Property.server().get("IP");
+	private static final int PORT_NUMBER = Integer.parseInt(Property.server().get("SERVER_PORT"));
 	public static void main(String[] args) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("java", "-cp", "./bin", "core.server.Main");

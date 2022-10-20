@@ -19,14 +19,14 @@ public class FtpClient extends Thread{
 	public void start() {
 		String chatRoomName = (String) map.get("chatRoomName");
 		String chat = (String) map.get("chat");
-		String serverIP = Property.list().get("IP");
+		String serverIP = Property.server().get("IP");
 		String fileName = chat.split(" ")[1];
 
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("chatRoomAndFileName", chatRoomName+"/"+fileName);
 		map.put("chat", chat);
 
-		int port = Integer.parseInt(Property.list().get("FTP_PORT"));
+		int port = Integer.parseInt(Property.server().get("FTP_PORT"));
 		System.out.println("FtpClient > port > "+port);
 
 		try {
@@ -73,7 +73,7 @@ public class FtpClient extends Thread{
 									userName, 
 									inputArr));
 
-			String filePath = "resources/room/"+chatRoomAndFileName;
+			String filePath = Property.server().get("DOWNLOAD_PATH")+chatRoomAndFileName;
 
 			System.out.println("FtpClient > saveFile > filePath > "+chatRoomAndFileName);
 			System.out.println("downloadPath:"+downloadPath);

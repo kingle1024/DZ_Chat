@@ -4,6 +4,7 @@ import java.io.*;
 
 import log.Log;
 import member.Member;
+import property.Property;
 
 public class PrivateChatMessage extends Message {
 	private static final long serialVersionUID = -286765041005171349L;
@@ -48,6 +49,6 @@ public class PrivateChatMessage extends Message {
 	@Override
 	public Log toLog() {
 		String logMessage = "PrivateMessage:" + sender.getUserId() + ":" + message;
-		return new Log("chatlog.txt", logMessage); 
+		return new Log(Property.server().get("CHAT_LOG_FILE"), logMessage);
 	}
 }

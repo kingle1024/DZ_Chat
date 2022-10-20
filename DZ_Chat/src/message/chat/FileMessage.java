@@ -19,8 +19,8 @@ public class FileMessage {
 
         // FTP Client
         Socket socket = new Socket(
-                Property.list().get("IP"),
-                Integer.parseInt(Property.list().get("FTP_PORT")));
+                Property.server().get("IP"),
+                Integer.parseInt(Property.server().get("FTP_PORT")));
         StringBuilder input = new StringBuilder();
         input.append(chat)
                 .append(" ")

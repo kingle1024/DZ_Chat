@@ -7,10 +7,16 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class Property {
-    public static HashMap<String, String> list() {
+    public static HashMap<String, String> client() {
+        return property("resources/client.properties");
+    }
+    public static HashMap<String, String> server() {
+        return property("resources/server.properties");
+    }
+    public static HashMap<String, String> property(String propertyPath){
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("resources/application.properties"));
+            properties.load(new FileInputStream(propertyPath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

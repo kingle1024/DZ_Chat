@@ -26,10 +26,10 @@ public class Main {
 			for (Member m : memberMap.values()) {
 				System.out.println(m);
 			}
-			Server server = new MainServer(Integer.parseInt(Property.list().get("SERVER_PORT")));
+			Server server = new MainServer(Integer.parseInt(Property.server().get("SERVER_PORT")));
 			server.start();
 
-			FtpServer ftpServer = new FtpServer(Integer.parseInt(Property.list().get("FTP_PORT")));
+			FtpServer ftpServer = new FtpServer(Integer.parseInt(Property.server().get("FTP_PORT")));
 			ftpServer.start();
 
 			Scanner scanner = new Scanner(System.in);

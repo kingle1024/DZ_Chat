@@ -9,7 +9,7 @@ import java.util.Date;
 
 
 public class FtpService {
-	private final int DEFAULT_BUFFER_SIZE = Integer.parseInt(Property.list().get("DEFAULT_BUFFER_SIZE"));
+	private final int DEFAULT_BUFFER_SIZE = Integer.parseInt(Property.client().get("DEFAULT_BUFFER_SIZE"));
 	public static boolean fileValid(String filePath) {
 		File file = new File(filePath);
 		
@@ -21,25 +21,20 @@ public class FtpService {
 		return true;
 	}
 	public void saveSocketFile(Socket socket, String saveFilePath) throws IOException {
+		// Socket으로 데이터가 오는 경우
 		saveFile(socket.getInputStream(), saveFilePath);
 	}
 	public void saveTargetFile(String targetFilePath, String saveFilePath) throws IOException {
-		System.out.println("FtpService > saveTargetFile : 파일 저장 위치 : "+saveFilePath);
+		// 파일 경로로 데이터 위치를 알려주는 경우
 		saveFile(new FileInputStream(targetFilePath), saveFilePath);
 	}
 	public void saveFile(InputStream is, String saveFilePath) {
-		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-		int readBytes;
-		FileOutputStream fos = null;
-
 		try {
-			fos = new FileOutputStream(saveFilePath);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-
-		try {
-			while ((readBytes = is.read(buffer)) != -1) {
+			byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+			int readBytes;
+			FileOutputStream fos = new FileOutputStream(saveFilePath); // 저장할 파일 위치
+	
+			while ((readBytes = is.read(buffer)) != -1) { // InputStream에서 내용을 읽어서 FileOutputStream으로 저장
 				fos.write(buffer, 0, readBytes);
 			}
 
@@ -51,8 +46,8 @@ public class FtpService {
 		}
 		System.out.println("FtpService > saveFile 끝 ");
 	}
-	public String dir(String path) {
-		File file = new File("resources/room/"+path+"");
+	public String dir(String roomName) {
+		File file = new File(Property.server().get("DOWNLOAD_PATH")+roomName+"");
 		StringBuilder sb = new StringBuilder();
 		if(!file.exists()) {
 			sb.append("폴더에 파일이 존재하지 않습니다. ( ")
@@ -61,7 +56,7 @@ public class FtpService {
 		}
 		File[] contents = file.listFiles();
 		sb.append("<파일 목록> ")
-				.append(path)
+				.append(roomName)
 				.append("\n");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd a HH:mm");

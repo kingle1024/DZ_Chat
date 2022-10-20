@@ -1,6 +1,7 @@
 package message.ftp;
 
 import core.server.Server;
+import property.Property;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -12,7 +13,7 @@ import java.util.concurrent.Executors;
 // 받는곳(Server)
 public class FtpServer extends Server {
 	private static ServerSocket serverSocket;
-	public static final ExecutorService threadPool = Executors.newFixedThreadPool(16);
+	public static final ExecutorService threadPool = Executors.newFixedThreadPool(Integer.parseInt(Property.server().get("THREAD_POOL")));
 
 	public FtpServer(int port) throws UnknownHostException {
 		super(port);

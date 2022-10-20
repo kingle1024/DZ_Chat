@@ -4,10 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import message.ftp.FileCommon;
+import property.Property;
 
 public class MemberDao {
 	private static final MemberMap memberMap = MemberMap.getInstance();
-	private static final String filePath = "./DZ_Chat/resources/member/memberFile.txt";
+	private static final String filePath = "./DZ_Chat/"+ Property.server().get("MEMBER_FILE");
 	private static MemberDao dao;
 
 	private MemberDao() {
