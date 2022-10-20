@@ -31,7 +31,6 @@ public class FileMessage {
 
         HashMap<String, Object> threadMap = new HashMap<>();
         String[] message = input.toString().split(" ");
-//        System.out.println("FileMessage > run");
         String fileName = message[1];
 
         threadMap.put("fileName", input.toString());
@@ -39,18 +38,13 @@ public class FileMessage {
         threadMap.put("chatRoomName", chatRoomName);
 
         if(chat.startsWith("#fileSend")) {
-            ClientToServerThread clientToServerThread =
-                    new ClientToServerThread(threadGroup, fileName, threadMap);
+            ClientToServerThread clientToServerThread = new ClientToServerThread(threadGroup, fileName, threadMap);
             clientToServerThread.start();
         }else if(chat.startsWith("#fileSave")){
             threadMap.put("chat", chat);
-            FtpClient ftpClient =
-                    new FtpClient(threadGroup, fileName, threadMap);
+            FtpClient ftpClient = new FtpClient(threadGroup, fileName, threadMap);
             ftpClient.start();
-        }
-
-        // #fileStop aa
-        if(chat.startsWith("#fileStop")) {
+        }else if(chat.startsWith("#fileStop")) {
             threadGroup.interrupt();
             return false;
         }
