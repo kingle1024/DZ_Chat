@@ -3,6 +3,7 @@ package core.server;
 import java.io.IOException;
 import java.util.Scanner;
 
+import log.LogConsumer;
 import member.Member;
 import member.MemberDao;
 import member.MemberMap;
@@ -31,7 +32,10 @@ public class Main {
 
 			FtpServer ftpServer = new FtpServer(Integer.parseInt(Property.server().get("FTP_PORT")));
 			ftpServer.start();
-
+			
+//			Thread logConsumer = new Thread(new LogConsumer());
+//			logConsumer.start();
+			
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
 				System.out.println("Wait Scanner read");
@@ -49,7 +53,7 @@ public class Main {
 		} catch (IOException e) {
 			System.out.println("IOException" + e);
 		} catch (Exception e) {
-			System.out.println("Exception");
+			System.out.println("Exception" + e);
 		}
 	}
 
