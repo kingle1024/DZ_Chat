@@ -15,6 +15,7 @@ public class HasChatRoomService extends ObjectStreamService {
 
 	@Override
 	public void request() throws IOException {
+		System.out.println("HasChatRoomService");
 		try {
 			String chatRoomName = (String) is.readObject();	
 			if (MainServer.chatRoomMap.containsKey(chatRoomName)) {

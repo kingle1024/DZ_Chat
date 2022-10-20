@@ -10,10 +10,8 @@ import property.Property;
 public class ChatMessage extends Message implements NeedLog {
 	private static final long serialVersionUID = -4472963080600091036L;
 	private final Member sender;
-	private final String chatRoomName;
-	public ChatMessage(String chatRoomName, Member sender, String message) {
+	public ChatMessage(Member sender, String message) {
 		super(message);
-		this.chatRoomName = chatRoomName;
 		this.sender = sender;
 	}
 
@@ -28,7 +26,7 @@ public class ChatMessage extends Message implements NeedLog {
 	public void push() {
 		System.out.println("message push: " + message);
 		System.out.println("chatRoom: " + chatRoom);
-		chatRoom.getChatServiceList().stream().forEach(s -> {
+		chatRoom.getChatServices().stream().forEach(s -> {
 			try {
 				System.out.println(s.getMe());
 				send(s.getOs());

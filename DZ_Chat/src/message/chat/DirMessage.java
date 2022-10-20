@@ -29,7 +29,7 @@ public class DirMessage extends Message {
 
 	@Override
 	public void push() {
-		chatRoom.getChatServiceList().forEach(s -> {
+		chatRoom.getChatServices().forEach(s -> {
 			try {
 				System.out.println(s.getMe());
 				send(s.getOs());
