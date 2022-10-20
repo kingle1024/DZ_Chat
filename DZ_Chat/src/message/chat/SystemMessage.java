@@ -19,7 +19,7 @@ public class SystemMessage extends Message implements Serializable {
 	public SystemMessage(ChatRoom chatRoom, String message) {
 		super(message);
 		this.chatRoom = chatRoom;
-		this.chatRoomName = chatRoom.getRoomName();
+		this.chatRoomName = chatRoom.getChatRoomName();
 	}
 	
 	@Override
@@ -30,7 +30,7 @@ public class SystemMessage extends Message implements Serializable {
 	
 	@Override
 	public void push() {
-		chatRoom.getChatServiceList().stream().forEach(s -> {
+		chatRoom.getChatServices().stream().forEach(s -> {
 			try {
 				send(s.getOs());
 			} catch (IOException e) {

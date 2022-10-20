@@ -9,11 +9,9 @@ import property.Property;
 public class PrivateChatMessage extends Message {
 	private static final long serialVersionUID = -286765041005171349L;
 	private final Member sender;
-	private final String chatRoomName;
 	private final String to;
-	public PrivateChatMessage(String chatRoomName, Member sender, String message, String to) {
+	public PrivateChatMessage(Member sender, String message, String to) {
 		super(message);
-		this.chatRoomName =chatRoomName;
 		this.sender = sender;
 		this.to = to;
 	}
@@ -26,7 +24,7 @@ public class PrivateChatMessage extends Message {
 
 	@Override
 	public void push() {
-		chatRoom.getChatServiceList().stream()
+		chatRoom.getChatServices().stream()
 			.filter(s -> s.equalsUser(to))
 			.forEach(s -> {
 			try {
