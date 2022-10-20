@@ -28,6 +28,6 @@ public abstract class Message implements Serializable, NeedLog {
 	}
 	
 	public Log toLog() {
-		return new Log(chatRoom.getRoomName() + "/" + Property.server().get("CHAT_LOG_FILE"), message); //폴더이름
+		return new Log(chatRoom.getChatRoomName() + "/" + Property.server().get("CHAT_LOG_FILE"), message); //폴더이름
 	}
 }
