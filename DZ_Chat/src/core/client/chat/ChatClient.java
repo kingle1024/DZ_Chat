@@ -62,14 +62,16 @@ public class ChatClient extends ObjectStreamClient {
 					monitor.setStatus("open");
 					monitor.notify();
 					while (true) {
-						if (monitor.equalsStatus("open")) monitor.wait();
-						if (monitor.equalsStatus("end")) {
+						if (monitor.equalsStatus("open")) {
+							monitor.wait();
+						} else if (monitor.equalsStatus("end")) {
 							System.out.println("End monitor");
 							sendExit = true;
 							monitor.notifyAll();
 							throw new IOException();
+						} else {
+							break;
 						}
-						else break;
 					}
 				}
 			} catch (IOException e) {
