@@ -21,6 +21,8 @@ public class TextInputView extends View {
 			System.out.print(key + ": ");
 			values.add(scanner.nextLine());
 		});
-		return ViewMap.getInstance().getView(stringActor.act(values));
+		View nextView = ViewMap.getInstance().getView(stringActor.act(values));
+		values.clear();
+		return nextView;
 	}
 }

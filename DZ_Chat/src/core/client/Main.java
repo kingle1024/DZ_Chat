@@ -12,14 +12,9 @@ import java.util.*;
 
 public class Main {
 	private static Member me;
-	private static boolean hasChatRoom(String chatRoomName) {
-		HasChatRoomClient hasChatClient = new HasChatRoomClient(chatRoomName);
-		hasChatClient.run();
-		return hasChatClient.getHasGetRoom();
-	}
 
 	public static View viewInit() {
-//		System.out.println("View 생성");
+		System.out.println("View 생성");
 		Scanner scanner = new Scanner(System.in);
 		View main = new MenuChooseView("메인화면");
 		View login = new TextInputView("로그인", (str) -> {
@@ -42,7 +37,6 @@ public class Main {
 			String name = str.get(3);
 			String birth = str.get(4);
 			Member tmp = new Member(id, pw, name, birth);
-			System.out.println(tmp);
 			RegisterClient registerClient = new RegisterClient(tmp, pwChk);
 			registerClient.run();
 			if (registerClient.getRegisterSuccess()) {
@@ -83,16 +77,12 @@ public class Main {
 			if (hasChatRoom(chatRoomName)) {
 				ChatClient client = new ChatClient(chatRoomName, me);
 				client.run();
-//				while (client.getSendExit()) {
-//					client = new ChatClient(chatRoomName, me);
-//					client.run();
-//				}
 			} else {
 				System.out.println("존재하지 않는 채팅방 입니다.");
 			}
 			return "로그인 성공";
 		}, "입장할 채팅방 이름을 입력하세요.");
-		
+
 		View updateMember = new TextInputView("회원 비밀번호 수정", (str) -> {
 			String validatePW = str.get(0);
 			String newPW = str.get(1);
@@ -100,25 +90,25 @@ public class Main {
 			updatePWClient.run();
 			if (updatePWClient.getUpdateSuccess()) {
 				me.setPassword(newPW);
-				return "로그인 성공";	
+				return "로그인 성공";
 			} else {
 				System.out.println("비밀번호 불일치");
 				return "회원정보";
 			}
-			
+
 		}, "기존 비밀번호 입력", "새로운 비밀번호 입력");
 		View deleteMember = new TextInputView("탈퇴", (str) -> {
-	         String pw = str.get(0);
-	         DeleteClient deleteClient = new DeleteClient(me, pw);
-	         deleteClient.run();
-	         if (deleteClient.getDeleteSuccess()) {
-	            me = null;
-	            return "메인화면";
-	         } else {
-	            return "회원정보";
-	         }
+			String pw = str.get(0);
+			DeleteClient deleteClient = new DeleteClient(me, pw);
+			deleteClient.run();
+			if (deleteClient.getDeleteSuccess()) {
+				me = null;
+				return "메인화면";
+			} else {
+				return "회원정보";
+			}
 
-	      }, "pw");
+		}, "pw");
 
 		main.addSubView(login);
 		main.addSubView(register);
@@ -144,5 +134,11 @@ public class Main {
 			System.out.println(view.getName());
 			view = view.act();
 		}
+	}
+
+	private static boolean hasChatRoom(String chatRoomName) {
+		HasChatRoomClient hasChatClient = new HasChatRoomClient(chatRoomName);
+		hasChatClient.run();
+		return hasChatClient.getHasGetRoom();
 	}
 }
