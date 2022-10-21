@@ -16,9 +16,8 @@ public class Main {
 	private static final MemberDao memberDao = MemberDao.getInstance();
 
 	public static void main(String[] args) {
-//		System.out.println("change");
 		// Mock ChatRoom
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			MainServer.chatRoomMap.put("TEST ROOM" + i, new ChatRoom("TEST ROOM" + i));
 		}
 		try {
@@ -34,6 +33,7 @@ public class Main {
 			ftpServer.start();
 			
 //			Thread logConsumer = new Thread(new LogConsumer());
+//			logConsumer.setDaemon(true);
 //			logConsumer.start();
 			
 			Scanner scanner = new Scanner(System.in);
