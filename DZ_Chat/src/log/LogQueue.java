@@ -26,6 +26,15 @@ public class LogQueue {
 		}
 	}
 	
+	public void add(Log log) {
+		synchronized (monitor) {
+			que.add(log);
+			if (que.size() > 5) {
+				monitor.notify();
+			}
+		}
+	}
+	
 	public Log poll() throws InterruptedException {
 		synchronized (monitor) {
 			if (que.isEmpty()) {
