@@ -26,6 +26,7 @@ public class MainServer extends Server {
       System.out.println("[Main Server] Start " + HOST + ":" + PORT_NUMBER);
 //      System.out.println("안녕");
       threadPool.execute(() -> {
+    	  Thread.currentThread().setDaemon(true);
          try {
             while (true) {
                Socket socket = serverSocket.accept();

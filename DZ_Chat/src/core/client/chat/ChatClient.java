@@ -18,8 +18,7 @@ public class ChatClient extends ObjectStreamClient {
 	private ThreadGroup threadGroup;
 	private MessageFactory messageFactory;
 
-	private static final MessageQueue messageQueue = MessageQueue.getInstance();
-	private static final Monitor monitor = messageQueue.getMonitor();
+	private static final Monitor monitor = MessageQueue.getMonitor();
 	private boolean isMessageConsumerStarted = false;
 
 	public ChatClient(String chatRoomName, Member me) {
@@ -39,7 +38,9 @@ public class ChatClient extends ObjectStreamClient {
 		Thread listenerThread = new Thread(messageListener);
 		Thread producerThread = new Thread(messageProducer);
 		Thread consumerThread = new Thread(messageConsumer);
-
+		listenerThread.setDaemon(true);
+		producerThread.setDaemon(true);
+		consumerThread.setDaemon(true);
 		producerThread.start();
 
 		while (true) {
