@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class MessageListener implements Runnable {
+	private static final Monitor monitor = MessageQueue.getMonitor();
 	private ObjectInputStream is;
 
 	public MessageListener(ObjectInputStream is) {
@@ -25,6 +26,11 @@ public class MessageListener implements Runnable {
 				System.out.println(message);
 			} catch (ClassNotFoundException | IOException e) {
 				try {
+					synchronized (monitor) {
+						System.out.println("서버와 연결이 끊겼습니다.");
+						monitor.setStatus("close");
+						monitor.notifyAll();
+					}
 					Thread.sleep(500);
 				} catch (InterruptedException e1) {
 				}

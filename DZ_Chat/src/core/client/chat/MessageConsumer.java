@@ -22,6 +22,9 @@ public class MessageConsumer implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
+			if (Thread.currentThread().isInterrupted()) {
+				return;
+			}
 			try {
 				if (!messageQueue.isEmpty() && !monitor.equalsStatus("close")) {
 					Message message = messageQueue.poll();
@@ -35,10 +38,7 @@ public class MessageConsumer implements Runnable {
 			} catch (InterruptedException e) {
 				
 			} catch (IOException e) {
-				System.out.println("서버와 연결이 끊겼습니다.");
-				synchronized (monitor) {
-					monitor.setStatus("close");
-				}
+
 			}
 		}
 	}

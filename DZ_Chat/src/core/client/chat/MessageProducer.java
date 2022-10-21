@@ -7,7 +7,7 @@ import message.MessageFactory;
 
 public class MessageProducer implements Runnable {
 	private static final MessageQueue messageQueue = MessageQueue.getInstance();
-	private static final Monitor monitor = messageQueue.getMonitor();
+	private static final Monitor monitor = MessageQueue.getMonitor();
 	private MessageFactory messageFactory;
 	
 	public MessageProducer(MessageFactory messageFactory) {

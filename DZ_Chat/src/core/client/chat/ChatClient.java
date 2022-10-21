@@ -18,8 +18,7 @@ public class ChatClient extends ObjectStreamClient {
 	private ThreadGroup threadGroup;
 	private MessageFactory messageFactory;
 
-	private static final MessageQueue messageQueue = MessageQueue.getInstance();
-	private static final Monitor monitor = messageQueue.getMonitor();
+	private static final Monitor monitor = MessageQueue.getMonitor();
 	private boolean isMessageConsumerStarted = false;
 
 	public ChatClient(String chatRoomName, Member me) {
@@ -39,7 +38,9 @@ public class ChatClient extends ObjectStreamClient {
 		Thread listenerThread = new Thread(messageListener);
 		Thread producerThread = new Thread(messageProducer);
 		Thread consumerThread = new Thread(messageConsumer);
-
+		listenerThread.setDaemon(true);
+		producerThread.setDaemon(true);
+		consumerThread.setDaemon(true);
 		producerThread.start();
 
 		while (true) {
@@ -53,6 +54,7 @@ public class ChatClient extends ObjectStreamClient {
 					isMessageConsumerStarted = true;
 				}
 
+
 				System.out.println("채팅방 입장");
 				synchronized (monitor) {
 					monitor.setStatus("open");
@@ -65,7 +67,7 @@ public class ChatClient extends ObjectStreamClient {
 							monitor.notifyAll();
 							throw new IOException();
 						} else {
-							break;
+							throw new IOException();
 						}
 					}
 				}
@@ -80,12 +82,11 @@ public class ChatClient extends ObjectStreamClient {
 					} catch (IOException e1) {
 
 					}
-
 					return;
 				} else {
 					try {
 						Thread.sleep(1000);
-//						System.out.println("서버 재접속 시도");
+						System.out.println("서버 재접속 시도");
 					} catch (InterruptedException e1) {
 					}
 				}

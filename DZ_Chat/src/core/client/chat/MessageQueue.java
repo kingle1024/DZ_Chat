@@ -35,7 +35,7 @@ public class MessageQueue {
 		return que.isEmpty();
 	}
 	
-	public Monitor getMonitor() {
+	public static Monitor getMonitor() {
 		return monitor;
 	}
 }
