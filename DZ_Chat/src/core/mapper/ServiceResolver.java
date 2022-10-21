@@ -13,7 +13,6 @@ public class ServiceResolver implements Serializable {
 	public ServiceResolver(String commandType, Object... args) {
 		this.commandType = commandType;
 		this.args = args;
-		System.out.println(commandType);
 	}
 
 	public ObjectStreamService response(ObjectInputStream is, ObjectOutputStream os) {

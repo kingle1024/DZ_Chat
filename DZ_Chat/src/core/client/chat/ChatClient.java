@@ -53,6 +53,7 @@ public class ChatClient extends ObjectStreamClient {
 					isMessageConsumerStarted = true;
 				}
 
+
 				System.out.println("채팅방 입장");
 				synchronized (monitor) {
 					monitor.setStatus("open");
@@ -65,7 +66,7 @@ public class ChatClient extends ObjectStreamClient {
 							monitor.notifyAll();
 							throw new IOException();
 						} else {
-							break;
+							throw new IOException();
 						}
 					}
 				}
@@ -80,12 +81,11 @@ public class ChatClient extends ObjectStreamClient {
 					} catch (IOException e1) {
 
 					}
-
 					return;
 				} else {
 					try {
 						Thread.sleep(1000);
-//						System.out.println("서버 재접속 시도");
+						System.out.println("서버 재접속 시도");
 					} catch (InterruptedException e1) {
 					}
 				}
