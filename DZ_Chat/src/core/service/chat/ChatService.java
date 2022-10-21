@@ -12,11 +12,10 @@ import member.Member;
 import message.chat.ChatRoom;
 import message.chat.Message;
 
-public class ChatService extends ObjectStreamService implements NeedLog {
+public class ChatService extends ObjectStreamService {
 	private final Member me;
 	private final String chatRoomName;
 	private final ChatRoom chatRoom;
-//	private NeedLog needLog = new NeedLog();
 	private LogQueue logQueue = LogQueue.getInstance();
 	public ChatService(ObjectInputStream is, ObjectOutputStream os, Object... args) throws IOException {
 		super(is, os);
@@ -26,7 +25,7 @@ public class ChatService extends ObjectStreamService implements NeedLog {
 	}
 
 	@Override
-	public void request() throws IOException {
+	public void request() {
 		System.out.println("Chat Service");
 		chatRoom.entrance(this);
 		MainServer.threadPool.execute(() -> {
@@ -36,19 +35,14 @@ public class ChatService extends ObjectStreamService implements NeedLog {
 					message.setChatRoom(chatRoom);
 					message.push();
 					System.out.println("[Server]" + message);
-					logQueue.add(message); //LogQueue
+					logQueue.add(message);
 				}
 			} catch (IOException e) {
 				chatRoom.exit(this);
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+
 			}
 		});
-	}
-	
-	@Override
-	public Log toLog() {
-		return null;
 	}
 	
 	public Member getMe() {
