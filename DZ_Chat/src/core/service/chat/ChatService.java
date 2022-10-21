@@ -26,22 +26,25 @@ public class ChatService extends ObjectStreamService implements NeedLog {
 	}
 
 	@Override
-	public void request() throws IOException {
+	public void request() {
 		System.out.println("Chat Service");
 		chatRoom.entrance(this);
 		MainServer.threadPool.execute(() -> {
 			try {
 				while (true) {
+					System.out.println("Wait Read");
 					Message message = (Message) is.readObject();
+					System.out.println("After Read");
 					message.setChatRoom(chatRoom);
 					message.push();
 					System.out.println("[Server]" + message);
-					logQueue.add(message); //LogQueue
+					logQueue.add(message);
 				}
 			} catch (IOException e) {
+				System.out.println("ChatRoomExit");
 				chatRoom.exit(this);
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+
 			}
 		});
 	}

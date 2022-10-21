@@ -80,6 +80,12 @@ public class ChatClient extends ObjectStreamClient {
 					producerThread.interrupt();
 					consumerThread.interrupt();
 					listenerThread.interrupt();
+					try {
+						unconnect();	
+					} catch (IOException e1) {
+						
+					}
+					
 					return;
 				} else {
 					try {
