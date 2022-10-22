@@ -5,9 +5,7 @@ import java.util.Objects;
 
 import core.server.MainServer;
 import core.service.ObjectStreamService;
-import log.Log;
 import log.LogQueue;
-import log.NeedLog;
 import member.Member;
 import message.chat.ChatRoom;
 import message.chat.Message;
@@ -39,8 +37,9 @@ public class ChatService extends ObjectStreamService {
 				}
 			} catch (IOException e) {
 				chatRoom.exit(this);
+				System.out.println("ChatService > IOException > "+e);
 			} catch (ClassNotFoundException e) {
-
+				System.out.println("ChatService > ClassNotFoundException > "+e);
 			}
 		});
 	}
