@@ -54,9 +54,10 @@ public class FtpClient extends Thread{
 							ftp.getDownloadPath((String)map.get("fileName")));
 			String filePath = Property.server().get("DOWNLOAD_PATH")+chatRoomAndFileName;
 
-			ftp.sendTargetFileInputStream(filePath, downloadPath.toString());
-			System.out.println("FtpClient > start() > 파일 저장이 완료되었습니다.");
-			ftp.showPicture(downloadPath);
+			if(ftp.sendTargetFileInputStream(filePath, downloadPath.toString())){
+				ftp.showPicture(downloadPath);
+				System.out.println("FtpClient > start() > 파일 저장이 완료되었습니다.");
+			}
 		}catch(IOException e) {
 			e.printStackTrace();
 		}

@@ -18,7 +18,6 @@ public class FileCommon {
 
 			//채팅시간, 유저아디@ip, 채팅내용
 		} catch (IOException e) {
-			System.out.println(e);
 			e.printStackTrace();
 			return false;
 		}
@@ -26,11 +25,9 @@ public class FileCommon {
 		return true;		
 	}
 	public String fileNameBalance(String path, String fileName) {
-		String[] files;
-		try {
-			files = fileName.split("\\.");
-		}catch(Exception e) {
-			System.out.println(fileName + " : 파일명이 올바르지 않습니다. (Ex test.txt) ");
+		String[] files = fileName.split("\\.");
+		if(files.length < 2){
+			System.out.println("파일명이 올바르지 않습니다. (ex test.txt)");
 			return null;
 		}
 
@@ -57,7 +54,7 @@ public class FileCommon {
 			}
 		}
 
-		System.out.println("사용할 파일위치와 파일명 : "+sbFileName.toString());
+		System.out.println("사용할 파일위치와 파일명 : "+sbFileName);
 		return sbFileName.toString();
 	}
 }
