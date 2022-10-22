@@ -24,7 +24,6 @@ public class FtpServer extends Server {
 		serverSocket = new ServerSocket(PORT_NUMBER);
 		System.out.println("[FTP 서버] 시작 " + HOST + ":" + PORT_NUMBER);
 		threadPool.execute(() -> {
-			Thread.currentThread().setDaemon(true);
 			try {
 				while (true) {
 					Socket socket = serverSocket.accept(); // 새로운 연결 소켓 생성 및 accept대기
