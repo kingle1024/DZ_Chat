@@ -99,7 +99,7 @@ public class Main {
 		}, "기존 비밀번호 입력", "새로운 비밀번호 입력");
 		View deleteMember = new TextInputView("탈퇴", (str) -> {
 			String pw = str.get(0);
-			DeleteClient deleteClient = new DeleteClient(me, pw);
+			DeleteMemberClient deleteClient = new DeleteMemberClient(me, pw);
 			deleteClient.run();
 			if (deleteClient.getDeleteSuccess()) {
 				me = null;

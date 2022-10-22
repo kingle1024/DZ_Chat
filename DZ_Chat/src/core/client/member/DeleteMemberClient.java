@@ -5,12 +5,12 @@ import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 import member.Member;
 
-public class DeleteClient extends ObjectStreamClient {
+public class DeleteMemberClient extends ObjectStreamClient {
 	private Member me;
 	private String pw;
 	private boolean deleteSuccess = false;
 
-	public DeleteClient(Member me, String pw) {
+	public DeleteMemberClient(Member me, String pw) {
 		this.me = me;
 		this.pw = pw;
 	}
@@ -18,7 +18,7 @@ public class DeleteClient extends ObjectStreamClient {
 	@Override
 	public void run() {
 		try {
-			connect(new ServiceResolver("member.DeleteService"));
+			connect(new ServiceResolver("member.DeleteMemberService"));
 			send(me);
 			send(pw);
 			deleteSuccess = (Boolean) receive();

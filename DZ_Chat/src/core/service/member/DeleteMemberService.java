@@ -7,10 +7,10 @@ import core.service.ObjectStreamService;
 import member.Member;
 import member.MemberManager;
 
-public class DeleteService extends ObjectStreamService {
+public class DeleteMemberService extends ObjectStreamService {
 	private static final MemberManager memberManager = MemberManager.getInstance();
 
-	public DeleteService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
+	public DeleteMemberService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
 
