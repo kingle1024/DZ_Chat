@@ -22,10 +22,13 @@ public class FtpService {
 	}
 	public void saveSocketFile(Socket socket, String saveFilePath) throws IOException {
 		// Socket으로 데이터가 오는 경우
+		System.out.println("FtpServer > saveFilePath > "+saveFilePath);
 		saveFile(socket.getInputStream(), saveFilePath);
 	}
 	public void saveTargetFile(String targetFilePath, String saveFilePath) throws IOException {
 		// 파일 경로로 데이터 위치를 알려주는 경우
+		System.out.println("FtpServer > targetFilePath > "+targetFilePath);
+		System.out.println("FtpServer > saveFilePath > "+saveFilePath);
 		saveFile(new FileInputStream(targetFilePath), saveFilePath);
 	}
 	public void saveFile(InputStream is, String saveFilePath) {
@@ -94,7 +97,9 @@ public class FtpService {
         }
         return null;
 	}
-	public String getOsPath(String osName, String userName){
+	public String getOsDownloadPath(){
+		String userName = System.getProperty("user.name");
+		String osName = System.getProperty("os.name").toLowerCase();
 		StringBuilder osPath = new StringBuilder();
 		if(osName.contains("window")){
 			osPath
@@ -105,30 +110,32 @@ public class FtpService {
 					.append("/Users/")
 					.append(userName);
 		}
+		if(osName.contains("window")){
+			osPath.append("\\Downloads\\");
+		}else if(osName.contains("mac")){
+			osPath.append("/Downloads/");
+		}
 		return osPath.toString();
 	}
-	public String getDownloadPath(String osName, StringBuffer downloadPath, String userName, String[] inputArr) {
-		String osPath = getOsPath(osName, userName);
-		downloadPath.append(osPath);
-		if(osName.contains("window")){
-			downloadPath.append("\\Downloads\\");
-		}else if(osName.contains("mac")){
-			downloadPath.append("/Downloads/");
-		}
-		String fileName = inputArr[1];
-		downloadPath.append(fileName);
+	public String getDownloadPath(String fileName) {
+		StringBuffer downloadPath = new StringBuffer();
+		downloadPath.append(getOsDownloadPath())
+			.append(fileName);
 		
 		return downloadPath.toString();
 	}
-	public void showPicture(String[] inputArr, String osName, StringBuffer downloadPath) throws IOException, InterruptedException {
-		String fileName = inputArr[1];
-		if(fileName.contains("png") || fileName.contains("jpg") || fileName.contains("jpeg")) {
+	public void showPicture(StringBuffer downloadPath) throws IOException, InterruptedException {
+		String osName = System.getProperty("os.name").toLowerCase();
+		String downloadPathStr = downloadPath.toString();
+		if(downloadPathStr.contains("png") ||
+				downloadPathStr.contains("jpg") ||
+				downloadPathStr.contains("jpeg")) {
 			Process p = null;
-			if(osName.contains("mac")){		        
-				String[] cmd = {"/bin/sh","-c","open "+downloadPath.toString()};
+			if(osName.contains("mac")){
+				String[] cmd = {"/bin/sh","-c","open "+downloadPath};
 	            p = Runtime.getRuntime().exec(cmd);	            
 			}else if(osName.contains("window")) {
-				p = Runtime.getRuntime().exec("cmd /c " + "mspaint "+downloadPath.toString());
+				p = Runtime.getRuntime().exec("cmd /c " + "mspaint "+downloadPath);
 			}
 			assert p != null;
 			p.waitFor();
@@ -163,10 +170,10 @@ public class FtpService {
 	}
 	public void fileSend(String clientMessage, Socket socket) {
 		String[] message = clientMessage.split(" ");
-		System.out.println("FtpService > fileSend > message[1] > "+message[1]);
+//		System.out.println("FtpService > fileSend > message[1] > "+message[1]);
 		File file = new File(message[1]);
 		String fileName = file.getName();
-		System.out.println("FtpService > fileSend > message[2] > "+message[2]);
+//		System.out.println("FtpService > fileSend > message[2] > "+message[2]);
 		String roomName = message[2];
 		FileCommon fileCommon = new FileCommon();
 		String saveFilePath = fileCommon.fileNameBalance("resources/"+roomName+"/", fileName);

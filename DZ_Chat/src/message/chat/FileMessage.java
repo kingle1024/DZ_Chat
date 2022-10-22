@@ -4,11 +4,12 @@ import message.ftp.ClientToServerThread;
 import message.ftp.FtpClient;
 import property.Property;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.HashMap;
-
-import static message.ftp.FtpClient.messageSend;
 
 public class FileMessage {
     public boolean run(HashMap<String, Object> map) throws IOException {
@@ -18,9 +19,7 @@ public class FileMessage {
         String chatRoomName = (String) map.get("chatRoomName");
 
         // FTP Client
-        Socket socket = new Socket(
-                Property.server().get("IP"),
-                Integer.parseInt(Property.server().get("FTP_PORT")));
+        Socket socket = getSocket();
         StringBuilder input = new StringBuilder();
         input.append(chat)
                 .append(" ")
@@ -37,6 +36,11 @@ public class FileMessage {
         threadMap.put("socket", socket);
         threadMap.put("chatRoomName", chatRoomName);
 
+        if(chat.startsWith("#fileStop")) {
+            threadGroup.interrupt();
+            return false;
+        }
+
         if(chat.startsWith("#fileSend")) {
             ClientToServerThread clientToServerThread = new ClientToServerThread(threadGroup, fileName, threadMap);
             clientToServerThread.start();
@@ -44,10 +48,30 @@ public class FileMessage {
             threadMap.put("chat", chat);
             FtpClient ftpClient = new FtpClient(threadGroup, fileName, threadMap);
             ftpClient.start();
-        }else if(chat.startsWith("#fileStop")) {
-            threadGroup.interrupt();
-            return false;
         }
         return true;
+    }
+    public Socket getSocket(){
+        try {
+            return new Socket(
+                    Property.server().get("IP"),
+                    Integer.parseInt(Property.server().get("FTP_PORT")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void messageSend(String input, Socket socket) throws IOException {
+        BufferedWriter bufferedWriter =
+                new BufferedWriter(
+                        new OutputStreamWriter(
+                                new ObjectOutputStream(socket.getOutputStream())
+                        )
+                );
+        bufferedWriter.write(input);
+        bufferedWriter.newLine();
+        bufferedWriter.flush();
+//		System.out.println("메시지 전송 완료");
     }
 }
