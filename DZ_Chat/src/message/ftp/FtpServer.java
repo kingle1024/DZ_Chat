@@ -20,33 +20,38 @@ public class FtpServer extends Server {
 	}
 
 	@Override
-	public void start() throws IOException {
-		serverSocket = new ServerSocket(PORT_NUMBER);
+	public void start() {
+		try {
+			serverSocket = new ServerSocket(PORT_NUMBER);
+		} catch (IOException e) {
+			System.out.println("FtpServer > start() > Exception");
+			throw new RuntimeException(e);
+		}
 		System.out.println("[FTP 서버] 시작 " + HOST + ":" + PORT_NUMBER);
 		threadPool.execute(() -> {
-			try {
+
+
 				while (true) {
-					Socket socket = serverSocket.accept(); // 새로운 연결 소켓 생성 및 accept대기
+					try {
+						FtpService ftpService = new FtpService();
+						Socket socket = serverSocket.accept(); // 새로운 연결 소켓 생성 및 accept대기
 
-					FtpService ftpService = new FtpService();
-					System.out.println("FTP server is listening... (Port: " + PORT_NUMBER + ")");
+						System.out.println("FTP server is listening... (Port: " + PORT_NUMBER + ")");
 
-					// 전달한 사용자 정보 표시
-					showClientInfo(socket);
-					// Client 메시지 확인
-					String clientMessage = ftpService.clientMessageReceive(socket);
+						// Client 메시지 확인
+						String chat = ftpService.clientMessageReceive(socket);
 
-					// 파일 전송
-					if (clientMessage.startsWith("#fileSend")) {
-						System.out.println("FileTransferReceiver > startServer() > #fileSend");
-						System.out.println("FtpServer가 받은 메시지 : " + clientMessage);
-						ftpService.fileSend(clientMessage, socket);
+						// 파일 전송
+						if (chat.startsWith("#fileSend")) {
+							System.out.println("FileTransferReceiver > startServer() > #fileSend > "+chat);
+							ftpService.fileSend(chat, socket);
+						}
+					} catch (IOException e) {
+						System.out.println("FtpServer > start() > IOException");
+						e.printStackTrace();
 					}
 				}
-			} catch (IOException e) {
-				System.out.println("FtpServer > start() > IOException");
-				e.printStackTrace();
-			}
+
 		});
 	}
 
@@ -59,13 +64,5 @@ public class FtpServer extends Server {
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void showClientInfo(Socket socket) {
-		InetSocketAddress isaClient = 
-				(InetSocketAddress) socket.getRemoteSocketAddress();
-		System.out.println(
-				"A client(" + isaClient.getAddress().getHostAddress() + 
-				" is connected. (Port: " + isaClient.getPort() + ")");
 	}
 }

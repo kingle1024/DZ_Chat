@@ -48,6 +48,7 @@ public class MessageFactory {
 		throw new ChatRoomExitException();
 	}
 	private Message createFileMessage(String chat) throws IOException {
+		System.out.println("createFileMessage");
 		String[] message = chat.split(" ");
 		if(message.length == 1){
 			message = new String[3];

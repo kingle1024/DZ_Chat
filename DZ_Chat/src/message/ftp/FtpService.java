@@ -20,18 +20,18 @@ public class FtpService {
 		
 		return true;
 	}
-	public void saveSocketFile(Socket socket, String saveFilePath) throws IOException {
+	public boolean sendSocketInputStream(Socket socket, String saveFilePath) throws IOException {
 		// Socket으로 데이터가 오는 경우
 		System.out.println("FtpServer > saveFilePath > "+saveFilePath);
-		saveFile(socket.getInputStream(), saveFilePath);
+		return saveFile(socket.getInputStream(), saveFilePath);
 	}
-	public void saveTargetFile(String targetFilePath, String saveFilePath) throws IOException {
+	public boolean sendTargetFileInputStream(String targetFilePath, String saveFilePath) throws IOException {
 		// 파일 경로로 데이터 위치를 알려주는 경우
-		System.out.println("FtpServer > targetFilePath > "+targetFilePath);
-		System.out.println("FtpServer > saveFilePath > "+saveFilePath);
-		saveFile(new FileInputStream(targetFilePath), saveFilePath);
+		System.out.println("FtpService > targetFilePath > "+targetFilePath);
+		System.out.println("FtpService > saveFilePath > "+saveFilePath);
+		return saveFile(new FileInputStream(targetFilePath), saveFilePath);
 	}
-	public void saveFile(InputStream is, String saveFilePath) {
+	public boolean saveFile(InputStream is, String saveFilePath) {
 		try {
 			byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 			int readBytes;
@@ -45,9 +45,11 @@ public class FtpService {
 			fos.close();
 		} catch (IOException e) {
 			System.out.println("saveFile IOException > "+e);
-			throw new RuntimeException(e);
+			return false;
 		}
 		System.out.println("FtpService > saveFile 끝 ");
+
+		return true;
 	}
 	public String dir(String roomName) {
 		File file = new File(Property.server().get("DOWNLOAD_PATH")+roomName+"");
@@ -142,20 +144,6 @@ public class FtpService {
             p.destroy();
 		}
 	}
-	public boolean saveFileToServer(Socket socket, String filename) {
-		// 서버에 파일 전송
-		try {
-			System.out.println("FtpServer > saveFile > 내가 받은 파일 경로 :"+filename);
-			FtpService ftp = new FtpService();
-			ftp.saveSocketFile(socket, filename);
-		}catch(IOException e) {
-			e.printStackTrace();
-			System.out.println("파일 전송에 실패하였습니다.");
-			return false;
-		}
-
-		return true;
-	}
 	public String clientMessageReceive(Socket socket) throws IOException {
 		BufferedReader bufferedReader =
 				new BufferedReader(
@@ -168,20 +156,22 @@ public class FtpService {
 
 		return clientMessage;
 	}
-	public void fileSend(String clientMessage, Socket socket) {
-		String[] message = clientMessage.split(" ");
-//		System.out.println("FtpService > fileSend > message[1] > "+message[1]);
-		File file = new File(message[1]);
-		String fileName = file.getName();
-//		System.out.println("FtpService > fileSend > message[2] > "+message[2]);
-		String roomName = message[2];
-		FileCommon fileCommon = new FileCommon();
-		String saveFilePath = fileCommon.fileNameBalance("resources/"+roomName+"/", fileName);
-		FtpService ftpService = new FtpService();
-		if(ftpService.saveFileToServer(socket, saveFilePath)){
-			System.out.println("FtpServer > fileSend : 파일 전송 성공");
-		}else{
-			System.out.println("파일 전송 실패 ");
+	public void fileSend(String chat, Socket socket) {
+		try {
+			String[] message = chat.split(" ");
+			File file = new File(message[1]);
+			String fileName = file.getName();
+			String roomName = message[2];
+			FileCommon fileCommon = new FileCommon();
+
+			String saveFilePath = fileCommon.fileNameBalance("resources/" + roomName + "/", fileName);
+			if(saveFilePath != null){
+				sendSocketInputStream(socket, saveFilePath);
+			}
+		}catch (IOException e) {
+			System.out.println("FtpService > fileSend > "+e);
+			throw new RuntimeException(e);
 		}
 	}
+
 }
