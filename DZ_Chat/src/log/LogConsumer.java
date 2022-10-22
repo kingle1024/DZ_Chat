@@ -12,10 +12,10 @@ public class LogConsumer implements Runnable {
 				appendInfo(logQueue.poll());
 			}
 		} catch (InterruptedException e) {
-			
+			System.out.println("log > InterruptedException :"+e);
 		}
 	}
-	
+
 	public void appendInfo(Log log) {
 		System.out.println("Log > appendInfo");
 		try {
@@ -26,10 +26,10 @@ public class LogConsumer implements Runnable {
 			f.write(byteArr);
 			f.close();
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println("appendInfo > Exception > "+e);
 		}
 	}
-	
+
 	public void consumeAllLog() {
 		synchronized (monitor) {
 			monitor.notify();
