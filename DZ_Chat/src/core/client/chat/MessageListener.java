@@ -27,6 +27,7 @@ public class MessageListener implements Runnable {
 			} catch (ClassNotFoundException | IOException e) {
 				try {
 					synchronized (monitor) {
+						if (monitor.equalsStatus("end")) return;
 						System.out.println("서버와 연결이 끊겼습니다.");
 						monitor.setStatus("close");
 						monitor.notifyAll();

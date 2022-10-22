@@ -20,6 +20,7 @@ public class Main {
 		for (int i = 0; i < 5; i++) {
 			MainServer.chatRoomMap.put("TEST ROOM" + i, new ChatRoom("TEST ROOM" + i));
 		}
+		
 		try {
 			memberDao.readContent();
 			System.out.println("server.Main" + memberMap.size());
@@ -32,9 +33,9 @@ public class Main {
 			FtpServer ftpServer = new FtpServer(Integer.parseInt(Property.server().get("FTP_PORT")));
 			ftpServer.start();
 			
-//			Thread logConsumer = new Thread(new LogConsumer());
-//			logConsumer.setDaemon(true);
-//			logConsumer.start();
+			Thread logConsumer = new Thread(new LogConsumer());
+			logConsumer.setDaemon(true);
+			logConsumer.start();
 			
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
