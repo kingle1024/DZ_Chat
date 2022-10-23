@@ -10,4 +10,9 @@ id716> fdfsfd
 id716> fdsgsdgsdg
 id716> sgsdg
 id716> dsg
-[2022-10-22T14:17:42.285814600]PrivateMessage:jhkim988:ぞし
+[2022-10-22T14:17:42.285814600]PrivateMessage:jhkim988:ぞし[2022-10-23 21:36:14]Entrance:123,123,123,123
+[2022-10-23 21:36:19]ChatMessage:123:1
+[2022-10-23 21:36:20]ChatMessage:123:2
+[2022-10-23 21:36:20]ChatMessage:123:3
+[2022-10-23 21:36:20]ChatMessage:123:4
+[2022-10-23 21:36:21]ChatMessage:123:5

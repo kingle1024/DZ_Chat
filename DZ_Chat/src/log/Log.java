@@ -1,16 +1,19 @@
 package log;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Log {
 	private String path;
 	private String log;
-	private LocalDateTime time;
-
+	private String time;
+	private DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); 
+	
 	public Log(String path, String log) {
 		this.path = path;
 		this.log = log;
-		this.time = LocalDateTime.now();
+		 LocalDateTime now = LocalDateTime.now();
+		this.time = now.format(pattern);
 	}
 
 	public String getTimeLog() {
