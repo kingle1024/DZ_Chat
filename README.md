@@ -23,7 +23,7 @@ Java Socket 을 이용한 채팅 프로그래밍
 - 채팅방 내 파일 다운로드(#fileSave)
 ![image](https://user-images.githubusercontent.com/25365672/197394323-0b5a4724-7e1c-4940-ace6-a8ad5afe5b0a.png)
 - 파일 전송 중 취소 기능(#fileStop)
-![image](https://user-images.githubusercontent.com/25365672/197394416-c74138a9-5570-4dcf-81ea-767ea15f9df1.png)
+![image](https://user-images.githubusercontent.com/25365672/197394552-979af8f9-a150-4b28-adfb-7fbf5fe73ed6.png)
 ![image](https://user-images.githubusercontent.com/25365672/197394466-09c28771-0a25-4b87-87f2-eaac0f1f6aeb.png)
 
 - 채팅방 파일 목록 조회(#dir)
