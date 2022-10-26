@@ -14,8 +14,12 @@ import java.util.HashMap;
 public class FileMessage {
     public boolean run(HashMap<String, Object> map) throws IOException {
         String chat = (String) map.get("chat");
-
         ThreadGroup threadGroup = (ThreadGroup) map.get("threadGroup");
+        if(chat.startsWith("#fileStop")) {
+            threadGroup.interrupt();
+            return false;
+        }
+
         String chatRoomName = (String) map.get("chatRoomName");
 
         // FTP Client
@@ -36,10 +40,7 @@ public class FileMessage {
         threadMap.put("socket", socket);
         threadMap.put("chatRoomName", chatRoomName);
 
-        if(chat.startsWith("#fileStop")) {
-            threadGroup.interrupt();
-            return false;
-        }
+
 
         if(chat.startsWith("#fileSend")) {
             ClientToServerThread clientToServerThread = new ClientToServerThread(threadGroup, fileName, threadMap);
