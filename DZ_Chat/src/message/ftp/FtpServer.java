@@ -3,7 +3,6 @@ package message.ftp;
 import core.server.Server;
 import property.Property;
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -13,7 +12,9 @@ import java.util.concurrent.Executors;
 // 받는곳(Server)
 public class FtpServer extends Server {
 	private static ServerSocket serverSocket;
-	public static final ExecutorService threadPool = Executors.newFixedThreadPool(Integer.parseInt(Property.server().get("THREAD_POOL")));
+	public static final ExecutorService threadPool =
+			Executors.newFixedThreadPool(
+					Integer.parseInt(Property.server().get("THREAD_POOL")));
 
 	public FtpServer(int port) throws UnknownHostException {
 		super(port);
@@ -23,38 +24,38 @@ public class FtpServer extends Server {
 	public void start() {
 		try {
 			serverSocket = new ServerSocket(PORT_NUMBER);
+			System.out.println("[FTP 서버] 시작 " + HOST + ":" + PORT_NUMBER);
 		} catch (IOException e) {
 			System.out.println("FtpServer > start() > Exception");
 			throw new RuntimeException(e);
 		}
-		System.out.println("[FTP 서버] 시작 " + HOST + ":" + PORT_NUMBER);
+
 		threadPool.execute(() -> {
-
-
+			try {
 				while (true) {
-					try {
-						FtpService ftpService = new FtpService();
-						Socket socket = serverSocket.accept(); // 새로운 연결 소켓 생성 및 accept대기
-
-						System.out.println("FTP server is listening... (Port: " + PORT_NUMBER + ")");
-
-						// Client 메시지 확인
-						String chat = ftpService.clientMessageReceive(socket);
-
-						// 파일 전송
-						if (chat.startsWith("#fileSend")) {
-							System.out.println("FileTransferReceiver > startServer() > #fileSend > "+chat);
-							ftpService.fileSend(chat, socket);
-						}
-					} catch (IOException e) {
-						System.out.println("FtpServer > start() > IOException");
-						e.printStackTrace();
-					}
+					Socket socket = serverSocket.accept(); // 새로운 연결 소켓 생성 및 accept대기
+					System.out.println("FTP server is listening... (Port: " + PORT_NUMBER + ")");
+					command(socket);
 				}
-
+			} catch (IOException e) {
+				System.out.println("FtpServer > start() > IOException");
+				e.printStackTrace();
+			}
 		});
 	}
-
+	public void command(Socket socket){
+		try {
+			FtpService ftpService = new FtpService();
+			String chat = ftpService.clientMessageReceive(socket);
+			if (chat.startsWith("#fileSend")) {
+				System.out.println("FileTransferReceiver > startServer() > #fileSend > " + chat);
+				ftpService.fileSend(chat, socket);
+			}
+		} catch (IOException e) {
+			System.out.println("FtpServer > command > "+e);
+			throw new RuntimeException(e);
+		}
+	}
 	@Override
 	public void stop() throws IOException {
 		try {
