@@ -32,7 +32,7 @@ public class ClientToServerThread extends Thread {
 		try {
 			String originFilePath = fileName;
 
-			if (message[1].startsWith("/")) {
+			if (message[1].startsWith("/") || message[1].startsWith("C:\\") || message[1].startsWith("D:\\")) {
 				originFilePath = message[1];
 			} else {
 				originFilePath = "DZ_Chat/" + originFilePath;
