@@ -11,7 +11,6 @@ import member.Member;
 public class RegisterClient extends Client {
 	private Member tmpMember;
 	private String pwChk;
-	private boolean registerSuccess = false;
 	private JSONObject json = new JSONObject();
 	
 	public RegisterClient(Member tmpMember, String pwChk) {
@@ -27,15 +26,12 @@ public class RegisterClient extends Client {
 			connect(new RequestType("member.RegisterService"));
 			send(json);
 			JSONObject response = receive();
+			boolean registerSuccess = false; // TODO
 			System.out.println(registerSuccess ? "회원가입 성공" : "회원가입 실패");
 			return response;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public boolean getRegisterSuccess() {
-		return registerSuccess;
 	}
 }
