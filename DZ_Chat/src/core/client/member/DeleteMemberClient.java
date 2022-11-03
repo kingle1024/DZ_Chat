@@ -9,19 +9,17 @@ import core.client.mapper.RequestType;
 import member.Member;
 
 public class DeleteMemberClient extends Client {
-	private Member me;
 	private String pw;
 	private JSONObject json = new JSONObject();
 	
-	public DeleteMemberClient(Member me, String pw) {
-		this.me = me;
+	public DeleteMemberClient( String pw) {
 		this.pw = pw;
 	}
 
 	@Override
 	public JSONObject run() {
 		try {
-//			json.put("member", me.toJSON());
+//			json.put("member", getMe.toJSON());
 			json.put("pw", pw);
 			connect(new RequestType("member.DeleteMemberService"));
 			send(json);
