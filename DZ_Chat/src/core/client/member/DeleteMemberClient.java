@@ -1,6 +1,9 @@
 package core.client.member;
 
 import java.io.IOException;
+
+import org.json.JSONObject;
+
 import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 import member.Member;
@@ -8,7 +11,6 @@ import member.Member;
 public class DeleteMemberClient extends ObjectStreamClient {
 	private Member me;
 	private String pw;
-	private boolean deleteSuccess = false;
 
 	public DeleteMemberClient(Member me, String pw) {
 		this.me = me;
@@ -16,18 +18,16 @@ public class DeleteMemberClient extends ObjectStreamClient {
 	}
 
 	@Override
-	public void run() {
+	public JSONObject run() {
 		try {
 			connect(new ServiceResolver("member.DeleteMemberService"));
 			send(me);
 			send(pw);
-			deleteSuccess = (Boolean) receive();
+			JSONObject response = receive();
+			return response;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public boolean getDeleteSuccess() {
-		return deleteSuccess;
+		return null;
 	}
 }

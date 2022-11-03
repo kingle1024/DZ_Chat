@@ -1,6 +1,9 @@
 package core.client.member;
 
 import java.io.IOException;
+
+import org.json.JSONObject;
+
 import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 import member.Member;
@@ -16,14 +19,18 @@ public class RegisterClient extends ObjectStreamClient {
 	}
 
 	@Override
-	public void run() {
+	public JSONObject run() {
 		try {
 			connect(new ServiceResolver("member.RegisterService"));
 			send(tmpMember);
 			send(pwChk);
-			registerSuccess = (Boolean) receive();
+			JSONObject response = receive();
+			System.out.println(registerSuccess ? "회원가입 성공" : "회원가입 실패");
+//			return registerSuccess ? ViewMap.getView("로그인") : ViewMap.getView("메인화면");
+			return response;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
 

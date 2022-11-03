@@ -1,6 +1,9 @@
 package core.client.member;
 
 import java.io.IOException;
+
+import org.json.JSONObject;
+
 import core.client.ObjectStreamClient;
 import core.mapper.ServiceResolver;
 import member.Member;
@@ -18,19 +21,18 @@ public class UpdatePWClient extends ObjectStreamClient {
 	}
 
 	@Override
-	public void run() {
+	public JSONObject run() {
 		try {
 			connect(new ServiceResolver("member.UpdatePWService"));
 			send(me);
 			send(validatePW);
 			send(newPW);
-			updateSuccess = (Boolean) receive();
-		} catch (IOException e) {
+			JSONObject response = receive();
+			return response;
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			return null;
 		}
-
 	}
 
 	public boolean getUpdateSuccess() {

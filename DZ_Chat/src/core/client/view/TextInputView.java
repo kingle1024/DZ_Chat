@@ -1,28 +1,31 @@
 package core.client.view;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import static core.client.Main.getScanner;
 
-public class TextInputView extends View {
-	private String[] keys;
+public abstract class TextInputView extends View {
+	private List<String> keys;
 	private List<String> values;
-	private StringActor stringActor;
-	public TextInputView(String name, StringActor stringActor, String... keys) {
+	public TextInputView(String name, String... keys) {
 		super(name);
-		this.keys = keys;
-		this.stringActor= stringActor;
 		values = new ArrayList<>();
-		ViewMap.getInstance().add(this);
+		this.keys = Arrays.asList(keys);
 	}
 	
-	@Override
-	public View act() {
-		Scanner scanner = new Scanner(System.in);
-		Arrays.asList(keys).stream().forEach(key -> {
-			System.out.print(key + ": ");
-			values.add(scanner.nextLine());
+	public void inputText() {
+		keys.stream().forEach(key -> {
+			System.out.println(key + ": ");
+			values.add(getScanner().nextLine());
 		});
-		View nextView = ViewMap.getInstance().getView(stringActor.act(values));
+	}
+	
+	public Iterator<String> answerIterator() {
 		values.clear();
-		return nextView;
+		inputText();
+		Iterator<String> iter = values.iterator();
+		return iter;
 	}
 }

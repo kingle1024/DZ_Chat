@@ -1,8 +1,13 @@
 package core.client;
 
 import java.io.*;
+
+import core.client.view.View;
 import core.mapper.ServiceResolver;
 import java.net.Socket;
+
+import org.json.JSONObject;
+
 import property.Property;
 
 public abstract class ObjectStreamClient implements Client {
@@ -27,8 +32,9 @@ public abstract class ObjectStreamClient implements Client {
 		System.out.println("[클라이언트] 연결 종료");
 	}
 
-	public Object receive() throws IOException, ClassNotFoundException {
-		return is.readObject();
+	public JSONObject receive() throws IOException, ClassNotFoundException {
+		is.readObject();
+		return new JSONObject();
 	}
 
 	public void send(Object obj) throws IOException {
@@ -36,5 +42,5 @@ public abstract class ObjectStreamClient implements Client {
 		os.flush();
 	}
 
-	public abstract void run();
+	public abstract JSONObject run();
 }

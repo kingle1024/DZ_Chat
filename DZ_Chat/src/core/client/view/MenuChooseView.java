@@ -1,44 +1,29 @@
 package core.client.view;
 
-import java.util.Scanner;
-
-import core.client.Client;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
+import static core.client.Main.getScanner;;
 
 public class MenuChooseView extends View {
-	private Client client;
-	private VoidActor voidActor;
+	private List<String> keys;
+	private int values;
 	
-	public MenuChooseView(String name, VoidActor voidActor) {
+	public MenuChooseView(String name, String...keys) {
 		super(name);
-		this.voidActor = voidActor;
-		ViewMap.getInstance().add(this);
+		this.keys = Arrays.asList(keys);
 	}
-	public MenuChooseView(String name) {
-		super(name);
-		ViewMap.getInstance().add(this);
-	}
-	
-	private void printMenu() {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 1; i <= next.size(); i++) {
-			sb.append("[")
-			.append(i)
-			.append("]")
-			.append(next.get(i-1));
-		}
-		System.out.println(sb.toString());
+
+	public void inputNumber() {
+		IntStream.range(1, keys.size()+1).forEach(idx -> {
+			System.out.println("[" + idx + "]" + keys.get(idx-1));
+		});
+		values = Integer.parseInt(getScanner().nextLine());
 	}
 	
 	@Override
-	public View act() {
-		if (voidActor != null) voidActor.act();
-		printMenu();
-		Scanner scanner = new Scanner(System.in);
-		int choose = Integer.parseInt(scanner.nextLine());
-		return next.get(choose-1);
-	}
-	
-	public void run() {
-		client.run();
+	public View nextView() {
+		inputNumber();
+		return ViewMap.getView(keys.get(values-1));
 	}
 }
