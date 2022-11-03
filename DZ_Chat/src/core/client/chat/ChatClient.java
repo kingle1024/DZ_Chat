@@ -7,11 +7,10 @@ import org.json.JSONObject;
 
 import core.client.Client;
 import core.client.mapper.RequestType;
-import member.Member;
 import message.MessageFactory;
+import static core.client.Main.*;
 
 public class ChatClient extends Client {
-	private Member me;
 	private String chatRoomName;
 	private boolean sendExit = false;
 	private ThreadGroup threadGroup;
@@ -21,10 +20,9 @@ public class ChatClient extends Client {
 	private static final Monitor monitor = MessageQueue.getMonitor();
 	private boolean isMessageConsumerStarted = false;
 
-	public ChatClient(String chatRoomName, Member me) {
+	public ChatClient(String chatRoomName) {
 		this.chatRoomName = chatRoomName;
-		this.me = me;
-		this.messageFactory = new MessageFactory(me, chatRoomName, threadGroup);
+		this.messageFactory = new MessageFactory(getMe(), chatRoomName, threadGroup);
 	}
 
 	public JSONObject run() {
