@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.json.JSONObject;
 
 import core.client.ClientMap;
-import core.client.Main;
 import core.client.view.TextInputView;
 import core.client.view.View;
 import core.client.view.ViewMap;
