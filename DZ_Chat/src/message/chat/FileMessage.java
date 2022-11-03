@@ -30,6 +30,7 @@ public class FileMessage {
                 .append("room/")
                 .append(chatRoomName);
 
+        // 서버에다가 메시지를 전달해줌
         messageSend(input.toString(), socket);
 
         HashMap<String, Object> threadMap = new HashMap<>();
@@ -39,8 +40,6 @@ public class FileMessage {
         threadMap.put("fileName", input.toString());
         threadMap.put("socket", socket);
         threadMap.put("chatRoomName", chatRoomName);
-
-
 
         if(chat.startsWith("#fileSend")) {
             ClientToServerThread clientToServerThread = new ClientToServerThread(threadGroup, fileName, threadMap);
