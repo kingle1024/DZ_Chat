@@ -9,14 +9,9 @@ import core.client.mapper.RequestType;
 
 public class HasChatRoomClient extends Client {
 	private String chatRoomName;
-	private boolean hasChatRoom = false;
 
 	public HasChatRoomClient(String chatRoomName) {
 		this.chatRoomName = chatRoomName;
-	}
-
-	public boolean getHasGetRoom() {
-		return hasChatRoom;
 	}
 	
 	@Override
