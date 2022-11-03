@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import message.MessageFactory;
+import static core.client.Main.*;
 
 public class MessageProducer implements Runnable {
 	private static final MessageQueue messageQueue = MessageQueue.getInstance();
@@ -16,11 +17,12 @@ public class MessageProducer implements Runnable {
 	
 	@Override
 	public void run() {
-		Scanner scanner = new Scanner(System.in);
-		while (scanner.hasNext()) {
-			String chat = scanner.nextLine();
+		while (getScanner().hasNext()) {
+			String chat = getScanner().nextLine();
 			try {
-				messageQueue.add(messageFactory.createMessage(chat));
+				// TODO
+				messageFactory.createMessage(chat);
+				messageQueue.add("");
 			} catch (ChatRoomExitException e) {
 				System.out.println("MessageProducer ChatRoomExitException");
 				synchronized (monitor) {

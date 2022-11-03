@@ -2,6 +2,8 @@ package core.client.view.viewimpl;
 
 import java.util.Iterator;
 
+import org.json.JSONObject;
+
 import core.client.ClientMap;
 import core.client.view.TextInputView;
 import core.client.view.View;
@@ -18,7 +20,8 @@ public class LoginView extends TextInputView {
 		Iterator<String> answerIterator = answerIterator();
 		id = answerIterator.next();
 		pw = answerIterator.next();
-		ClientMap.runClient("member.LoginClient", id, pw);
-		return ViewMap.getView("SuccessLogin");
+		JSONObject response = ClientMap.runClient("member.LoginClient", id, pw);
+		boolean success = false; // response -> success;
+		return success ? ViewMap.getView("SuccessLogin") : ViewMap.getView("Main");
 	}
 }

@@ -1,12 +1,14 @@
-package core.mapper;
+package core.server.mapper;
 
 import java.io.*;
 import java.net.Socket;
 
+import org.json.JSONObject;
+
+import core.common.JSONizable;
 import core.service.ObjectStreamService;
 
-public class ServiceResolver implements Serializable {
-	private static final long serialVersionUID = 6041049640297416804L;
+public class ServiceResolver implements JSONizable {
 	private String commandType;
 	private Object[] args;
 
@@ -39,5 +41,13 @@ public class ServiceResolver implements Serializable {
 
 	public String getCommandType() {
 		return commandType;
+	}
+
+	@Override
+	public JSONObject toJson() {
+		JSONObject ret = new JSONObject();
+		ret.put("commandType", commandType);
+//		ret.put("paramConstructor", );
+		return ret;
 	}
 }

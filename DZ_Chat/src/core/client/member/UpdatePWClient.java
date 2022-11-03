@@ -4,18 +4,16 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
-import member.Member;
+import core.client.Client;
+import core.client.mapper.RequestType;
+import static core.client.Main.*;
 
-public class UpdatePWClient extends ObjectStreamClient {
-	private final Member me;
+public class UpdatePWClient extends Client {
 	private final String validatePW;
 	private final String newPW;
-	private boolean updateSuccess = false;
-
-	public UpdatePWClient(Member me, String validatePW, String newPW) {
-		this.me = me;
+	private JSONObject json = new JSONObject();
+	
+	public UpdatePWClient(String validatePW, String newPW) {
 		this.validatePW = validatePW;
 		this.newPW = newPW;
 	}
@@ -23,19 +21,17 @@ public class UpdatePWClient extends ObjectStreamClient {
 	@Override
 	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("member.UpdatePWService"));
-			send(me);
-			send(validatePW);
-			send(newPW);
+			if (!validatePW.equals(getMe().getPassword())) return null;
+			json.put("member", getMe());
+			json.put("validatePW", validatePW);
+			json.put("newPW", newPW);
+			connect(new RequestType("member.UpdatePWService"));
+			send(json);
 			JSONObject response = receive();
 			return response;
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public boolean getUpdateSuccess() {
-		return updateSuccess;
 	}
 }

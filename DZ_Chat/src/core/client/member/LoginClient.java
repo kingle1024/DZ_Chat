@@ -4,17 +4,17 @@ import java.io.*;
 
 import org.json.JSONObject;
 
-import core.client.ObjectStreamClient;
-import core.client.view.View;
-import core.client.view.ViewMap;
-import core.mapper.ServiceResolver;
+import core.client.Client;
+import core.client.mapper.RequestType;
 import member.Member;
+import static core.client.Main.*;
 
-public class LoginClient extends ObjectStreamClient {
+public class LoginClient extends Client {
 	private Member member;
 	private String id;
 	private String pw;
-
+	private JSONObject json = new JSONObject();
+	
 	public LoginClient(String id, String pw) {
 		this.id = id;
 		this.pw = pw;
@@ -23,23 +23,17 @@ public class LoginClient extends ObjectStreamClient {
 	@Override
 	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("member.LoginService"));
-			send(id);
-			send(pw);
-			JSONObject member = receive();
+			json.put("id", id);
+			json.put("pw", pw);
+			connect(new RequestType("member.LoginService"));
+			JSONObject response = receive();
 			unconnect();
-			return member;
-//			if (member != null) {
-//				System.out.println("로그인 성공했습니다.");
-//				return ViewMap.getView("로그인 성공");
-//			} else {
-//				System.out.println("로그인 실패했습니다.");
-//				return ViewMap.getView("메인화면");
-//			}
-		} catch (IOException | ClassNotFoundException e) {
+//			setMe(response -> me);
+			return response;
+		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 
 	public Member getMember() {

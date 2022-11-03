@@ -1,14 +1,13 @@
 package core.client.chat;
 
 import java.io.*;
-import java.util.*;
 
 import org.json.JSONObject;
 
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
+import core.client.Client;
+import core.client.mapper.RequestType;
 
-public class MakeChatRoomClient extends ObjectStreamClient {
+public class MakeChatRoomClient extends Client {
 	private String chatRoomName;
 	public MakeChatRoomClient(String chatRoomName) {
 		this.chatRoomName = chatRoomName;
@@ -17,8 +16,8 @@ public class MakeChatRoomClient extends ObjectStreamClient {
 	@Override
 	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("chat.MakeChatRoomService"));
-			send(chatRoomName);
+			connect(new RequestType("chat.MakeChatRoomService"));
+			send("chatRoomName", chatRoomName);
 			unconnect();
 		} catch (IOException e) {
 			e.printStackTrace();

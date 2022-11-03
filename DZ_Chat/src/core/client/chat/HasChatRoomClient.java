@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
+import core.client.Client;
+import core.client.mapper.RequestType;
 
-public class HasChatRoomClient extends ObjectStreamClient {
+public class HasChatRoomClient extends Client {
 	private String chatRoomName;
 	private boolean hasChatRoom = false;
 
@@ -22,12 +22,12 @@ public class HasChatRoomClient extends ObjectStreamClient {
 	@Override
 	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("chat.HasChatRoomService"));
-			send(chatRoomName);
+			connect(new RequestType("chat.HasChatRoomService"));
+			send("chatRoomName", chatRoomName);
 			JSONObject response = receive();
 			unconnect();
 			return response;
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;

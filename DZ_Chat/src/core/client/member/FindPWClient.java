@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
-import core.client.ObjectStreamClient;
+import core.client.Client;
+import core.client.mapper.RequestType;
 import core.client.view.View;
 import core.client.view.ViewMap;
-import core.mapper.ServiceResolver;
 
-public class FindPWClient extends ObjectStreamClient {
+public class FindPWClient extends Client {
 	private String id;
 	private String findPW;
 
@@ -20,15 +20,16 @@ public class FindPWClient extends ObjectStreamClient {
 	@Override
 	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("member.FindPWService"));
-			send(id);
+			connect(new RequestType("member.FindPWService"));
+			send("id", id);
 			JSONObject response = receive();
 			if (findPW != null) {
 				System.out.println("비밀번호: " + findPW);
 			} else {
 				System.out.println("존재하지 않는 ID 입니다.");
 			}
-		} catch (IOException | ClassNotFoundException e) {
+			unconnect();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;

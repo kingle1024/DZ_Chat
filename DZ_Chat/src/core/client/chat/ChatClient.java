@@ -5,18 +5,19 @@ import java.util.Arrays;
 
 import org.json.JSONObject;
 
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
+import core.client.Client;
+import core.client.mapper.RequestType;
 import member.Member;
 import message.MessageFactory;
 
-public class ChatClient extends ObjectStreamClient {
+public class ChatClient extends Client {
 	private Member me;
 	private String chatRoomName;
 	private boolean sendExit = false;
 	private ThreadGroup threadGroup;
 	private MessageFactory messageFactory;
-
+	private JSONObject param = new JSONObject();
+	
 	private static final Monitor monitor = MessageQueue.getMonitor();
 	private boolean isMessageConsumerStarted = false;
 
@@ -28,9 +29,9 @@ public class ChatClient extends ObjectStreamClient {
 
 	public JSONObject run() {
 		System.out.println("채팅 시작");
-		MessageListener messageListener = new MessageListener(is);
+		MessageListener messageListener = new MessageListener(this);
 		MessageProducer messageProducer = new MessageProducer(messageFactory);
-		MessageConsumer messageConsumer = new MessageConsumer(os);
+		MessageConsumer messageConsumer = new MessageConsumer(this);
 
 		Thread listenerThread = new Thread(messageListener);
 		Thread producerThread = new Thread(messageProducer);
@@ -42,9 +43,11 @@ public class ChatClient extends ObjectStreamClient {
 
 		while (true) {
 			try {
-				connect(new ServiceResolver("chat.ChatService", chatRoomName, me));
-				messageListener.setIs(is);
-				messageConsumer.setOs(os);
+				param.put("chatRoomName", chatRoomName);
+//				param.put("member", me.toJSON());
+				connect(new RequestType("chat.ChatService", param));
+				messageListener.setChatClient(this);
+				messageConsumer.setChatClient(this);
 				if (!isMessageConsumerStarted) {
 					listenerThread.start();
 					consumerThread.start();
