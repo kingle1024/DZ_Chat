@@ -10,7 +10,6 @@ import member.Member;
 import static core.client.Main.*;
 
 public class LoginClient extends Client {
-	private Member member;
 	private String id;
 	private String pw;
 	private JSONObject json = new JSONObject();
@@ -34,9 +33,5 @@ public class LoginClient extends Client {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public Member getMember() {
-		return member;
 	}
 }
