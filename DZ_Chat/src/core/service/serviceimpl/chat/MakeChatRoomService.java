@@ -1,15 +1,15 @@
-package core.service.chat;
+package core.service.serviceimpl.chat;
 
 import java.io.*;
 import core.server.MainServer;
-import core.service.ObjectStreamService;
+import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import log.NeedLog;
 import message.chat.ChatRoom;
 import property.Property;
 
-public class MakeChatRoomService extends ObjectStreamService implements NeedLog {
+public class MakeChatRoomService extends Service implements NeedLog {
 	private LogQueue logQueue = LogQueue.getInstance();
 	public MakeChatRoomService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
