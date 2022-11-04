@@ -1,22 +1,23 @@
-package core.service.chat;
+package core.service.serviceimpl.chat;
 
 import java.io.*;
 import java.util.Objects;
 
+import org.json.JSONObject;
+
 import core.server.MainServer;
-import core.service.ObjectStreamService;
+import core.service.Service;
 import log.LogQueue;
 import member.Member;
 import message.chat.ChatRoom;
 import message.chat.Message;
 
-public class ChatService extends ObjectStreamService {
+public class ChatService extends Service {
 	private final Member me;
 	private final String chatRoomName;
 	private final ChatRoom chatRoom;
 	private LogQueue logQueue = LogQueue.getInstance();
-	public ChatService(ObjectInputStream is, ObjectOutputStream os, Object... args) throws IOException {
-		super(is, os);
+	public ChatService(Object... args) throws IOException {
 		this.chatRoomName = (String) args[0];
 		this.me = (Member) args[1];
 		this.chatRoom = MainServer.chatRoomMap.get(chatRoomName);
@@ -29,17 +30,16 @@ public class ChatService extends ObjectStreamService {
 		MainServer.threadPool.execute(() -> {
 			try {
 				while (true) {
-					Message message = (Message) is.readObject();
+					JSONObject messageJSON = receive();
+					Message message = null;
 					message.setChatRoom(chatRoom);
 					message.push();
 					System.out.println("[Server]" + message);
 					logQueue.add(message);
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				chatRoom.exit(this);
 				System.out.println("ChatService > IOException > "+e);
-			} catch (ClassNotFoundException e) {
-				System.out.println("ChatService > ClassNotFoundException > "+e);
 			}
 		});
 	}
@@ -52,9 +52,6 @@ public class ChatService extends ObjectStreamService {
 		return me.nickname();
 	}
 	
-	public ObjectOutputStream getOs() {
-		return os;
-	}
 	
 	public boolean equalsUser(String id) {
 		return me.getUserId().equals(id);
