@@ -1,9 +1,9 @@
-package core.service.member;
+package core.service.serviceimpl.member;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import core.service.ObjectStreamService;
+import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import log.NeedLog;
@@ -11,7 +11,7 @@ import member.Member;
 import member.MemberManager;
 import property.Property;
 
-public class UpdatePWService extends ObjectStreamService implements NeedLog {
+public class UpdatePWService extends Service implements NeedLog {
 	private final static MemberManager memberManager = MemberManager.getInstance();
 	private Member member;
 	private String validatePW;
