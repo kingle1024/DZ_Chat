@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import core.server.MainServer;
-import core.service.chat.ChatService;
+import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import log.LogQueue;
 import member.Member;
