@@ -1,16 +1,16 @@
-package core.service.member;
+package core.service.serviceimpl.member;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import core.service.ObjectStreamService;
+import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import log.NeedLog;
 import member.MemberManager;
 import property.Property;
 
-public class FindPWService extends ObjectStreamService implements NeedLog {
+public class FindPWService extends Service implements NeedLog {
 	private static final MemberManager memberManager = MemberManager.getInstance();
 	private LogQueue logQueue = LogQueue.getInstance();
 	public FindPWService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
