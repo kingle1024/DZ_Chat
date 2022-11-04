@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import core.service.MapperService;
+import core.service.serviceimpl.MapperService;
 import member.Member;
 import message.chat.ChatRoom;
 

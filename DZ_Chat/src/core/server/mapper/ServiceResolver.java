@@ -6,7 +6,7 @@ import java.net.Socket;
 import org.json.JSONObject;
 
 import core.common.JSONizable;
-import core.service.ObjectStreamService;
+import core.service.Service;
 
 public class ServiceResolver implements JSONizable {
 	private String commandType;
@@ -17,14 +17,14 @@ public class ServiceResolver implements JSONizable {
 		this.args = args;
 	}
 
-	public ObjectStreamService response(ObjectInputStream is, ObjectOutputStream os) {
+	public Service response(ObjectInputStream is, ObjectOutputStream os) {
 		try {
 			if (args.length > 0) {
-				return (ObjectStreamService) Class.forName("core.service." + commandType)
+				return (Service) Class.forName("core.service." + commandType)
 						.getConstructor(ObjectInputStream.class, ObjectOutputStream.class, Object[].class)
 						.newInstance(is, os, args);
 			} else {
-				return (ObjectStreamService) Class.forName("core.service." + commandType)
+				return (Service) Class.forName("core.service." + commandType)
 						.getConstructor(ObjectInputStream.class, ObjectOutputStream.class)
 						.newInstance(is, os);
 			}
