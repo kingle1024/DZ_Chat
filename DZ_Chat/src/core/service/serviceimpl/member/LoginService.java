@@ -1,14 +1,14 @@
-package core.service.member;
+package core.service.serviceimpl.member;
 
 import java.io.*;
-import core.service.ObjectStreamService;
+import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import log.NeedLog;
 import member.*;
 import property.Property;
 
-public class LoginService extends ObjectStreamService implements NeedLog {
+public class LoginService extends Service implements NeedLog {
 	private static final MemberManager memberManager = MemberManager.getInstance();
 	private LogQueue logQueue = LogQueue.getInstance();
 	public LoginService(ObjectInputStream is, ObjectOutputStream os) throws IOException {

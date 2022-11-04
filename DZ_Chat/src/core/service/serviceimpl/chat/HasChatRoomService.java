@@ -1,13 +1,13 @@
-package core.service.chat;
+package core.service.serviceimpl.chat;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import core.server.MainServer;
-import core.service.ObjectStreamService;
+import core.service.Service;
 
-public class HasChatRoomService extends ObjectStreamService {
+public class HasChatRoomService extends Service {
 
 	public HasChatRoomService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
