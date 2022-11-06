@@ -3,20 +3,22 @@ package core.client.chat;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import org.json.JSONObject;
+
 import message.chat.Message;
 
 public class MessageConsumer implements Runnable {
 	private static final MessageQueue messageQueue = MessageQueue.getInstance();
-	private Monitor monitor = messageQueue.getMonitor();
-	private ObjectOutputStream os;
+	private Monitor monitor = MessageQueue.getMonitor();
+	private ChatClient chatClient;
 
-	public MessageConsumer(ObjectOutputStream os) {
-		this.os = os;
+	public MessageConsumer(ChatClient chatClient) {
+		this.chatClient = chatClient;
 		System.out.println("MessageConsumer  생성 완료");
 	}
 
-	public void setOs(ObjectOutputStream os) {
-		this.os = os;
+	public void setChatClient(ChatClient chatClient) {
+		this.chatClient = chatClient;
 	}
 	
 	@Override
@@ -27,9 +29,11 @@ public class MessageConsumer implements Runnable {
 			}
 			try {
 				if (!messageQueue.isEmpty() && !monitor.equalsStatus("close")) {
-					Message message = messageQueue.poll();
-					os.writeObject(message);
-					os.flush();
+					// TODO 클라이언트 전용 메세지 객체를 만들어, JSONizable 구현 시켜서 바로 보내기
+					// ClientMessage clientMessage = messageQueue.poll();
+					// chatClient.send(messageQueue.poll());
+					JSONObject message = messageQueue.poll();
+					chatClient.send(message);
 				} else {
 					synchronized (monitor) {
 						monitor.wait();

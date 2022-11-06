@@ -5,7 +5,8 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import core.service.MapperService;
+import core.service.ServiceMap;
+import core.service.serviceimpl.MapperService;
 import member.Member;
 import message.chat.ChatRoom;
 
@@ -24,18 +25,15 @@ public class MainServer extends Server {
    public void start() throws IOException {
       serverSocket = new ServerSocket(PORT_NUMBER);
       System.out.println("[Main Server] Start " + HOST + ":" + PORT_NUMBER);
-//      System.out.println("안녕");
       threadPool.execute(() -> {
          try {
             while (true) {
                Socket socket = serverSocket.accept();
                System.out.println("New Socket Accept");
-               ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream()); 
-               ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-               new MapperService(is, os).request();
+               ServiceMap.getService("MapperService", socket).request();
             }
          } catch (IOException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
          }
       });
    }

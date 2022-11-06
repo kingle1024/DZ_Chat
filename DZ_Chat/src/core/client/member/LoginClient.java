@@ -1,39 +1,39 @@
 package core.client.member;
 
 import java.io.*;
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
-import member.Member;
 
-public class LoginClient extends ObjectStreamClient {
-	private Member member;
+import org.json.JSONObject;
+
+import core.client.Client;
+import core.client.mapper.RequestType;
+import member.Member;
+import static core.client.Main.*;
+
+public class LoginClient extends Client {
 	private String id;
 	private String pw;
-
+	private JSONObject loginJSON;
+	
 	public LoginClient(String id, String pw) {
 		this.id = id;
 		this.pw = pw;
 	}
 
 	@Override
-	public void run() {
+	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("member.LoginService"));
-			send(id);
-			send(pw);
-			member = (Member) receive();
-			if (member != null) {
-				System.out.println("로그인 성공했습니다.");
-			} else {
-				System.out.println("로그인 실패했습니다.");
-			}
+			loginJSON = new JSONObject();
+			loginJSON.put("id", id);
+			loginJSON.put("pw", pw);
+			
+			connect(new RequestType("member.LoginService"));
+			send(loginJSON);
+			JSONObject response = receive();
 			unconnect();
-		} catch (IOException | ClassNotFoundException e) {
+			return response;
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public Member getMember() {
-		return member;
+		return null;
 	}
 }

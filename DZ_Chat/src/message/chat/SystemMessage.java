@@ -2,39 +2,28 @@ package message.chat;
 
 import java.io.*;
 
+import org.json.JSONObject;
+
 import core.server.MainServer;
+import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 
 public class SystemMessage extends Message implements Serializable {
-	private static final long serialVersionUID = 7033598494494691135L;
+	private final ChatService chatService;
 	private final ChatRoom chatRoom;
-	private final String chatRoomName;
 	
-	public SystemMessage(String chatRoomName, String message) {
+	public SystemMessage(ChatService chatService, String message) {
 		super(message);
-		this.chatRoomName = chatRoomName;
-		this.chatRoom = MainServer.chatRoomMap.get(chatRoomName);
+		this.chatService = chatService;
+		this.chatRoom = chatService.c
 	}
 
-	public SystemMessage(ChatRoom chatRoom, String message) {
-		super(message);
-		this.chatRoom = chatRoom;
-		this.chatRoomName = chatRoom.getChatRoomName();
-	}
-	
-	@Override
-	public void send(ObjectOutputStream os) throws IOException {
-		os.writeObject("\t[System: " + message + "]");
-		os.flush();
-	}
-	
 	@Override
 	public void push() {
 		chatRoom.getChatServices().stream().forEach(s -> {
 			try {
-				send(s.getOs());
+				chatService.send(new JSONObject().put("message", "\t[System: " + message + "]"));;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});

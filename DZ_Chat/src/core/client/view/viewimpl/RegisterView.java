@@ -3,7 +3,9 @@ package core.client.view.viewimpl;
 
 import java.util.Iterator;
 
-import core.client.member.RegisterClient;
+import org.json.JSONObject;
+
+import core.client.ClientMap;
 import core.client.view.TextInputView;
 import core.client.view.View;
 import core.client.view.ViewMap;
@@ -28,8 +30,8 @@ public class RegisterView extends TextInputView {
 		name = answerIterator.next();
 		birth = answerIterator.next();
 		Member tmp = new Member(id, pw, name, birth);
-//		ClientMap.runClient("member.register", tmp, pwChk);
-		new RegisterClient(tmp, pwChk).run();
+		JSONObject response = ClientMap.runClient("member.register", tmp, pwChk);
+		System.out.println(response.getBoolean("success") ? "회원가입 성공" : "회원가입 실패");
 		return ViewMap.getView("Main");
 	}
 }

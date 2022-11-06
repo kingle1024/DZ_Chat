@@ -8,7 +8,7 @@ import property.Property;
 
 public class MemberDao {
 	private static final MemberMap memberMap = MemberMap.getInstance();
-	private static final String filePath = "./DZ_Chat/"+ Property.server().get("MEMBER_FILE");
+	private static final String filePath = Property.server().get("MEMBER_FILE");
 	private static MemberDao dao;
 
 	private MemberDao() {
@@ -33,7 +33,7 @@ public class MemberDao {
 			}
 			br.close();
 		} catch (Exception e) {
-			System.out.println("Exception");
+			e.printStackTrace();
 		}
 	}
 

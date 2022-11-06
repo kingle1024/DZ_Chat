@@ -1,33 +1,35 @@
 package core.client.member;
 
 import java.io.IOException;
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
+
+import org.json.JSONObject;
+
+import core.client.Client;
+import core.client.mapper.RequestType;
 import member.Member;
 
-public class RegisterClient extends ObjectStreamClient {
+public class RegisterClient extends Client {
 	private Member tmpMember;
 	private String pwChk;
-	private boolean registerSuccess = false;
-
+	private JSONObject json = new JSONObject();
+	
 	public RegisterClient(Member tmpMember, String pwChk) {
 		this.tmpMember = tmpMember;
 		this.pwChk = pwChk;
 	}
 
 	@Override
-	public void run() {
+	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("member.RegisterService"));
-			send(tmpMember);
-			send(pwChk);
-			registerSuccess = (Boolean) receive();
-		} catch (IOException | ClassNotFoundException e) {
+			json.put("member", tmpMember.getJSON());
+			json.put("pwChk", pwChk);
+			connect(new RequestType("member.RegisterService"));
+			send(json);
+			JSONObject response = receive();
+			return response;			
+		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
-	}
-
-	public boolean getRegisterSuccess() {
-		return registerSuccess;
 	}
 }

@@ -1,47 +1,53 @@
-package core.service.chat;
+package core.service.serviceimpl.chat;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Objects;
 
+import org.json.JSONObject;
+
 import core.server.MainServer;
-import core.service.ObjectStreamService;
+import core.service.Service;
 import log.LogQueue;
 import member.Member;
 import message.chat.ChatRoom;
 import message.chat.Message;
 
-public class ChatService extends ObjectStreamService {
-	private final Member me;
-	private final String chatRoomName;
-	private final ChatRoom chatRoom;
+public class ChatService extends Service {
+	private Member me;
+	private String chatRoomName;
+	private ChatRoom chatRoom;
 	private LogQueue logQueue = LogQueue.getInstance();
-	public ChatService(ObjectInputStream is, ObjectOutputStream os, Object... args) throws IOException {
-		super(is, os);
-		this.chatRoomName = (String) args[0];
-		this.me = (Member) args[1];
-		this.chatRoom = MainServer.chatRoomMap.get(chatRoomName);
-	}
-
+	
 	@Override
 	public void request() {
+		setInitData();
 		System.out.println("Chat Service");
 		chatRoom.entrance(this);
 		MainServer.threadPool.execute(() -> {
 			try {
 				while (true) {
-					Message message = (Message) is.readObject();
+					JSONObject messageJSON = receive();
+					Message message = MessageFactory.create(messageJSON);
 					message.setChatRoom(chatRoom);
 					message.push();
-					System.out.println("[Server]" + message);
 					logQueue.add(message);
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				chatRoom.exit(this);
 				System.out.println("ChatService > IOException > "+e);
-			} catch (ClassNotFoundException e) {
-				System.out.println("ChatService > ClassNotFoundException > "+e);
 			}
 		});
+	}
+	
+	public void setInitData() {
+		try {
+			JSONObject initData = receive();
+			chatRoomName = initData.getString("chatRoomName");
+			me = Member.parseJSON(initData.getJSONObject("me"));
+			chatRoom = MainServer.chatRoomMap.get(chatRoomName);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Member getMe() {
@@ -52,9 +58,6 @@ public class ChatService extends ObjectStreamService {
 		return me.nickname();
 	}
 	
-	public ObjectOutputStream getOs() {
-		return os;
-	}
 	
 	public boolean equalsUser(String id) {
 		return me.getUserId().equals(id);
@@ -76,8 +79,4 @@ public class ChatService extends ObjectStreamService {
 		ChatService other = (ChatService) obj;
 		return Objects.equals(chatRoomName, other.chatRoomName) && Objects.equals(me, other.me);
 	}
-
-
-
 }
-

@@ -2,36 +2,32 @@ package core.client.chat;
 
 import java.io.IOException;
 
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
+import org.json.JSONObject;
 
-public class HasChatRoomClient extends ObjectStreamClient {
+import core.client.Client;
+import core.client.mapper.RequestType;
+
+public class HasChatRoomClient extends Client {
 	private String chatRoomName;
-	private boolean hasChatRoom = false;
 
 	public HasChatRoomClient(String chatRoomName) {
 		this.chatRoomName = chatRoomName;
 	}
-
-	public boolean getHasGetRoom() {
-		return hasChatRoom;
-	}
 	
 	@Override
-	public void run() {
+	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("chat.HasChatRoomService"));
-			send(chatRoomName);
-			hasChatRoom =(Boolean) receive();
+			JSONObject json = new JSONObject();
+			json.put("chatRoomName", chatRoomName);
+			connect(new RequestType("chat.HasChatRoomService"));
+			send(json);
+			JSONObject response = receive();
 			unconnect();
+			return response;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		return null;
 	}
 
 }

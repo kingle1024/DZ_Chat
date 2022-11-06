@@ -18,7 +18,6 @@ public class DirMessage extends Message {
 		this.sender = sender;
 	}
 
-	@Override
 	public void send(ObjectOutputStream oos) throws IOException {
 		FtpService ftp = new FtpService();
 
@@ -29,6 +28,7 @@ public class DirMessage extends Message {
 
 	@Override
 	public void push() {
+		
 		chatRoom.getChatServices().forEach(s -> {
 			try {
 				System.out.println(s.getMe());

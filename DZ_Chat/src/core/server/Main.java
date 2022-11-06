@@ -23,7 +23,7 @@ public class Main {
 		
 		try {
 			memberDao.readContent();
-			System.out.println("server.Main" + memberMap.size());
+			System.out.println("memberMap size: " + memberMap.size());
 			for (Member m : memberMap.values()) {
 				System.out.println(m);
 			}

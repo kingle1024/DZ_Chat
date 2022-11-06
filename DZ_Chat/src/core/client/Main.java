@@ -5,6 +5,8 @@ import member.Member;
 
 import java.util.*;
 
+import org.json.JSONObject;
+
 public class Main {
 	private static Member me;
 	private static Scanner scanner;
