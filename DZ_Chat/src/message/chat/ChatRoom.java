@@ -12,7 +12,6 @@ import property.Property;
 
 public class ChatRoom implements Serializable {
 	private static final long serialVersionUID = 1823559605769244050L;
-	private static final LogQueue logQueue = LogQueue.getInstance();
 	private final String chatRoomName;
 	private final List<ChatService> chatServices;
 	private final String logPath;

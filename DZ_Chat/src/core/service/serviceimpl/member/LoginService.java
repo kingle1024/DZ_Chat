@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import core.service.Service;
 import log.Log;
 import log.LogQueue;
-import log.NeedLog;
 import member.*;
 import property.Property;
 
@@ -29,7 +28,6 @@ public class LoginService extends Service implements NeedLog {
 			if (member != null) {
 				logQueue.add(this);
 				sendJSON.put("member", member.getJSON());
-
 			}
 			send(sendJSON);
 		} catch (IOException e) {
@@ -37,9 +35,9 @@ public class LoginService extends Service implements NeedLog {
 		}
 	}
 
-	@Override
-	public Log toLog() { 
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "Login Success");
+
+	public Log toLog() {
+		return new Log(Property.server().get("CHAT_LOG_FILE"), "id : " + this.id + " Login Success");
 	}
 
 }
