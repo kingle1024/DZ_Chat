@@ -11,7 +11,6 @@ import member.*;
 import property.ServerProperties;
 
 public class LoginService extends Service {
-	private static final MemberManager memberManager = MemberManager.getInstance();
 	private String id;
 	private String pw;
 	
@@ -23,7 +22,7 @@ public class LoginService extends Service {
 			id = loginJSON.getString("id");
 			pw = loginJSON.getString("pw");
 			System.out.println("id: " + id + ", pw: " + pw);
-			Member member = memberManager.login(id, pw);
+			Member member = MemberManager.login(id, pw);
 			JSONObject sendJSON = new JSONObject();
 			sendJSON.put("hasMember", member != null);
 			if (member != null) {

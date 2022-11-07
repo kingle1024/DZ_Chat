@@ -1,20 +1,11 @@
 package member;
 
 public class MemberManager {
-	private static MemberManager memberManager;
-
 	private MemberManager() {
 
 	}
 
-	public static MemberManager getInstance() {
-		if (memberManager == null)
-			return memberManager = new MemberManager();
-		return memberManager;
-	}
-
-	// 회원 가입
-	public boolean register(Member tmpMember, String pwChk) {
+	public static boolean register(Member tmpMember, String pwChk) {
 		if (!tmpMember.validatePw(pwChk)) {
 			System.out.println("회원가입실패:비밀번호불일치");
 			return false;
@@ -28,8 +19,7 @@ public class MemberManager {
 		return true;
 	}
 
-	// 로그인
-	public Member login(String id, String pw) {
+	public static Member login(String id, String pw) {
 		if (!MemberMap.containsKey(id)) {
 			return null;
 		}
@@ -39,8 +29,7 @@ public class MemberManager {
 		return member;
 	}
 
-	// 탈퇴
-	public boolean delete(Member member, String pw) {
+	public static boolean delete(Member member, String pw) {
 		if (!member.getPassword().equals(pw)) {
 			return false;
 		}
@@ -48,16 +37,14 @@ public class MemberManager {
 		return true;
 	}
 
-	// 비밀번호 찾기
-	public String findPw(String id) {
+	public static String findPw(String id) {
 		if (MemberMap.containsKey(id)) {
 			return MemberMap.getpw(id);
 		}
 		return null;
 	}
 
-	// 정보수정 - 비밀번호 변경
-	public boolean updatePw(Member me, String validatePw, String newPw) {
+	public static boolean updatePw(Member me, String validatePw, String newPw) {
 		if (!me.validatePw(validatePw)) {
 			return false;
 		}

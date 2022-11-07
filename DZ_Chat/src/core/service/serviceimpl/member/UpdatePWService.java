@@ -13,7 +13,6 @@ import member.MemberMap;
 import property.ServerProperties;
 
 public class UpdatePWService extends Service {
-	private final static MemberManager memberManager = MemberManager.getInstance();
 	private Member member;
 	private String validatePW;
 	private String newPW;
@@ -28,7 +27,7 @@ public class UpdatePWService extends Service {
 			newPW = receiveJSON.getString("newPW");
 			
 			JSONObject sendJSON = new JSONObject();
-			sendJSON.put("success", memberManager.updatePw(member, validatePW, newPW));
+			sendJSON.put("success", MemberManager.updatePw(member, validatePW, newPW));
 			sendJSON.put("member", MemberMap.get(member.getUserId()).getJSON());
 			System.out.println(sendJSON);
 			send(sendJSON);

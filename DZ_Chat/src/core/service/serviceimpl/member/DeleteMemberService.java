@@ -12,7 +12,6 @@ import member.MemberManager;
 import property.ServerProperties;
 
 public class DeleteMemberService extends Service {
-	private static final MemberManager memberManager = MemberManager.getInstance();
 
 	@Override
 	public void request() throws IOException {
@@ -21,7 +20,7 @@ public class DeleteMemberService extends Service {
 		String pw = receiveJSON.getString("pw");
 		
 		JSONObject sendJSON = new JSONObject();
-		sendJSON.put("result", memberManager.delete(me, pw));
+		sendJSON.put("result", MemberManager.delete(me, pw));
 		send(sendJSON);
 		LogQueue.add(toLog());
 	}
