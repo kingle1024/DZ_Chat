@@ -7,35 +7,24 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 // 보내는 곳 (Client)
-public class FtpClient extends Thread{
+public class FileSaveThread extends Thread{
 	private volatile HashMap<String, Object> map;
-	public FtpClient(ThreadGroup threadGroup, String threadName, HashMap<String, Object> map) {
-		super(threadGroup, threadName);
+	public FileSaveThread(ThreadGroup threadGroup, HashMap<String, Object> map) {
+		super(threadGroup, map.get("threadName").toString());
 		this.map = map;
 	}
 
 	@Override
 	public void start() {
-		String chatRoomName = (String) map.get("chatRoomName");
-		String chat = (String) map.get("chat");
-		String fileName = chat.split(" ")[1];
-		HashMap<String, Object> map = new HashMap<>();
-		StringBuilder sb = new StringBuilder();
+		String saveRoomAndFileNameStr = getSaveRoomAndFileName();
+		File file = new File(saveRoomAndFileNameStr);
 
-		sb.append(chatRoomName)
-				.append("/")
-				.append(fileName);
-		File file = new File(sb.toString());
-
-		map.put("chatRoomAndFileName", sb.toString());
+		map.put("chatRoomAndFileName", saveRoomAndFileNameStr);
 		map.put("fileName", file.getName());
 
 		try {
-			// 서버 연결
 			System.out.println("FtpClient > run() > ");
-
-			// 파일 받기
-			saveFile(map);
+			saveFile();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			System.out.println("FtpClient > UnknownHostException");
@@ -46,13 +35,16 @@ public class FtpClient extends Thread{
 			throw new RuntimeException(e);
 		}
 	}
-	public void saveFile(HashMap<String, Object> map) throws Exception {
+	public void saveFile() throws Exception {
+		File file = new File((String)map.get("chatRoomAndFileName"));
 		String chatRoomAndFileName = (String) map.get("chatRoomAndFileName");
+		System.out.println("chatRoomAndFileName:"+chatRoomAndFileName);
+		System.out.println("file:"+file.getAbsolutePath());
 		try {
 			FtpService ftp = new FtpService();
-			StringBuffer downloadPath = new StringBuffer(
-							ftp.getDownloadPath((String)map.get("fileName")));
 			String filePath = Property.server().get("DOWNLOAD_PATH")+chatRoomAndFileName;
+			StringBuffer downloadPath =
+					new StringBuffer(ftp.getDownloadPath((String)map.get("fileName")));
 
 			if(ftp.sendTargetFileInputStream(filePath, downloadPath.toString())){
 				ftp.showPicture(downloadPath);
@@ -61,5 +53,14 @@ public class FtpClient extends Thread{
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	public String getSaveRoomAndFileName(){
+		String chatRoomName = (String) map.get("chatRoomName");
+		File originFileAndPath = new File((String)map.get("fileAndPath"));
+		StringBuilder saveRoomAndFileName = new StringBuilder();
+		saveRoomAndFileName.append(chatRoomName)
+				.append("/")
+				.append(originFileAndPath.getName());
+		return saveRoomAndFileName.toString();
 	}
 }

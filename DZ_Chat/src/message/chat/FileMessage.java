@@ -1,7 +1,7 @@
 package message.chat;
 
-import message.ftp.ClientToServerThread;
-import message.ftp.FtpClient;
+import message.ftp.FileSaveThread;
+import message.ftp.FileSendThread;
 import property.Property;
 
 import java.io.BufferedWriter;
@@ -13,42 +13,40 @@ import java.util.HashMap;
 
 public class FileMessage {
     public boolean run(HashMap<String, Object> map) throws IOException {
-        String chat = (String) map.get("chat");
         ThreadGroup threadGroup = (ThreadGroup) map.get("threadGroup");
+        String chat = (String) map.get("chat");
         if(chat.startsWith("#fileStop")) {
             threadGroup.interrupt();
             return false;
         }
 
-        String chatRoomName = (String) map.get("chatRoomName");
-
         // FTP Client
         Socket socket = getSocket();
-        StringBuilder input = new StringBuilder();
-        input.append(chat)
-                .append(" ")
-                .append("room/")
-                .append(chatRoomName);
+        String chatAndRoomName = (String)map.get("chatAndRoomName");
+        String chatRoomName = (String) map.get("chatRoomName");
 
-        // 서버에다가 메시지를 전달해줌
-        messageSend(input.toString(), socket);
+        // FTP 서버에다가 메시지를 전달해줌
+        sendMessageFtpServer(chatAndRoomName, socket);
 
         HashMap<String, Object> threadMap = new HashMap<>();
-        String[] message = input.toString().split(" ");
-        String fileName = message[1];
+        String[] message = chatAndRoomName.split(" ");
+        System.out.println("message:"+message[1]);
 
-        threadMap.put("fileName", input.toString());
+        threadMap.put("chat", chat);
+        threadMap.put("threadName", message[1]);
         threadMap.put("socket", socket);
         threadMap.put("chatRoomName", chatRoomName);
+        // common
+        threadMap.put("command", map.get("command"));
+        // common
+        threadMap.put("fileAndPath", map.get("fileAndPath"));
 
         if(chat.startsWith("#fileSend")) {
-            ClientToServerThread clientToServerThread = new ClientToServerThread(threadGroup, fileName, threadMap);
-            clientToServerThread.start();
+            new FileSendThread(threadGroup, threadMap).start();
         }else if(chat.startsWith("#fileSave")){
-            threadMap.put("chat", chat);
-            FtpClient ftpClient = new FtpClient(threadGroup, fileName, threadMap);
-            ftpClient.start();
+            new FileSaveThread(threadGroup, threadMap).start();
         }
+
         return true;
     }
     public Socket getSocket(){
@@ -62,7 +60,7 @@ public class FileMessage {
 
     }
 
-    public void messageSend(String input, Socket socket) throws IOException {
+    public void sendMessageFtpServer(String input, Socket socket) throws IOException {
         BufferedWriter bufferedWriter =
                 new BufferedWriter(
                         new OutputStreamWriter(

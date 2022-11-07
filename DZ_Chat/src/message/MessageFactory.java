@@ -23,6 +23,7 @@ public class MessageFactory {
 		return new SystemMessage(chatService, message);
 	}
 
+
 	private static PrivateChatMessage createPrivateChatMessage(ChatService chatService, JSONObject json) {
 		return new PrivateChatMessage(
 				chatService,
@@ -30,6 +31,15 @@ public class MessageFactory {
 				json.getJSONObject("sender"))
 				, json.getString("message")
 				, json.getString("to"));
+	}
+	public String[] getMessageSplit(String chat){
+		String message[] = chat.split(" ");
+		if(message.length == 1){
+			message = new String[3];
+			message[1] = "temp";
+			message[2] = "temp2";
+		}
+		return message;
 	}
 	
 	private static DirMessage createDirMessage(ChatService chatService, JSONObject json) {
@@ -39,6 +49,34 @@ public class MessageFactory {
 				, json.getString("message"));
 	}
 	
+
+	public boolean fileMessage(String chat) throws IOException {
+		if(threadGroup == null){
+			threadGroup = new ThreadGroup(sender.getUserId()+chatRoomName);
+		}
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("chat", chat); //  삭제 예정
+		map.put("chatRoomName", this.chatRoomName);
+		map.put("threadGroup", threadGroup);
+		map.put("chatAndRoomName", getChatAndRoomNameStr(chat));
+		final String message[] = chat.split(" ");
+		map.put("command", message[0]);
+		map.put("fileAndPath", message[1]);
+
+		return new FileMessage().run(map);
+	}
+	public String getChatAndRoomNameStr(String chat){
+		StringBuilder input = new StringBuilder();
+		input.append(chat)
+				.append(" ")
+				.append("room/")
+				.append(chatRoomName);
+		return input.toString();
+	}
+}
+
+
+
 	private static ChatMessage createChatMessage(ChatService chatService, JSONObject json) {
 		return new ChatMessage(
 				chatService,
