@@ -3,6 +3,7 @@ package member;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MemberManagerDB {
@@ -56,18 +57,69 @@ public class MemberManagerDB {
 	}
 	
 	public static Member login(String id, String pw) {
+		try {
+			open();
+			pstmt = conn.prepareStatement("select * from member where userid = ?");
+			pstmt.setString(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				String userId = rs.getString("userId");
+				String password = rs.getString("password");
+				String name = rs.getString("name");
+				String birth = rs.getString("birth");
+				return new Member(userId, password, name, birth);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
 		return null;
 	}
 
-	public static boolean delete(Member member, String pw) {
+	public static boolean deleteMember(Member member, String pw) {
+		if (!member.getPassword().equals(pw)) return false;
+		try {
+			open();
+			pstmt = conn.prepareStatement("delete from member where userId = ?");
+			return pstmt.executeUpdate() == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
 		return false;
 	}
 
 	public static String findPw(String id) {
+		try {
+			open();
+			pstmt = conn.prepareStatement("select password from member where userId = id");
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return rs.getString("password");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
 		return null;
 	}
 
 	public static boolean updatePw(Member me, String validatePw, String newPw) {
-		return true;
+		try {
+			open();
+			pstmt = conn.prepareStatement("update member set password = ? where userId = ?, password = ?");
+			pstmt.setString(1, newPw);
+			pstmt.setString(2, me.getUserId());
+			pstmt.setString(3,  validatePw);
+			return pstmt.executeUpdate() == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return false;
 	}
 }
