@@ -3,24 +3,27 @@ package core.client.chat;
 import java.io.IOException;
 import java.util.Scanner;
 
+import org.json.JSONObject;
+
 import message.MessageFactory;
+import static core.client.Main.*;
 
 public class MessageProducer implements Runnable {
 	private static final MessageQueue messageQueue = MessageQueue.getInstance();
 	private static final Monitor monitor = MessageQueue.getMonitor();
-	private MessageFactory messageFactory;
+	private CommandParser commandParser;
 	
-	public MessageProducer(MessageFactory messageFactory) {
-		this.messageFactory = messageFactory;
+	public MessageProducer(CommandParser commandParser) {
+		this.commandParser = commandParser;
 	}
 	
 	@Override
 	public void run() {
-		Scanner scanner = new Scanner(System.in);
-		while (scanner.hasNext()) {
-			String chat = scanner.nextLine();
+		while (getScanner().hasNext()) {
 			try {
-				messageQueue.add(messageFactory.createMessage(chat));
+				String msg = getScanner().nextLine();
+				JSONObject msgJson = commandParser.createJSONObject(msg);
+				messageQueue.add(msgJson);
 			} catch (ChatRoomExitException e) {
 				System.out.println("MessageProducer ChatRoomExitException");
 				synchronized (monitor) {

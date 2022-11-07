@@ -1,39 +1,40 @@
 package core.client.member;
 
 import java.io.IOException;
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
-import member.Member;
 
-public class UpdatePWClient extends ObjectStreamClient {
-	private final Member me;
+import org.json.JSONObject;
+
+import core.client.Client;
+import core.client.mapper.RequestType;
+import static core.client.Main.*;
+
+public class UpdatePWClient extends Client {
 	private final String validatePW;
 	private final String newPW;
-	private boolean updateSuccess = false;
-
-	public UpdatePWClient(Member me, String validatePW, String newPW) {
-		this.me = me;
+	private JSONObject json = new JSONObject();
+	
+	public UpdatePWClient(String validatePW, String newPW) {
 		this.validatePW = validatePW;
 		this.newPW = newPW;
 	}
 
 	@Override
-	public void run() {
+	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("member.UpdatePWService"));
-			send(me);
-			send(validatePW);
-			send(newPW);
-			updateSuccess = (Boolean) receive();
+			if (!validatePW.equals(getMe().getPassword())) {
+				return new JSONObject().put("success", false);
+			}
+			json.put("member", getMe().getJSON());
+			json.put("validatePW", validatePW);
+			json.put("newPW", newPW);
+			connect(new RequestType("member.UpdatePWService"));
+			send(json);
+			JSONObject response = receive();
+			unconnect();
+			return response;
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			return null;
 		}
-
-	}
-
-	public boolean getUpdateSuccess() {
-		return updateSuccess;
 	}
 }

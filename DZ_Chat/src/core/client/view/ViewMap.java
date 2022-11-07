@@ -30,6 +30,6 @@ public class ViewMap {
 	}
 	
 	public static void add(View view) {
-		viewMap.put(view.getName(), view);
+		viewMap.put(view.getViewName(), view);
 	}
 }

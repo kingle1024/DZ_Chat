@@ -5,6 +5,8 @@ import member.Member;
 
 import java.util.*;
 
+import org.json.JSONObject;
+
 public class Main {
 	private static Member me;
 	private static Scanner scanner;
@@ -15,7 +17,7 @@ public class Main {
 		View view = ViewMap.getView("Main");
 		try {
 			while (true) {
-				System.out.println(view.getName());
+				System.out.println(view.getViewName());
 				view = view.nextView();
 			}	
 		} catch (Exception e) {

@@ -6,11 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import static core.client.Main.getScanner;
 
-public abstract class TextInputView extends View {
+public abstract class TextInputView implements View {
 	private List<String> keys;
 	private List<String> values;
-	public TextInputView(String name, String... keys) {
-		super(name);
+	public TextInputView(String... keys) {
 		values = new ArrayList<>();
 		this.keys = Arrays.asList(keys);
 	}

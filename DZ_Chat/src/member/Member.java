@@ -3,6 +3,8 @@ package member;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.json.JSONObject;
+
 public class Member implements Comparable<Member>, Serializable {
 
 	private static final long serialVersionUID = -4338769178604718663L;
@@ -10,12 +12,17 @@ public class Member implements Comparable<Member>, Serializable {
 	private String password;
 	private String name;
 	private String birth;
+	private JSONObject json = new JSONObject();
 
 	public Member(String userId, String password, String name, String birth) {
 		this.userId = userId;
 		this.password = password;
 		this.name = name;
 		this.birth = birth;
+		json.put("userId", userId);
+		json.put("password", password);
+		json.put("name", name);
+		json.put("birth", birth);
 	}
 
 	public String getUserId() {
@@ -27,6 +34,7 @@ public class Member implements Comparable<Member>, Serializable {
 	}
 
 	public void setPassword(String password) {
+		json.put("password", password);
 		this.password = password;
 	}
 
@@ -41,6 +49,24 @@ public class Member implements Comparable<Member>, Serializable {
 	public boolean validatePw(String pw) {
 		return password.equals(pw);
 	}
+	
+	public String nickname() {
+		return name + "( " + userId + " )";
+	}
+	
+	public JSONObject getJSON() {
+		return json;
+	}
+	
+	public static Member parseJSON(JSONObject json) {
+		return new Member(
+				json.getString("userId")
+				, json.getString("password")
+				, json.getString("name")
+				, json.getString("birth")
+				);			
+	}
+	
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -68,9 +94,4 @@ public class Member implements Comparable<Member>, Serializable {
 	public String toString() {
 		return userId + "," + password + "," + name + "," + birth;
 	}
-
-	public String nickname() {
-		return name + "( " + userId + " )";
-	}
-
 }

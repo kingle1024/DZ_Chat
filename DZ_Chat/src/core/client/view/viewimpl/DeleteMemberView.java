@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import org.json.JSONObject;
 
-import core.client.member.DeleteMemberClient;
+import core.client.ClientMap;
 import core.client.view.TextInputView;
 import core.client.view.View;
 import core.client.view.ViewMap;
@@ -14,22 +14,24 @@ public class DeleteMemberView extends TextInputView {
 	private String pw;
 
 	public DeleteMemberView() {
-		super("DeleteMember", "pw");
-		
+		super("pw");
 	}
 
 	@Override
 	public View nextView() {
 		Iterator<String> answerIterator = answerIterator();
 		pw = answerIterator.next();
-//		JSONObject response = ClientMap.runClient("member.DeleteMemberClient", getMe(), pw);
-		DeleteMemberClient deleteClient = new DeleteMemberClient(getMe(), pw);
-		deleteClient.run();
-		if (deleteClient.getDeleteSuccess()) {
+		JSONObject response = ClientMap.runClient("member.DeleteMemberClient", pw);
+		if (response.getBoolean("result")) {
 			setMe(null);
 			return ViewMap.getView("Main");
 		} else {
 			return ViewMap.getView("UserInfo");
 		}
+	}
+	
+	@Override
+	public String getViewName() {
+		return "회원 삭제";
 	}
 }
