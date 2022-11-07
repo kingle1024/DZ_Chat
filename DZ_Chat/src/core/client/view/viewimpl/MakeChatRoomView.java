@@ -11,8 +11,9 @@ import core.client.view.ViewMap;
 
 public class MakeChatRoomView extends TextInputView {
 	private String chatRoomName;
+	
 	public MakeChatRoomView() {
-		super("MakeChatRoom", "만들 채팅방 이름을 입력하세요.");
+		super("만들 채팅방 이름을 입력하세요.");
 	}
 
 	@Override
@@ -24,5 +25,10 @@ public class MakeChatRoomView extends TextInputView {
 			ClientMap.runClient("chat.MakeChatRoomClient", chatRoomName);	
 		}
 		return ViewMap.getView("SuccessLogin");
+	}
+
+	@Override
+	public String getViewName() {
+		return "채팅방 만들기";
 	}
 }

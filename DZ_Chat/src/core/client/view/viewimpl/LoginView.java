@@ -15,8 +15,9 @@ import static core.client.Main.*;
 public class LoginView extends TextInputView {
 	private String id;
 	private String pw;
+	
 	public LoginView() {
-		super("Login", "id", "pw");
+		super("id", "pw");
 	}
 
 	public View nextView() {
@@ -32,5 +33,10 @@ public class LoginView extends TextInputView {
 		System.out.println(hasMember ? "로그인 성공" : "로그인 실패");
 		return hasMember ? ViewMap.getView("SuccessLogin") : ViewMap.getView("Main");
 	
+	}
+
+	@Override
+	public String getViewName() {
+		return "로그인";
 	}
 }

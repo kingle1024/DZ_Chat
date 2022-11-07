@@ -15,4 +15,9 @@ public class UserInfoView extends MenuChooseView {
 		System.out.println(getMe());
 		return super.nextView();
 	}
+	
+	@Override
+	public String getViewName() {
+		return "회원 정보";
+	}
 }

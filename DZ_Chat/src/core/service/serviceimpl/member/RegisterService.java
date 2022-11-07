@@ -13,7 +13,6 @@ import property.Property;
 
 public class RegisterService extends Service implements NeedLog {
 	private static final MemberManager memberManager = MemberManager.getInstance();
-	private static final MemberMap memberMap = MemberMap.getInstance();
 	private LogQueue logQueue = LogQueue.getInstance();
 
 	@Override

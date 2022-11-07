@@ -17,7 +17,7 @@ public class Main {
 		View view = ViewMap.getView("Main");
 		try {
 			while (true) {
-				System.out.println(view.getName());
+				System.out.println(view.getViewName());
 				view = view.nextView();
 			}	
 		} catch (Exception e) {

@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.json.JSONObject;
 
 import core.client.ClientMap;
-import core.client.member.DeleteMemberClient;
 import core.client.view.TextInputView;
 import core.client.view.View;
 import core.client.view.ViewMap;
@@ -15,8 +14,7 @@ public class DeleteMemberView extends TextInputView {
 	private String pw;
 
 	public DeleteMemberView() {
-		super("DeleteMember", "pw");
-		
+		super("pw");
 	}
 
 	@Override
@@ -30,5 +28,10 @@ public class DeleteMemberView extends TextInputView {
 		} else {
 			return ViewMap.getView("UserInfo");
 		}
+	}
+	
+	@Override
+	public String getViewName() {
+		return "회원 삭제";
 	}
 }

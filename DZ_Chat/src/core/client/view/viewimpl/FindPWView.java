@@ -13,7 +13,7 @@ public class FindPWView extends TextInputView {
 	private String id;
 	
 	public FindPWView() {
-		super("FindPW", "id");
+		super("id");
 	}
 
 	@Override
@@ -21,6 +21,7 @@ public class FindPWView extends TextInputView {
 		Iterator<String> answerIterator = answerIterator();
 		id = answerIterator.next();
 		JSONObject response = ClientMap.runClient("member.FindPWClient", id);
+
 		if (response.getBoolean("success")) {
 			System.out.println("비밀번호: " + response.getString("findPW"));
 		} else {
@@ -28,5 +29,10 @@ public class FindPWView extends TextInputView {
 		}
 		
 		return ViewMap.getView("Main");
+	}
+
+	@Override
+	public String getViewName() {
+		return "비밀번호 찾기";
 	}
 }

@@ -34,6 +34,7 @@ public class Member implements Comparable<Member>, Serializable {
 	}
 
 	public void setPassword(String password) {
+		json.put("password", password);
 		this.password = password;
 	}
 

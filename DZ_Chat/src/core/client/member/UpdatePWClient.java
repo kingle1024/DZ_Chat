@@ -21,7 +21,9 @@ public class UpdatePWClient extends Client {
 	@Override
 	public JSONObject run() {
 		try {
-			if (!validatePW.equals(getMe().getPassword())) return null;
+			if (!validatePW.equals(getMe().getPassword())) {
+				return new JSONObject().put("success", false);
+			}
 			json.put("member", getMe().getJSON());
 			json.put("validatePW", validatePW);
 			json.put("newPW", newPW);

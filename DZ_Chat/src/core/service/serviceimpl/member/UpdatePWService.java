@@ -12,6 +12,7 @@ import log.LogQueue;
 import log.NeedLog;
 import member.Member;
 import member.MemberManager;
+import member.MemberMap;
 import property.Property;
 
 public class UpdatePWService extends Service implements NeedLog {
@@ -25,12 +26,15 @@ public class UpdatePWService extends Service implements NeedLog {
 	public void request() throws IOException {
 		try {
 			JSONObject receiveJSON = receive();
+			System.out.println("receiveJSON: " + receiveJSON);
 			member = Member.parseJSON(receiveJSON.getJSONObject("member"));
 			validatePW = receiveJSON.getString("validatePW");
 			newPW = receiveJSON.getString("newPW");
 			
 			JSONObject sendJSON = new JSONObject();
 			sendJSON.put("success", memberManager.updatePw(member, validatePW, newPW));
+			sendJSON.put("member", MemberMap.get(member.getUserId()).getJSON());
+			System.out.println(sendJSON);
 			send(sendJSON);
 			System.out.println("UpdatePWService: " + sendJSON);
 			logQueue.add(this);
