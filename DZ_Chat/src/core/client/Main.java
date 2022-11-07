@@ -5,12 +5,10 @@ import member.Member;
 
 import java.util.*;
 
-import org.json.JSONObject;
-
 public class Main {
 	private static Member me;
 	private static Scanner scanner;
-	
+
 	public static void main(String[] args) {
 		scanner = new Scanner(System.in);
 		System.out.println("클라이언트 시작");
@@ -19,22 +17,22 @@ public class Main {
 			while (true) {
 				System.out.println(view.getViewName());
 				view = view.nextView();
-			}	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			scanner.close();
 		}
 	}
-	
+
 	public static Member getMe() {
 		return me;
 	}
-	
+
 	public static void setMe(Member member) {
 		me = member;
 	}
-	
+
 	public static Scanner getScanner() {
 		return scanner;
 	}

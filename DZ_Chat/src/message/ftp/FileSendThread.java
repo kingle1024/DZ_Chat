@@ -31,7 +31,7 @@ public class FileSendThread extends Thread {
 			if (fileAndPath.startsWith("/") || fileAndPath.startsWith("C:\\") || fileAndPath.startsWith("D:\\")) {
 
 			} else {
-				fileAndPath = "DZ_Chat/" + fileAndPath;
+//				fileAndPath = "DZ_Chat/" + fileAndPath;
 			}
 
 			if (!fileValid(fileAndPath))
@@ -71,7 +71,6 @@ public class FileSendThread extends Thread {
 			}
 
 			System.out.println("Client에서 파일 전송 완료");
-//            fis.close();
 			os.close();
 		} catch (IOException e) {
 			System.out.println("ClientToServerThread IOException");

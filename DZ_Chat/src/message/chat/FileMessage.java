@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class FileMessage {
-    public boolean run(HashMap<String, Object> map) throws IOException {
+    public boolean client(HashMap<String, Object> map) throws IOException {
         ThreadGroup threadGroup = (ThreadGroup) map.get("threadGroup");
         String chat = (String) map.get("chat");
         if(chat.startsWith("#fileStop")) {
