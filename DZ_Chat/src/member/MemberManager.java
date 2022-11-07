@@ -1,7 +1,6 @@
 package member;
 
 public class MemberManager {
-	private static MemberMap memberMap = MemberMap.getInstance();
 	private static MemberManager memberManager;
 
 	private MemberManager() {
@@ -20,21 +19,21 @@ public class MemberManager {
 			System.out.println("회원가입실패:비밀번호불일치");
 			return false;
 		}
-		if (memberMap.containsKey(tmpMember.getUserId())) {
+		if (MemberMap.containsKey(tmpMember.getUserId())) {
 			System.out.println("회원가입실패:이미존재하는회원");
 			return false;
 		}
-		memberMap.put(tmpMember.getUserId(), tmpMember);
+		MemberMap.put(tmpMember.getUserId(), tmpMember);
 		System.out.println("회원가입성공:" + tmpMember);
 		return true;
 	}
 
 	// 로그인
 	public Member login(String id, String pw) {
-		if (!memberMap.containsKey(id)) {
+		if (!MemberMap.containsKey(id)) {
 			return null;
 		}
-		Member member = memberMap.get(id);
+		Member member = MemberMap.get(id);
 		if (!member.validatePw(pw))
 			return null;
 		return member;
@@ -45,14 +44,14 @@ public class MemberManager {
 		if (!member.getPassword().equals(pw)) {
 			return false;
 		}
-		memberMap.deleteMember(member.getUserId());
+		MemberMap.deleteMember(member.getUserId());
 		return true;
 	}
 
 	// 비밀번호 찾기
 	public String findPw(String id) {
-		if (memberMap.containsKey(id)) {
-			return memberMap.getpw(id);
+		if (MemberMap.containsKey(id)) {
+			return MemberMap.getpw(id);
 		}
 		return null;
 	}
@@ -63,6 +62,7 @@ public class MemberManager {
 			return false;
 		}
 		me.setPassword(newPw);
+		MemberMap.put(me.getUserId(), me);
 		return true;
 	}
 }

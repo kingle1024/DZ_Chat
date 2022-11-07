@@ -2,34 +2,33 @@ package message.chat;
 
 import java.io.*;
 
+import org.json.JSONObject;
+
+import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import log.NeedLog;
 import member.Member;
 import property.Property;
 
-public class ChatMessage extends Message implements NeedLog {
-	private static final long serialVersionUID = -4472963080600091036L;
+public class ChatMessage implements NeedLog, Message {
+	private final ChatService chatService;
 	private final Member sender;
-	public ChatMessage(Member sender, String message) {
-		super(message);
-		this.sender = sender;
-	}
-
+	private final String message;
 	
-	@Override
-	public void send(ObjectOutputStream oos) throws IOException {
-		oos.writeObject(this.toString());
-		oos.flush();
+	public ChatMessage(ChatService chatService, Member sender, String message) {
+		this.chatService = chatService;
+		this.sender = sender;
+		this.message = message;
 	}
 	
 	@Override
 	public void push() {
 		System.out.println("message push: " + message);
-		System.out.println("chatRoom: " + chatRoom);
-		chatRoom.getChatServices().stream().forEach(s -> {
+		JSONObject json = new JSONObject().put("message", this.toString());
+		System.out.println(json);
+		chatService.getChatServices().stream().forEach(s -> {
 			try {
-				System.out.println(s.getMe());
-				send(s.getOs());
+				chatService.send(json);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

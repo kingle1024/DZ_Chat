@@ -7,12 +7,17 @@ import static core.client.Main.*;
 public class UserInfoView extends MenuChooseView {
 
 	public UserInfoView() {
-		super("UserInfo", "UpdateMember", "DeleteMember");
+		super("UserInfo", "UpdatePW", "DeleteMember");
 	}
 
 	@Override
 	public View nextView() {
 		System.out.println(getMe());
 		return super.nextView();
+	}
+	
+	@Override
+	public String getViewName() {
+		return "회원 정보";
 	}
 }

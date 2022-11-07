@@ -1,63 +1,36 @@
 package message;
 
-import java.io.IOException;
-import java.util.HashMap;
+import org.json.JSONObject;
 
-import core.client.chat.ChatRoomExitException;
+import core.service.serviceimpl.chat.ChatService;
 import member.Member;
 import message.chat.ChatMessage;
 import message.chat.DirMessage;
-import message.chat.FileMessage;
 import message.chat.Message;
 import message.chat.PrivateChatMessage;
+import message.chat.SystemMessage;
 
 public class MessageFactory {
-	private Member sender;
-	private String chatRoomName;
-	private ThreadGroup threadGroup;
-	public MessageFactory(Member sender, String chatRoomName, ThreadGroup threadGroup) {
-		this.sender = sender;
-		this.chatRoomName = chatRoomName;
-		this.threadGroup = threadGroup;
+	
+	public static Message create(ChatService chatService, JSONObject json) {
+		String type = json.getString("type");
+		if ("@".equals(type)) return createPrivateChatMessage(chatService, json);
+		if ("#dir".equals(type)) return createDirMessage(chatService, json);
+		return createChatMessage(chatService, json);
 	}
 	
-	public Message createMessage(String msg) throws IOException, ChatRoomExitException {
-		if (msg.startsWith("@")) return createPrivateChatMessage(msg);
-		if (msg.startsWith("#exit")) return createExitMessage();
-		if (msg.startsWith("#file")) return createFileMessage(msg);
-		if (msg.startsWith("#dir")) return createDirMessage(msg);
-		return createChatMessage(msg);
+	public static SystemMessage createSystemMessage(ChatService chatService, String message) {
+		return new SystemMessage(chatService, message);
 	}
-	private ChatMessage createChatMessage(String msg) {
-		return new ChatMessage(sender, msg);
-	}
-	
-	private PrivateChatMessage createPrivateChatMessage(String msg) {
-		int idx = msg.indexOf(' ');
-		if (idx == -1 || idx+1 >= msg.length())  {
-			System.out.println("형식을 확인해주세요");
-			System.out.println("@[보낼 사람 id] [보낼 내용]");
-			return null;
-		}
-		String to = msg.substring(1, idx);
-		String message = msg.substring(idx + 1, msg.length());
-		return new PrivateChatMessage(sender, message, to);
-	}
-	
-	private Message createExitMessage() throws ChatRoomExitException {
-		throw new ChatRoomExitException();
-	}
-	private Message createFileMessage(String message) throws IOException {
-		System.out.println("createFileMessage");
-		String[] messageArr = getMessageSplit(message);
-		String fileName = messageArr[1];
-		boolean result = fileMessage(message);
 
-		if(!result){
-			return new PrivateChatMessage(sender, fileName + " 파일 전송 취소", "privateMan");
-		}else{
-			return new ChatMessage(sender, fileName + " 파일 전송");
-		}
+
+	private static PrivateChatMessage createPrivateChatMessage(ChatService chatService, JSONObject json) {
+		return new PrivateChatMessage(
+				chatService,
+				Member.parseJSON(
+				json.getJSONObject("sender"))
+				, json.getString("message")
+				, json.getString("to"));
 	}
 	public String[] getMessageSplit(String chat){
 		String message[] = chat.split(" ");
@@ -69,10 +42,14 @@ public class MessageFactory {
 		return message;
 	}
 	
-	private DirMessage createDirMessage(String chat) {
-		return new DirMessage(chatRoomName, sender, chat);
+	private static DirMessage createDirMessage(ChatService chatService, JSONObject json) {
+		return new DirMessage(
+				chatService
+				, Member.parseJSON(json.getJSONObject("sender"))
+				, json.getString("message"));
 	}
 	
+
 	public boolean fileMessage(String chat) throws IOException {
 		if(threadGroup == null){
 			threadGroup = new ThreadGroup(sender.getUserId()+chatRoomName);
@@ -100,19 +77,10 @@ public class MessageFactory {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	private static ChatMessage createChatMessage(ChatService chatService, JSONObject json) {
+		return new ChatMessage(
+				chatService,
+				Member.parseJSON(json.getJSONObject("sender"))
+				, json.getString("message"));
+	}
+}

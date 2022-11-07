@@ -1,33 +1,34 @@
 package core.client.member;
 
 import java.io.IOException;
-import core.client.ObjectStreamClient;
-import core.mapper.ServiceResolver;
-import member.Member;
 
-public class DeleteMemberClient extends ObjectStreamClient {
-	private Member me;
+import org.json.JSONObject;
+
+import core.client.Client;
+import core.client.mapper.RequestType;
+import static core.client.Main.*;
+
+public class DeleteMemberClient extends Client {
 	private String pw;
-	private boolean deleteSuccess = false;
-
-	public DeleteMemberClient(Member me, String pw) {
-		this.me = me;
+	private JSONObject json = new JSONObject();
+	
+	public DeleteMemberClient(String pw) {
 		this.pw = pw;
 	}
 
 	@Override
-	public void run() {
+	public JSONObject run() {
 		try {
-			connect(new ServiceResolver("member.DeleteMemberService"));
-			send(me);
-			send(pw);
-			deleteSuccess = (Boolean) receive();
-		} catch (IOException | ClassNotFoundException e) {
+			json.put("member", getMe().getJSON());
+			json.put("pw", pw);
+			connect(new RequestType("member.DeleteMemberService"));
+			send(json);
+			JSONObject response = receive();
+			unconnect();
+			return response;
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public boolean getDeleteSuccess() {
-		return deleteSuccess;
+		return null;
 	}
 }

@@ -7,16 +7,13 @@ import message.ftp.FileCommon;
 import property.Property;
 
 public class MemberDao {
-	private static final MemberMap memberMap = MemberMap.getInstance();
-	private static final String filePath = "./DZ_Chat/"+ Property.server().get("MEMBER_FILE");
-	private static MemberDao dao;
+	private static final String filePath = Property.server().get("MEMBER_FILE");
+	private static MemberDao dao = new MemberDao();
 
 	private MemberDao() {
 	}
 	
 	public static MemberDao getInstance() {
-		if (dao == null)
-			return dao = new MemberDao();
 		return dao;
 	}
 
@@ -29,11 +26,11 @@ public class MemberDao {
 
 			while ((readStr = br.readLine()) != null) {
 				splitStr = readStr.split(",");
-				memberMap.put(splitStr[0], new Member(splitStr[0], splitStr[1], splitStr[2], splitStr[3]));
+				MemberMap.put(splitStr[0], new Member(splitStr[0], splitStr[1], splitStr[2], splitStr[3]));
 			}
 			br.close();
 		} catch (Exception e) {
-			System.out.println("Exception");
+			e.printStackTrace();
 		}
 	}
 
@@ -41,7 +38,7 @@ public class MemberDao {
 	public void writeContent() {
 		FileCommon fileCommon = new FileCommon();
 		fileCommon.saveContent(filePath, "", false);		
-		for (Member member : memberMap.values()) {
+		for (Member member : MemberMap.values()) {
 			fileCommon.saveContent(filePath, member.toString() + "\n", true);
 		}
 	}

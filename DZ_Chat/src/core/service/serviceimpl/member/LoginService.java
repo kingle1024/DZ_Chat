@@ -1,33 +1,38 @@
-package core.service.member;
+package core.service.serviceimpl.member;
 
 import java.io.*;
-import core.service.ObjectStreamService;
+
+import org.json.JSONObject;
+
+import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import log.NeedLog;
 import member.*;
 import property.Property;
 
-public class LoginService extends ObjectStreamService implements NeedLog {
+public class LoginService extends Service implements NeedLog {
 	private static final MemberManager memberManager = MemberManager.getInstance();
 	private LogQueue logQueue = LogQueue.getInstance();
-	public LoginService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
-		super(is, os);
-	}
 
 	@Override
 	public void request() throws IOException {
+		System.out.println("Login Service");
 		try {
-			String id = (String) is.readObject();
-			String pw = (String) is.readObject();
+			JSONObject loginJSON = receive();
+			String id = loginJSON.getString("id");
+			String pw = loginJSON.getString("pw");
+			System.out.println("id: " + id + ", pw: " + pw);
 			Member member = memberManager.login(id, pw);
+			JSONObject sendJSON = new JSONObject();
+			sendJSON.put("hasMember", member != null);
 			if (member != null) {
-				os.writeObject(member);
 				logQueue.add(this);
-			} else {
-				os.writeObject(null);
+				sendJSON.put("member", member.getJSON());
+
 			}
-		} catch (ClassNotFoundException | IOException e) {
+			send(sendJSON);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
