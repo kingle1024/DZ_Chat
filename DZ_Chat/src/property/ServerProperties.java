@@ -49,25 +49,11 @@ public class ServerProperties {
 		return serverProperties.getProperty("MEMBER_FILE");
 	}
 	
-	public static String getInsertLog() {
-		return serverProperties.getProperty("INSERT_LOG");
+	public static String getDBInfo() {
+		return serverProperties.getProperty("DB_INFO");
 	}
 	
-	public static String getDriverClass() {
-		return serverProperties.getProperty("driverClass");
-	}
-	
-	public static String getDbServerConn() {
-		return serverProperties.getProperty("dbServerConn");
-	}
-	
-	public static String getDbPasswd() {
-		return serverProperties.getProperty("dbPasswd");
-	}
-	
-	public static String getDbUser() {
-		return serverProperties.getProperty("dbUser");
-	}
+
     public static void main(String[] args) {
         File file = new File("resource");
         System.out.println(file.getAbsolutePath());
