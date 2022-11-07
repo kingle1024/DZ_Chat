@@ -31,20 +31,15 @@ public class FtpServer extends Server {
 		}
 
 		threadPool.execute(() -> {
-			try {
-				while (true) {
-					Socket socket = serverSocket.accept(); // 새로운 연결 소켓 생성 및 accept대기
-					System.out.println("FTP server is listening... (Port: " + PORT_NUMBER + ")");
-					command(socket);
-				}
-			} catch (IOException e) {
-				System.out.println("FtpServer > start() > IOException");
-				e.printStackTrace();
+			while (true) {
+				System.out.println("FTP server is listening... (Port: " + PORT_NUMBER + ")");
+				command();
 			}
 		});
 	}
-	public void command(Socket socket){
+	public void command(){ // 이름 변경 및 분리 필요?
 		try {
+			Socket socket = serverSocket.accept();
 			FtpService ftpService = new FtpService();
 			String chat = ftpService.clientMessageReceive(socket);
 			if (chat.startsWith("#fileSend")) {

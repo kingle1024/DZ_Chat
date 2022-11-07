@@ -47,22 +47,26 @@ public class MessageFactory {
 	private Message createExitMessage() throws ChatRoomExitException {
 		throw new ChatRoomExitException();
 	}
-	private Message createFileMessage(String chat) throws IOException {
+	private Message createFileMessage(String message) throws IOException {
 		System.out.println("createFileMessage");
-		String[] message = chat.split(" ");
-		if(message.length == 1){
-			message = new String[3];
-			message[1] = "temp";
-			message[2] = "temp2";
-		}
-		String fileName = message[1];
-		boolean result = fileMessage(chat);
+		String[] messageArr = getMessageSplit(message);
+		String fileName = messageArr[1];
+		boolean result = fileMessage(message);
 
 		if(!result){
 			return new PrivateChatMessage(sender, fileName + " 파일 전송 취소", "privateMan");
 		}else{
 			return new ChatMessage(sender, fileName + " 파일 전송");
 		}
+	}
+	public String[] getMessageSplit(String chat){
+		String message[] = chat.split(" ");
+		if(message.length == 1){
+			message = new String[3];
+			message[1] = "temp";
+			message[2] = "temp2";
+		}
+		return message;
 	}
 	
 	private DirMessage createDirMessage(String chat) {
@@ -74,11 +78,41 @@ public class MessageFactory {
 			threadGroup = new ThreadGroup(sender.getUserId()+chatRoomName);
 		}
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("chat", chat);
+		map.put("chat", chat); //  삭제 예정
 		map.put("chatRoomName", this.chatRoomName);
 		map.put("threadGroup", threadGroup);
+		map.put("chatAndRoomName", getChatAndRoomNameStr(chat));
+		final String message[] = chat.split(" ");
+		map.put("command", message[0]);
+		map.put("fileAndPath", message[1]);
 
-		FileMessage fileMessage = new FileMessage();
-		return fileMessage.run(map);
+		return new FileMessage().run(map);
+	}
+	public String getChatAndRoomNameStr(String chat){
+		StringBuilder input = new StringBuilder();
+		input.append(chat)
+				.append(" ")
+				.append("room/")
+				.append(chatRoomName);
+		return input.toString();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

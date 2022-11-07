@@ -8,37 +8,33 @@ import java.util.HashMap;
 
 import static message.ftp.FtpService.fileValid;
 
-public class ClientToServerThread extends Thread {
+public class FileSendThread extends Thread {
 	private volatile HashMap<String, Object> map;
-
-	public ClientToServerThread(ThreadGroup threadGroup, String threadName, HashMap<String, Object> map) {
-		super(threadGroup, threadName); // 스레드 그룹과 스레드 이름을 설정
+	public FileSendThread(ThreadGroup threadGroup, HashMap<String, Object> map) {
+		super(threadGroup, (String) map.get("threadName")); // 스레드 그룹과 스레드 이름을 설정
 		this.map = map;
 	}
 
 	@Override
 	public void run() {
-		String input = (String) map.get("fileName");
-		String[] message = input.toString().split(" ");
-		if (input.startsWith("#fileStop")) {
+		String command = (String) map.get("command");
+		if (command.startsWith("#fileStop")) {
 			System.out.println("fileStop");
 			return;
 		}
-		String fileName = message[1];
-		File originFile = new File(fileName);
+		String fileAndPath = (String) map.get("fileAndPath");
+		File originFile = new File(fileAndPath);
 
-		System.out.println("ClientToServer > run() > fileName:" + fileName);
+		System.out.println("ClientToServer > run() > fileName:" + fileAndPath);
 		Socket socket = (Socket) map.get("socket");
 		try {
-			String originFilePath = fileName;
+			if (fileAndPath.startsWith("/") || fileAndPath.startsWith("C:\\") || fileAndPath.startsWith("D:\\")) {
 
-			if (message[1].startsWith("/") || message[1].startsWith("C:\\") || message[1].startsWith("D:\\")) {
-				originFilePath = message[1];
 			} else {
-				originFilePath = "DZ_Chat/" + originFilePath;
+				fileAndPath = "DZ_Chat/" + fileAndPath;
 			}
 
-			if (!fileValid(originFilePath))
+			if (!fileValid(fileAndPath))
 				return;
 
 			StringBuilder fileSaveTargetSb = new StringBuilder();
@@ -46,8 +42,8 @@ public class ClientToServerThread extends Thread {
 					.append(originFile.getName());
 
 			byte[] buffer = new byte[Integer.parseInt(Property.client().get("DEFAULT_BUFFER_SIZE"))];
-			File originFileTarget = new File(originFilePath);
-			System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > " + originFilePath);
+			File originFileTarget = new File(fileAndPath);
+			System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > " + fileAndPath);
 			long fileSize = originFileTarget.length();
 
 			// 여기에 파일이 있음
