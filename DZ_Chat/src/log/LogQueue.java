@@ -17,15 +17,6 @@ public class LogQueue {
 		return logQueue;
 	}
 	
-	public void add(NeedLog log) {
-		synchronized (monitor) {
-			que.add(log.toLog());
-			if (que.size() > 5) {
-				monitor.notify();
-			}
-		}
-	}
-	
 	public void add(Log log) {
 		synchronized (monitor) {
 			que.add(log);

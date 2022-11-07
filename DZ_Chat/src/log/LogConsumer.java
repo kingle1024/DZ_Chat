@@ -29,7 +29,6 @@ public class LogConsumer implements Runnable {
 					logFileSave(logPoll);
 					logDBSave(logPoll);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -41,12 +40,10 @@ public class LogConsumer implements Runnable {
 	public void logFileSave(Log log) throws IOException {
 		System.out.println("Log > logFileSave");
 		try {
-			// String filePath = log.getPath();
 			File file = new File(filePath);
 
 			if (!file.exists()) {
 				file.createNewFile();
-				// file.mkdirs();
 			}
 
 			FileOutputStream f = new FileOutputStream(file, true);
@@ -54,14 +51,11 @@ public class LogConsumer implements Runnable {
 			out = new BufferedOutputStream(f);
 			byte[] byteArr = lineToAppend.getBytes();
 			out.write(byteArr);
-			// f.write(byteArr);
-			// f.close();
 		} finally {
 			if (out != null) {
 				out.close();
 			}
 		}
-		// catch (Exception e) {}
 
 	}
 
