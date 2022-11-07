@@ -1,6 +1,7 @@
 package core.service.serviceimpl.chat;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 import org.json.JSONObject;
@@ -9,6 +10,7 @@ import core.server.MainServer;
 import core.service.Service;
 import log.LogQueue;
 import member.Member;
+import message.MessageFactory;
 import message.chat.ChatRoom;
 import message.chat.Message;
 
@@ -20,15 +22,14 @@ public class ChatService extends Service {
 	
 	@Override
 	public void request() {
-		setInitData();
+		init();
 		System.out.println("Chat Service");
 		chatRoom.entrance(this);
 		MainServer.threadPool.execute(() -> {
 			try {
 				while (true) {
 					JSONObject messageJSON = receive();
-					Message message = MessageFactory.create(messageJSON);
-					message.setChatRoom(chatRoom);
+					Message message = MessageFactory.create(this, messageJSON);
 					message.push();
 					logQueue.add(message);
 				}
@@ -39,7 +40,7 @@ public class ChatService extends Service {
 		});
 	}
 	
-	public void setInitData() {
+	private void init() {
 		try {
 			JSONObject initData = receive();
 			chatRoomName = initData.getString("chatRoomName");
@@ -58,9 +59,16 @@ public class ChatService extends Service {
 		return me.nickname();
 	}
 	
-	
 	public boolean equalsUser(String id) {
 		return me.getUserId().equals(id);
+	}
+	
+	public ChatRoom getChatRoom() {
+		return chatRoom;
+	}
+	
+	public List<ChatService> getChatServices() {
+		return chatRoom.getChatServices();
 	}
 	
 	@Override

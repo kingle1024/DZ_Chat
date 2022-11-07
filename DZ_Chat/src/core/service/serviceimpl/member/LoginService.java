@@ -24,15 +24,14 @@ public class LoginService extends Service implements NeedLog {
 			String pw = loginJSON.getString("pw");
 			System.out.println("id: " + id + ", pw: " + pw);
 			Member member = memberManager.login(id, pw);
-			if (member != null) {
-				logQueue.add(this);
-			}
-
 			JSONObject sendJSON = new JSONObject();
 			sendJSON.put("hasMember", member != null);
-			sendJSON.put("member", member.getJSON());
+			if (member != null) {
+				logQueue.add(this);
+				sendJSON.put("member", member.getJSON());
+
+			}
 			send(sendJSON);
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

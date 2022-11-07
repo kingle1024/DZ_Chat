@@ -30,7 +30,7 @@ public class RegisterView extends TextInputView {
 		name = answerIterator.next();
 		birth = answerIterator.next();
 		Member tmp = new Member(id, pw, name, birth);
-		JSONObject response = ClientMap.runClient("member.register", tmp, pwChk);
+		JSONObject response = ClientMap.runClient("member.RegisterClient", tmp, pwChk);
 		System.out.println(response.getBoolean("success") ? "회원가입 성공" : "회원가입 실패");
 		return ViewMap.getView("Main");
 	}

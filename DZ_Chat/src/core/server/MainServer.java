@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import core.service.Service;
 import core.service.ServiceMap;
 import core.service.serviceimpl.MapperService;
 import member.Member;

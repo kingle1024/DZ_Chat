@@ -26,6 +26,7 @@ public class DeleteMemberService extends Service implements NeedLog {
 		
 		JSONObject sendJSON = new JSONObject();
 		sendJSON.put("result", memberManager.delete(me, pw));
+		send(sendJSON);
 		logQueue.add(this);
 	}
 

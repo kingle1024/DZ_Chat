@@ -4,27 +4,30 @@ import java.io.*;
 
 import org.json.JSONObject;
 
+import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import log.NeedLog;
 import member.Member;
 import property.Property;
 
-public class ChatMessage extends Message implements NeedLog {
+public class ChatMessage implements NeedLog, Message {
+	private final ChatService chatService;
 	private final Member sender;
-	private JSONObject json = new JSONObject();
-	public ChatMessage(Member sender, String message) {
-		super(message);
+	private final String message;
+	
+	public ChatMessage(ChatService chatService, Member sender, String message) {
+		this.chatService = chatService;
 		this.sender = sender;
+		this.message = message;
 	}
 	
 	@Override
 	public void push() {
 		System.out.println("message push: " + message);
-		System.out.println("chatRoom: " + chatRoom);
-		json.put("message", this.toString());
-		chatRoom.getChatServices().stream().forEach(s -> {
+		JSONObject json = new JSONObject().put("message", this.toString());
+		System.out.println(json);
+		chatService.getChatServices().stream().forEach(s -> {
 			try {
-				System.out.println(s.getMe());
 				chatService.send(json);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -45,10 +48,5 @@ public class ChatMessage extends Message implements NeedLog {
 	public Log toLog() {
 		String logMessage = "ChatMessage:" + sender.getUserId() + ":" + message;
 		return new Log(Property.client().get("CHAT_LOG_FILE"), logMessage);
-	}
-
-	@Override
-	public JSONObject getJSON() {
-		return json;
 	}
 }

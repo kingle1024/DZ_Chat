@@ -24,19 +24,22 @@ public class MessageListener implements Runnable {
 			try {
 				JSONObject json = chatClient.receive();
 				System.out.println(json.get("message"));
-				synchronized (monitor) {
-					if (monitor.equalsStatus("end"))
-						return;
-					System.out.println("서버와 연결이 끊겼습니다.");
-					monitor.setStatus("close");
-					monitor.notifyAll();
-				}
-				Thread.sleep(500);
-			} catch (IOException e) {
+
 				
-			} catch (InterruptedException e) {
-				break;
-			}
+			} catch (IOException e) {
+				try {
+					synchronized (monitor) {
+						if (monitor.equalsStatus("end"))
+							return;
+						System.out.println("서버와 연결이 끊겼습니다.");
+						monitor.setStatus("close");
+						monitor.notifyAll();
+					}
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					break;
+				}
+			} 
 		}
 	}
 }

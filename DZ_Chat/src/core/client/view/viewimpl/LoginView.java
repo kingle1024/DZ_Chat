@@ -29,6 +29,7 @@ public class LoginView extends TextInputView {
 				? Member.parseJSON(response.getJSONObject("member"))
 				: null;
 		setMe(me);
+		System.out.println(hasMember ? "로그인 성공" : "로그인 실패");
 		return hasMember ? ViewMap.getView("SuccessLogin") : ViewMap.getView("Main");
 	
 	}

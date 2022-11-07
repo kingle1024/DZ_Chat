@@ -2,12 +2,8 @@ package core.service;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -41,6 +37,15 @@ public class ServiceMap {
 	public static Service getService(String serviceName) {
 		try {
 			return (Service) serviceMap.get(serviceName).newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Service getService(String serviceName, Object obj) {
+		try {
+			return (Service) serviceMap.get(serviceName).newInstance(obj);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

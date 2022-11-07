@@ -4,25 +4,23 @@ import java.io.*;
 
 import org.json.JSONObject;
 
-import core.server.MainServer;
 import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 
-public class SystemMessage extends Message implements Serializable {
+public class SystemMessage implements Message {
 	private final ChatService chatService;
-	private final ChatRoom chatRoom;
+	private String message;
 	
 	public SystemMessage(ChatService chatService, String message) {
-		super(message);
 		this.chatService = chatService;
-		this.chatRoom = chatService.c
+		this.message = message;
 	}
 
 	@Override
 	public void push() {
-		chatRoom.getChatServices().stream().forEach(s -> {
+		chatService.getChatServices().stream().forEach(s -> {
 			try {
-				chatService.send(new JSONObject().put("message", "\t[System: " + message + "]"));;
+				chatService.send(new JSONObject().put("message", toString()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -41,7 +39,6 @@ public class SystemMessage extends Message implements Serializable {
 
 	@Override
 	public Log toLog() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.json.JSONObject;
 
+import core.client.ClientMap;
 import core.client.chat.ChatClient;
 import core.client.chat.HasChatRoomClient;
 import core.client.view.TextInputView;
@@ -22,12 +23,9 @@ public class EntranceChatRoomView extends TextInputView {
 	public View nextView() {
 		Iterator<String> answerIterator = answerIterator();
 		chatRoomName = answerIterator.next();
-//		JSONObject hasChatRoomJSON = ClientMap.runClient("chat.HasChatRoomClient", chatRoomName);
-		HasChatRoomClient hasChatRoomClient = new HasChatRoomClient(chatRoomName);
-		hasChatRoomClient.run();
-		if (hasChatRoomClient.getHasGetRoom()) {
-//			ClientMap.runClient("chat.ChatClient", chatRoomName, getMe());
-			new ChatClient(chatRoomName, getMe()).run();
+		JSONObject hasChatRoomJSON = ClientMap.runClient("chat.HasChatRoomClient", chatRoomName);
+		if (hasChatRoomJSON.getBoolean("result")) {
+			ClientMap.runClient("chat.ChatClient", chatRoomName);
 		} else {
 			System.out.println("존재하지 않는 채팅방 입니다.");
 		}

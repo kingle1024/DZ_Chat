@@ -14,7 +14,7 @@ import core.service.ServiceMap;
 public class MapperService extends Service {
 	private Socket socket;
 
-	public MapperService(Socket socket) throws IOException {
+	public MapperService(Socket socket) {
 		this.socket = socket;
 	}
 
@@ -22,11 +22,12 @@ public class MapperService extends Service {
 	public void request() throws IOException {
 		System.out.println("Mapper Service");
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			setInputStream(br);
-			setOutputStream(bw);
-			JSONObject commandJSON = receive();
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            setInputStream(br);
+            setOutputStream(bw);
+			
+            JSONObject commandJSON = receive();
 			System.out.println("MapperService receive: " + commandJSON);
 			
 			String commandType = commandJSON.getString("commandType");

@@ -20,7 +20,7 @@ public class MakeChatRoomView extends TextInputView {
 		Iterator<String> answerIterator = answerIterator();
 		chatRoomName = answerIterator.next();
 		JSONObject hasChatRoom = ClientMap.runClient("chat.HasChatRoomClient", chatRoomName);
-		if (hasChatRoom.getBoolean("result")) {
+		if (!hasChatRoom.getBoolean("result")) {
 			ClientMap.runClient("chat.MakeChatRoomClient", chatRoomName);	
 		}
 		return ViewMap.getView("SuccessLogin");

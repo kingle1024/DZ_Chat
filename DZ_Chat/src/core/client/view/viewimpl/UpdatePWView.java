@@ -23,7 +23,7 @@ public class UpdatePWView extends TextInputView {
 		Iterator<String> answerIter = answerIterator();
 		validatePW = answerIter.next();
 		newPW = answerIter.next();
-		JSONObject response = ClientMap.runClient("member.UpdatePWClient", getMe(), validatePW, newPW);
+		JSONObject response = ClientMap.runClient("member.UpdatePWClient", validatePW, newPW);
 		if (response.getBoolean("success")) {
 			return ViewMap.getView("SuccessLogin");	
 		} else {

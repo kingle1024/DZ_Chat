@@ -50,6 +50,7 @@ public class Main {
 
 			ftpServer.stop();
 			server.stop();
+			scanner.close();
 
 		} catch (IOException e) {
 			System.out.println("IOException" + e);

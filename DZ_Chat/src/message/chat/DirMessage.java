@@ -3,36 +3,36 @@ package message.chat;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import member.Member;
 import message.ftp.FtpService;
 import property.Property;
 
-public class DirMessage extends Message {
-	private static final long serialVersionUID = 1326688109607339081L;
+public class DirMessage implements Message {
+	private final ChatService chatService;
 	private final Member sender;
-	private final String chatRoomName;
-	public DirMessage(String chatRoomName, Member sender, String message) {
-		super(message);
-		this.chatRoomName = chatRoomName;
+	private final String message;
+	
+	public DirMessage(ChatService chatService, Member sender, String message) {
+		this.chatService = chatService;
 		this.sender = sender;
+		this.message = message;
 	}
 
-	public void send(ObjectOutputStream oos) throws IOException {
-		FtpService ftp = new FtpService();
-
-		oos.writeObject(ftp.dir(chatRoomName));
-		System.out.println("[System] "+ftp.dir(chatRoomName));
-		oos.flush();
+	public void send() throws IOException {
+		// TODO JSON
+//		FtpService ftp = new FtpService();
+//		chatService.send(ftp.dir(chatRoomName));
+//		System.out.println("[System] "+ftp.dir(chatRoomName));
 	}
 
 	@Override
 	public void push() {
-		
-		chatRoom.getChatServices().forEach(s -> {
+		chatService.getChatServices().forEach(s -> {
 			try {
 				System.out.println(s.getMe());
-				send(s.getOs());
+				send();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

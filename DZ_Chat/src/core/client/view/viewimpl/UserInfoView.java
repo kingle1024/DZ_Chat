@@ -7,7 +7,7 @@ import static core.client.Main.*;
 public class UserInfoView extends MenuChooseView {
 
 	public UserInfoView() {
-		super("UserInfo", "UpdateMember", "DeleteMember");
+		super("UserInfo", "UpdatePW", "DeleteMember");
 	}
 
 	@Override

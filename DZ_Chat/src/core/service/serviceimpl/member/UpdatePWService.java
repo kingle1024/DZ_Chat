@@ -32,6 +32,7 @@ public class UpdatePWService extends Service implements NeedLog {
 			JSONObject sendJSON = new JSONObject();
 			sendJSON.put("success", memberManager.updatePw(member, validatePW, newPW));
 			send(sendJSON);
+			System.out.println("UpdatePWService: " + sendJSON);
 			logQueue.add(this);
 		} catch (IOException e) {
 			e.printStackTrace();
