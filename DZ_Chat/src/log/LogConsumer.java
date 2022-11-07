@@ -12,20 +12,18 @@ import java.sql.SQLException;
 import property.Property;
 
 public class LogConsumer implements Runnable {
-	private static final LogQueue logQueue = LogQueue.getInstance();
-	private static final Object monitor = logQueue.getMonitor();
 	private static final String filePath = "./" + Property.server().get("CHAT_LOG_FILE");
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
-	BufferedOutputStream out = null;
-	Log logPoll;
+	private BufferedOutputStream out = null;
+	private Log logPoll;
 
 	@Override
 	public void run() {
 		try {
 			while (!Thread.currentThread().isInterrupted()) {
 				try {
-					logPoll = logQueue.poll();
+					logPoll = LogQueue.poll();
 					logFileSave(logPoll);
 					logDBSave(logPoll);
 				} catch (IOException e) {
@@ -104,11 +102,5 @@ public class LogConsumer implements Runnable {
 			e.printStackTrace();
 		}
 
-	}
-
-	public void consumeAllLog() {
-		synchronized (monitor) {
-			monitor.notify();
-		}
 	}
 }

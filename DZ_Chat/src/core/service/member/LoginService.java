@@ -4,11 +4,10 @@ import java.io.*;
 import core.service.ObjectStreamService;
 import log.Log;
 import log.LogQueue;
-import log.NeedLog;
 import member.*;
 import property.Property;
 
-public class LoginService extends ObjectStreamService implements NeedLog {
+public class LoginService extends ObjectStreamService {
 	private String id;
 	private static final MemberManager memberManager = MemberManager.getInstance();
 	private LogQueue logQueue = LogQueue.getInstance();
@@ -25,7 +24,7 @@ public class LoginService extends ObjectStreamService implements NeedLog {
 			Member member = memberManager.login(id, pw);
 			if (member != null) {
 				os.writeObject(member);
-				logQueue.add(this);
+				logQueue.add(toLog());
 			} else {
 				os.writeObject(null);
 			}
@@ -34,7 +33,7 @@ public class LoginService extends ObjectStreamService implements NeedLog {
 		}
 	}
 
-	@Override
+
 	public Log toLog() {
 		return new Log(Property.server().get("CHAT_LOG_FILE"), "id : " + this.id + " Login Success");
 	}
