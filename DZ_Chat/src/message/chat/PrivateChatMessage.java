@@ -45,7 +45,6 @@ public class PrivateChatMessage implements Message {
 				.toString();
 	}
 
-	@Override
 	public Log toLog() {
 		String logMessage = "PrivateMessage:" + sender.getUserId() + ":" + message;
 		return new Log(Property.server().get("CHAT_LOG_FILE"), logMessage);

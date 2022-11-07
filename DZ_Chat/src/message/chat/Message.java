@@ -1,7 +1,5 @@
 package message.chat;
 
-import log.NeedLog;
-
-public interface Message extends NeedLog {
+public interface Message {
 	public abstract void push();
 }

@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import core.server.MainServer;
 import core.service.Service;
-import log.LogQueue;
 import member.Member;
 import message.MessageFactory;
 import message.chat.ChatRoom;
@@ -18,7 +17,6 @@ public class ChatService extends Service {
 	private Member me;
 	private String chatRoomName;
 	private ChatRoom chatRoom;
-	private LogQueue logQueue = LogQueue.getInstance();
 	
 	@Override
 	public void request() {
@@ -31,7 +29,6 @@ public class ChatService extends Service {
 					JSONObject messageJSON = receive();
 					Message message = MessageFactory.create(this, messageJSON);
 					message.push();
-					logQueue.add(message);
 				}
 			} catch (Exception e) {
 				chatRoom.exit(this);

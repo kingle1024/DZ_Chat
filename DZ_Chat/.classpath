@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-<<<<<<< HEAD
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/json-20220924.jar"/>
-	<classpathentry kind="lib" path="lib/ojdbc11.jar"/>
-	<classpathentry kind="lib" path="lib/mariadb-java-client-3.0.8.jar"/>
-=======
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/json-20220924.jar"/>
 	<classpathentry kind="lib" path="lib/lombok.jar"/>
->>>>>>> origin/json
+	<classpathentry kind="lib" path="lib/mariadb-java-client-3.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,12 +1,10 @@
 package message.chat;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import member.Member;
-import message.ftp.FtpService;
 import property.Property;
 
 public class DirMessage implements Message {
@@ -39,7 +37,6 @@ public class DirMessage implements Message {
 		});
 	}
 	
-	@Override
 	public Log toLog() {
 		String DirMessage = "Dir:" + sender.getUserId() + ":" + message;
 		return new Log(Property.server().get("DIR_LOG_FILE"), DirMessage);
