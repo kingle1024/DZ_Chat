@@ -9,8 +9,10 @@ import member.*;
 import property.Property;
 
 public class LoginService extends ObjectStreamService implements NeedLog {
+	private String id;
 	private static final MemberManager memberManager = MemberManager.getInstance();
 	private LogQueue logQueue = LogQueue.getInstance();
+
 	public LoginService(ObjectInputStream is, ObjectOutputStream os) throws IOException {
 		super(is, os);
 	}
@@ -18,7 +20,7 @@ public class LoginService extends ObjectStreamService implements NeedLog {
 	@Override
 	public void request() throws IOException {
 		try {
-			String id = (String) is.readObject();
+			this.id = (String) is.readObject();
 			String pw = (String) is.readObject();
 			Member member = memberManager.login(id, pw);
 			if (member != null) {
@@ -33,8 +35,8 @@ public class LoginService extends ObjectStreamService implements NeedLog {
 	}
 
 	@Override
-	public Log toLog() { 
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "Login Success");
+	public Log toLog() {
+		return new Log(Property.server().get("CHAT_LOG_FILE"), "id : " + this.id + " Login Success");
 	}
 
 }
