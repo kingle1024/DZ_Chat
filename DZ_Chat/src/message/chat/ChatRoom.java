@@ -8,7 +8,7 @@ import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import log.LogQueue;
 import message.MessageFactory;
-import property.Property;
+import property.ServerProperties;
 
 public class ChatRoom implements Serializable {
 	private static final long serialVersionUID = 1823559605769244050L;
@@ -19,7 +19,7 @@ public class ChatRoom implements Serializable {
 	public ChatRoom(String chatRoomName) {
 		this.chatRoomName = chatRoomName;
 		this.chatServices = new ArrayList<>();
-		this.logPath = chatRoomName + "/" + Property.server().get("CHAT_LOG_FILE");
+		this.logPath = chatRoomName + "/" + ServerProperties.getChatLogFile();
 	}
 	
 	public void entrance(ChatService chatService) {

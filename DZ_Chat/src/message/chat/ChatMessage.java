@@ -7,7 +7,8 @@ import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import log.LogQueue;
 import member.Member;
-import property.Property;
+import property.ClientProperties;
+import property.ServerProperties;
 
 public class ChatMessage implements Message {
 	private final ChatService chatService;
@@ -47,6 +48,6 @@ public class ChatMessage implements Message {
 
 	public Log toLog() {
 		String logMessage = "ChatMessage:" + sender.getUserId() + ":" + message;
-		return new Log(Property.client().get("CHAT_LOG_FILE"), logMessage);
+		return new Log(ClientProperties.getChatLogFile(), logMessage);
 	}
 }

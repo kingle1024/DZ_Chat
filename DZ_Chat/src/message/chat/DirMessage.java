@@ -5,7 +5,7 @@ import java.io.IOException;
 import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import member.Member;
-import property.Property;
+import property.ServerProperties;
 
 public class DirMessage implements Message {
 	private final ChatService chatService;
@@ -39,7 +39,7 @@ public class DirMessage implements Message {
 	
 	public Log toLog() {
 		String DirMessage = "Dir:" + sender.getUserId() + ":" + message;
-		return new Log(Property.server().get("DIR_LOG_FILE"), DirMessage);
+		return new Log(ServerProperties.getDirLogFile(), DirMessage);
 	}
 
 }

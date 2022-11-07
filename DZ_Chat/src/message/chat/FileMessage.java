@@ -2,7 +2,7 @@ package message.chat;
 
 import message.ftp.FileSaveThread;
 import message.ftp.FileSendThread;
-import property.Property;
+import property.ServerProperties;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -52,8 +52,8 @@ public class FileMessage {
     public Socket getSocket(){
         try {
             return new Socket(
-                    Property.server().get("IP"),
-                    Integer.parseInt(Property.server().get("FTP_PORT")));
+                    ServerProperties.getIP(),
+                    Integer.parseInt(ServerProperties.getFTPPort()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

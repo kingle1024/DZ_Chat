@@ -6,7 +6,7 @@ import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import member.*;
-import property.Property;
+import property.ServerProperties;
 
 public class RegisterService extends Service {
 	private static final MemberManager memberManager = MemberManager.getInstance();
@@ -30,6 +30,6 @@ public class RegisterService extends Service {
 	}
 
 	public Log toLog() {
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "Register Success");
+		return new Log(ServerProperties.getChatLogFile(), "Register Success");
 	}
 }

@@ -9,7 +9,7 @@ import member.MemberDao;
 import member.MemberMap;
 import message.chat.ChatRoom;
 import message.ftp.FtpServer;
-import property.Property;
+import property.ServerProperties;
 
 public class Main {
 	private static final MemberDao memberDao = MemberDao.getInstance();
@@ -26,10 +26,10 @@ public class Main {
 			for (Member m : MemberMap.values()) {
 				System.out.println(m);
 			}
-			Server server = new MainServer(Integer.parseInt(Property.server().get("SERVER_PORT")));
+			Server server = new MainServer(Integer.parseInt(ServerProperties.getServerPort()));
 			server.start();
 
-			FtpServer ftpServer = new FtpServer(Integer.parseInt(Property.server().get("FTP_PORT")));
+			FtpServer ftpServer = new FtpServer(Integer.parseInt(ServerProperties.getFTPPort()));
 			ftpServer.start();
 			
 			Thread logConsumer = new Thread(new LogConsumer());

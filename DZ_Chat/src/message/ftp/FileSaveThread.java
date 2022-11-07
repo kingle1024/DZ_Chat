@@ -1,6 +1,6 @@
 package message.ftp;
 
-import property.Property;
+import property.ServerProperties;
 
 import java.io.*;
 import java.net.UnknownHostException;
@@ -42,7 +42,7 @@ public class FileSaveThread extends Thread{
 		System.out.println("file:"+file.getAbsolutePath());
 		try {
 			FtpService ftp = new FtpService();
-			String filePath = Property.server().get("DOWNLOAD_PATH")+chatRoomAndFileName;
+			String filePath = ServerProperties.getDownloadPath() +chatRoomAndFileName;
 			StringBuffer downloadPath =
 					new StringBuffer(ftp.getDownloadPath((String)map.get("fileName")));
 

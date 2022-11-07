@@ -10,7 +10,7 @@ import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import member.MemberManager;
-import property.Property;
+import property.ServerProperties;
 
 public class FindPWService extends Service {
 	private static final MemberManager memberManager = MemberManager.getInstance();
@@ -27,7 +27,7 @@ public class FindPWService extends Service {
 	}
 
 	public Log toLog() {
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "Find Pw");
+		return new Log(ServerProperties.getChatLogFile(), "Find Pw");
 	}
 
 }

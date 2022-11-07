@@ -1,6 +1,7 @@
 package message.ftp;
 
-import property.Property;
+import property.ClientProperties;
+import property.ServerProperties;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,7 +10,7 @@ import java.util.Date;
 
 
 public class FtpService {
-	private final int DEFAULT_BUFFER_SIZE = Integer.parseInt(Property.client().get("DEFAULT_BUFFER_SIZE"));
+	private final int DEFAULT_BUFFER_SIZE = Integer.parseInt(ClientProperties.getDefaultBufferSize());
 	public static boolean fileValid(String filePath) {
 		File file = new File(filePath);
 		
@@ -52,7 +53,7 @@ public class FtpService {
 		return true;
 	}
 	public String dir(String roomName) {
-		File file = new File(Property.server().get("DOWNLOAD_PATH")+roomName+"");
+		File file = new File(ServerProperties.getDownloadPath()+roomName+"");
 		StringBuilder sb = new StringBuilder();
 		if(!file.exists()) {
 			sb.append("폴더에 파일이 존재하지 않습니다. ( ")

@@ -8,7 +8,7 @@ import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import member.*;
-import property.Property;
+import property.ServerProperties;
 
 public class LoginService extends Service {
 	private static final MemberManager memberManager = MemberManager.getInstance();
@@ -38,7 +38,7 @@ public class LoginService extends Service {
 
 
 	public Log toLog() {
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "id : " + this.id + " Login Success");
+		return new Log(ServerProperties.getChatLogFile(), "id : " + this.id + " Login Success");
 	}
 
 }

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import core.service.serviceimpl.chat.ChatService;
 import log.Log;
-import property.Property;
+import property.ServerProperties;
 
 public class MessageInfo {
 	private ChatService chatService;

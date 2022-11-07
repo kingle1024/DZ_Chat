@@ -10,7 +10,7 @@ import log.LogQueue;
 import member.Member;
 import member.MemberManager;
 import member.MemberMap;
-import property.Property;
+import property.ServerProperties;
 
 public class UpdatePWService extends Service {
 	private final static MemberManager memberManager = MemberManager.getInstance();
@@ -40,6 +40,6 @@ public class UpdatePWService extends Service {
 	}
 
 	public Log toLog() {
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "Register Success");
+		return new Log(ServerProperties.getChatLogFile(), "Register Success");
 	}
 }
