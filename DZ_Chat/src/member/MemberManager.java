@@ -29,7 +29,7 @@ public class MemberManager {
 		return member;
 	}
 
-	public static boolean delete(Member member, String pw) {
+	public static boolean deleteMember(Member member, String pw) {
 		if (!member.getPassword().equals(pw)) {
 			return false;
 		}

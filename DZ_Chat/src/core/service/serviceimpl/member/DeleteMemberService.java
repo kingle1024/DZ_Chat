@@ -20,7 +20,7 @@ public class DeleteMemberService extends Service {
 		String pw = receiveJSON.getString("pw");
 		
 		JSONObject sendJSON = new JSONObject();
-		sendJSON.put("result", MemberManager.delete(me, pw));
+		sendJSON.put("result", MemberManager.deleteMember(me, pw));
 		send(sendJSON);
 		LogQueue.add(toLog());
 	}
