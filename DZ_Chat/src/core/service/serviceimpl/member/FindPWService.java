@@ -9,13 +9,11 @@ import org.json.JSONObject;
 import core.service.Service;
 import log.Log;
 import log.LogQueue;
-import log.NeedLog;
 import member.MemberManager;
 import property.Property;
 
-public class FindPWService extends Service implements NeedLog {
+public class FindPWService extends Service {
 	private static final MemberManager memberManager = MemberManager.getInstance();
-	private LogQueue logQueue = LogQueue.getInstance();
 
 	@Override
 	public void request() throws IOException {
@@ -25,10 +23,9 @@ public class FindPWService extends Service implements NeedLog {
 		sendJSON.put("success", findPW != null);
 		sendJSON.put("findPW", findPW);
 		send(sendJSON);
-		logQueue.add(this);	
+		LogQueue.add(toLog());	
 	}
 
-	@Override
 	public Log toLog() {
 		return new Log(Property.server().get("CHAT_LOG_FILE"), "Find Pw");
 	}

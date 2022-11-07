@@ -37,7 +37,6 @@ public class SystemMessage implements Message {
 				.toString();
 	}
 
-	@Override
 	public Log toLog() {
 		return null;
 	}

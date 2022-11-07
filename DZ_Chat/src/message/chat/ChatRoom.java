@@ -12,7 +12,6 @@ import property.Property;
 
 public class ChatRoom implements Serializable {
 	private static final long serialVersionUID = 1823559605769244050L;
-	private static final LogQueue logQueue = LogQueue.getInstance();
 	private final String chatRoomName;
 	private final List<ChatService> chatServices;
 	private final String logPath;
@@ -25,17 +24,17 @@ public class ChatRoom implements Serializable {
 	
 	public void entrance(ChatService chatService) {
 		chatServices.add(chatService);
-		logQueue.add(entranceLog(chatService));
+		LogQueue.add(entranceLog(chatService));
 		MessageFactory.createSystemMessage(chatService, entranceMessage(chatService)).push();
 	}
 	
 	public void exit(ChatService chatService) {
 		chatServices.remove(chatService);
-		logQueue.add(exitLog(chatService));
+		LogQueue.add(exitLog(chatService));
 		MessageFactory.createSystemMessage(chatService, exitMessage(chatService)).push();
 		if (size() == 0) {
 			MainServer.chatRoomMap.remove(chatRoomName);
-			logQueue.add(removeChatRoomLog(chatService));
+			LogQueue.add(removeChatRoomLog(chatService));
 		}
 	}
 	

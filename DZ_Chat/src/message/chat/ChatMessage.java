@@ -3,14 +3,13 @@ package message.chat;
 import java.io.*;
 
 import org.json.JSONObject;
-
 import core.service.serviceimpl.chat.ChatService;
 import log.Log;
-import log.NeedLog;
+import log.LogQueue;
 import member.Member;
 import property.Property;
 
-public class ChatMessage implements NeedLog, Message {
+public class ChatMessage implements Message {
 	private final ChatService chatService;
 	private final Member sender;
 	private final String message;
@@ -33,6 +32,8 @@ public class ChatMessage implements NeedLog, Message {
 				e.printStackTrace();
 			}
 		});
+		
+		LogQueue.add(toLog());
 	}
 	
 	@Override
@@ -44,7 +45,6 @@ public class ChatMessage implements NeedLog, Message {
 				.toString();
 	}
 
-	@Override
 	public Log toLog() {
 		String logMessage = "ChatMessage:" + sender.getUserId() + ":" + message;
 		return new Log(Property.client().get("CHAT_LOG_FILE"), logMessage);

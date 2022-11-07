@@ -7,29 +7,28 @@ import org.json.JSONObject;
 import core.service.Service;
 import log.Log;
 import log.LogQueue;
-import log.NeedLog;
 import member.*;
 import property.Property;
 
-public class LoginService extends Service implements NeedLog {
+public class LoginService extends Service {
 	private static final MemberManager memberManager = MemberManager.getInstance();
-	private LogQueue logQueue = LogQueue.getInstance();
-
+	private String id;
+	private String pw;
+	
 	@Override
 	public void request() throws IOException {
 		System.out.println("Login Service");
 		try {
 			JSONObject loginJSON = receive();
-			String id = loginJSON.getString("id");
-			String pw = loginJSON.getString("pw");
+			id = loginJSON.getString("id");
+			pw = loginJSON.getString("pw");
 			System.out.println("id: " + id + ", pw: " + pw);
 			Member member = memberManager.login(id, pw);
 			JSONObject sendJSON = new JSONObject();
 			sendJSON.put("hasMember", member != null);
 			if (member != null) {
-				logQueue.add(this);
+				LogQueue.add(toLog());
 				sendJSON.put("member", member.getJSON());
-
 			}
 			send(sendJSON);
 		} catch (IOException e) {
@@ -37,9 +36,9 @@ public class LoginService extends Service implements NeedLog {
 		}
 	}
 
-	@Override
-	public Log toLog() { 
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "Login Success");
+
+	public Log toLog() {
+		return new Log(Property.server().get("CHAT_LOG_FILE"), "id : " + this.id + " Login Success");
 	}
 
 }

@@ -4,5 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/json-20220924.jar"/>
 	<classpathentry kind="lib" path="lib/lombok.jar"/>
+	<classpathentry kind="lib" path="lib/mariadb-java-client-3.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

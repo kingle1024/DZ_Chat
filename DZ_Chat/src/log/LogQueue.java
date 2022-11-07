@@ -1,50 +1,19 @@
 package log;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class LogQueue {
-	private static LogQueue logQueue;
-	private ConcurrentLinkedQueue<Log> que = new ConcurrentLinkedQueue<>();
-	private static final Object monitor  = new Object(); 
-	private LogQueue() {}
+	private static LinkedBlockingQueue<Log> que = new LinkedBlockingQueue<>();
 
-	public static LogQueue getInstance() {
-		if (logQueue == null) { 
-			synchronized (monitor) {
-				return logQueue = new LogQueue();
-			}
-		}	
-		return logQueue;
-	}
-	
-	public void add(NeedLog log) {
-		synchronized (monitor) {
-			que.add(log.toLog());
-			if (que.size() > 5) {
-				monitor.notify();
-			}
-		}
-	}
-	
-	public void add(Log log) {
-		synchronized (monitor) {
-			que.add(log);
-			if (que.size() > 5) {
-				monitor.notify();
-			}
-		}
-	}
-	
-	public Log poll() throws InterruptedException {
-		synchronized (monitor) {
-			if (que.isEmpty()) {
-				monitor.wait();
-			}
-			return que.poll();
-		}
+	private LogQueue() {
 	}
 
-	public Object getMonitor() {
-		return monitor;
+	public static void add(Log log) {
+		que.offer(log);
 	}
+
+	public static Log poll() throws InterruptedException {
+		return que.take();
+	}
+
 }
