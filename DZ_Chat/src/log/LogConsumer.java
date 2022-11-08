@@ -62,7 +62,7 @@ public class LogConsumer implements Runnable {
 
 		try {
 			open();
-			pstmt = conn.prepareStatement(ServerProperties.getInsertLog());
+			pstmt = conn.prepareStatement(ServerProperties.getInsertLogQuery());
 
 			pstmt.setDate(1, log.getCreateDate());
 			pstmt.setString(2, log.getLog());
