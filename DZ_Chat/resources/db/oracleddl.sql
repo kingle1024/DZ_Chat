@@ -4,11 +4,11 @@ create user masamo identified by kosa;
 grant connect, resource, dba to masamo;
 
 -- create log sequence
-create sequence seq_logid increament by 1;
+create sequence seq_logid increment by 1;
 
 -- create table
 create table tb_member (
-	userid varchar2(50)
+	userid varchar2(50) primary key
 	, password varchar2(50)
 	, name varchar2(50)
 	, birth varchar2(50)
