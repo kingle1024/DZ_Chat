@@ -5,53 +5,53 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class DBProperties {
-	private static Properties queryProperties = null;
-
-	static {
+	private Properties queryProperties = new Properties();
+	
+	public DBProperties(String propertiesPath) {
 		try {
-			queryProperties.load(new FileInputStream(ServerProperties.getDBInfo()));
+			queryProperties.load(new FileInputStream(propertiesPath));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static String getDriverClass() {
+	public String getDriverClass() {
 		return queryProperties.getProperty("driverClass");
 	}
 	
-	public static String getDbServerConn() {
+	public String getDbServerConn() {
 		return queryProperties.getProperty("dbServerConn");
 	}
 	
-	public static String getDbPasswd() {
+	public String getDbPasswd() {
 		return queryProperties.getProperty("dbPasswd");
 	}
 	
-	public static String getDbUser() {
+	public String getDbUser() {
 		return queryProperties.getProperty("dbUser");
 	}
 	
-	public static String getInsertLogQuery() {
+	public String getInsertLogQuery() {
 		return queryProperties.getProperty("INSERT_LOG");
 	}
 	
-	public static String getInsertMemberQuery() {
+	public String getInsertMemberQuery() {
 		return queryProperties.getProperty("INSERT_MEMBER");
 	}
 	
-	public static String getFindMemberByUserIdQuery() {
+	public String getFindMemberByUserIdQuery() {
 		return queryProperties.getProperty("FIND_MEMBER_BY_USERID");
 	}
 	
-	public static String getDeleteMemberByUserIdQuery() {
+	public String getDeleteMemberByUserIdQuery() {
 		return queryProperties.getProperty("DELETE_MEMBER_BY_USERID");
 	}
 	
-	public static String getFindMemberPasswordByUserIdQuery() {
+	public String getFindMemberPasswordByUserIdQuery() {
 		return queryProperties.getProperty("FIND_MEMBER_PASSWORD_BY_USERID");
 	}
 	
-	public static String getUpdateMemberPasswordQuery() {
+	public String getUpdateMemberPasswordQuery() {
 		return queryProperties.getProperty("UPDATE_MEMBER_PASSWORD");
 	}
 }
