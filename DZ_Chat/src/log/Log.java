@@ -1,28 +1,24 @@
 package log;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
 public class Log {
 	private String path;
 	private String log;
-	private String time;
-	private DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	private static SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private Date createDate;
 
 	public Log(String path, String log) {
 		this.path = path;
 		this.log = log;
-		LocalDateTime now = LocalDateTime.now();
-		this.time = now.format(pattern);
 		this.createDate = new Date(Calendar.getInstance().getTime().getTime());
 	}
 
 	public String getTimeLog() {
-		return "[" + time + "]" + log;
+		return "[" + getCreateDateStr() + "]" + log;
 	}
 
 	public String getPath() {
@@ -43,6 +39,10 @@ public class Log {
 	
 	public Date getCreateDate() {
 		return createDate;
+	}
+	
+	public String getCreateDateStr() {
+		return pattern.format(createDate);
 	}
 
 

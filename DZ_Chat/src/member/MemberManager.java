@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import property.ServerProperties;
 
@@ -15,8 +16,10 @@ public class MemberManager {
 		try {
 			Properties clsNames = new Properties();
 			clsNames.load(new FileInputStream(ServerProperties.getConnectProperties()));
-			for (Object obj : clsNames.values()) {
-				String value = (String) obj;
+			for (Entry<Object, Object> entry : clsNames.entrySet()) {
+				String key = (String) entry.getKey();
+				String value = (String) entry.getValue();
+				if (!key.startsWith("member")) continue;
 				String[] cls = value.split(",");
 				System.out.println(Arrays.toString(cls));
 				if (cls.length > 1) {
