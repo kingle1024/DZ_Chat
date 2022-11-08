@@ -15,7 +15,7 @@ public class MemberManagerDB implements MemberManagerInterface {
 	private PreparedStatement pstmt;
 	
 	public MemberManagerDB(String dbProperties) {
-		this.dbProperties = new DBProperties(dbProperties);
+		this.dbProperties = DBProperties.getInstance(dbProperties);
 	}
 	
 	

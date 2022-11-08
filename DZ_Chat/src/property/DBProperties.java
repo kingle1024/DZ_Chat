@@ -2,17 +2,27 @@ package property;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class DBProperties {
-	private Properties queryProperties = new Properties();
+	private static final Map<String, DBProperties> cache = new HashMap<>();
+	private Properties queryProperties;
 	
-	public DBProperties(String propertiesPath) {
+	public static DBProperties getInstance(String propertiesPath) {
+		if (cache.containsKey(propertiesPath)) return cache.get(propertiesPath);
+		DBProperties db = new DBProperties(propertiesPath);
+		cache.put(propertiesPath, db);
+		return db;
+	}
+	
+	private DBProperties(String propertiesPath) {
 		try {
 			queryProperties.load(new FileInputStream(propertiesPath));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}		
 	}
 	
 	public String getDriverClass() {
