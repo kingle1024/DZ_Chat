@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class DBProperties {
 	private static final Map<String, DBProperties> cache = new HashMap<>();
-	private Properties queryProperties;
+	private Properties queryProperties = new Properties();
 	
 	public static DBProperties getInstance(String propertiesPath) {
 		if (cache.containsKey(propertiesPath)) return cache.get(propertiesPath);
