@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import property.DBProperties;
 import property.ServerProperties;
 
 public class LogConsumer implements Runnable {
@@ -62,7 +63,7 @@ public class LogConsumer implements Runnable {
 
 		try {
 			open();
-			pstmt = conn.prepareStatement(ServerProperties.getInsertLogQuery());
+			pstmt = conn.prepareStatement(DBProperties.getInsertLogQuery());
 
 			pstmt.setDate(1, log.getCreateDate());
 			pstmt.setString(2, log.getLog());
@@ -78,13 +79,13 @@ public class LogConsumer implements Runnable {
 
 	private void open() {
 		try {
-			Class.forName(ServerProperties.getDriverClass());
+			Class.forName(DBProperties.getDriverClass());
 			System.out.println("JDBC 드라이버 로딩 성공");
 
 			conn = DriverManager.getConnection(
-					ServerProperties.getDbServerConn()
-					, ServerProperties.getDbUser()
-					, ServerProperties.getDbPasswd());
+					DBProperties.getDbServerConn()
+					, DBProperties.getDbUser()
+					, DBProperties.getDbPasswd());
 			conn.setAutoCommit(false);
 		} catch (Exception e) {
 			e.printStackTrace();
