@@ -1,6 +1,5 @@
 package core.client.mapper;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class RequestType {
@@ -16,4 +15,3 @@ public class RequestType {
 		return ret;
 	}
 }
-
