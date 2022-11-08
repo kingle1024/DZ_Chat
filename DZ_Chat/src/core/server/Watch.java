@@ -26,11 +26,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import log.LogConsumer;
-import property.Property;
+import property.ServerProperties;
 
 public class Watch {
-	private static final String HOST = Property.server().get("IP");
-	private static final int PORT_NUMBER = Integer.parseInt(Property.server().get("SERVER_PORT"));
+	private static final String HOST = ServerProperties.getIP();
+	private static final int PORT_NUMBER = Integer.parseInt(ServerProperties.getServerPort());
 	public static void main(String[] args) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("java", "-cp", "./bin", "core.server.Main");

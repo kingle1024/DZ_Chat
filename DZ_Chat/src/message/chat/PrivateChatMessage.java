@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import member.Member;
-import property.Property;
+import property.ServerProperties;
 
 public class PrivateChatMessage implements Message {
 	private final ChatService chatService;
@@ -47,6 +47,6 @@ public class PrivateChatMessage implements Message {
 
 	public Log toLog() {
 		String logMessage = "PrivateMessage:" + sender.getUserId() + ":" + message;
-		return new Log(Property.server().get("CHAT_LOG_FILE"), logMessage);
+		return new Log(ServerProperties.getChatLogFile(), logMessage);
 	}
 }

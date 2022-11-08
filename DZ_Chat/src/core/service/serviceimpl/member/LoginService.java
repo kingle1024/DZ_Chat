@@ -8,10 +8,9 @@ import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import member.*;
-import property.Property;
+import property.ServerProperties;
 
 public class LoginService extends Service {
-	private static final MemberManager memberManager = MemberManager.getInstance();
 	private String id;
 	private String pw;
 	
@@ -23,7 +22,7 @@ public class LoginService extends Service {
 			id = loginJSON.getString("id");
 			pw = loginJSON.getString("pw");
 			System.out.println("id: " + id + ", pw: " + pw);
-			Member member = memberManager.login(id, pw);
+			Member member = MemberManager.login(id, pw);
 			JSONObject sendJSON = new JSONObject();
 			sendJSON.put("hasMember", member != null);
 			if (member != null) {
@@ -38,7 +37,7 @@ public class LoginService extends Service {
 
 
 	public Log toLog() {
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "id : " + this.id + " Login Success");
+		return new Log(ServerProperties.getChatLogFile(), "id : " + this.id + " Login Success");
 	}
 
 }

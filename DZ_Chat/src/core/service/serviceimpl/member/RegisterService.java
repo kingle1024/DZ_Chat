@@ -6,10 +6,9 @@ import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import member.*;
-import property.Property;
+import property.ServerProperties;
 
 public class RegisterService extends Service {
-	private static final MemberManager memberManager = MemberManager.getInstance();
 
 	@Override
 	public void request() throws IOException {
@@ -18,7 +17,7 @@ public class RegisterService extends Service {
 			JSONObject receive = receive();
 			Member tmpMember = Member.parseJSON(receive.getJSONObject("member"));
 			String pwChk = receive.getString("pwChk");
-			boolean successRegister = memberManager.register(tmpMember, pwChk);
+			boolean successRegister = MemberManager.register(tmpMember, pwChk);
 			if (successRegister) LogQueue.add(toLog());
 			
 			JSONObject sendJSON = new JSONObject();
@@ -30,6 +29,6 @@ public class RegisterService extends Service {
 	}
 
 	public Log toLog() {
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "Register Success");
+		return new Log(ServerProperties.getChatLogFile(), "Register Success");
 	}
 }

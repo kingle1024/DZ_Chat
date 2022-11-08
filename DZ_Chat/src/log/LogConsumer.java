@@ -9,10 +9,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import property.Property;
+import property.DBProperties;
+import property.ServerProperties;
 
 public class LogConsumer implements Runnable {
-	private static final String filePath = "./" + Property.server().get("CHAT_LOG_FILE");
+	private static final String filePath = "./" + ServerProperties.getChatLogFile();
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private BufferedOutputStream out = null;
@@ -62,7 +63,7 @@ public class LogConsumer implements Runnable {
 
 		try {
 			open();
-			pstmt = conn.prepareStatement(Property.server().get("INSERT_LOG"));
+			pstmt = conn.prepareStatement(DBProperties.getInsertLogQuery());
 
 			pstmt.setString(1, log.getCreateDateStr());
 			pstmt.setString(2, log.getLog());
@@ -78,11 +79,13 @@ public class LogConsumer implements Runnable {
 
 	private void open() {
 		try {
-			Class.forName(Property.server().get("driverClass"));
+			Class.forName(DBProperties.getDriverClass());
 			System.out.println("JDBC 드라이버 로딩 성공");
 
-			conn = DriverManager.getConnection(Property.server().get("dbServerConn"), Property.server().get("dbUser"),
-					Property.server().get("dbPasswd"));
+			conn = DriverManager.getConnection(
+					DBProperties.getDbServerConn()
+					, DBProperties.getDbUser()
+					, DBProperties.getDbPasswd());
 			conn.setAutoCommit(false);
 		} catch (Exception e) {
 			e.printStackTrace();

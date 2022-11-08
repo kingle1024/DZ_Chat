@@ -6,7 +6,7 @@ import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import message.chat.ChatRoom;
-import property.Property;
+import property.ServerProperties;
 
 public class MakeChatRoomService extends Service {
 	private String chatRoomName;
@@ -20,6 +20,6 @@ public class MakeChatRoomService extends Service {
 
 	public Log toLog() {
 		String logMessage = "MakeChatRoom : " + this.chatRoomName;
-		return new Log(Property.server().get("CHAT_LOG_FILE"), logMessage);
+		return new Log(ServerProperties.getChatLogFile(), logMessage);
 	}
 }

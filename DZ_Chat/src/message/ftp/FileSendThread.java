@@ -1,6 +1,7 @@
 package message.ftp;
 
-import property.Property;
+import property.ClientProperties;
+import property.ServerProperties;
 
 import java.io.*;
 import java.net.Socket;
@@ -31,17 +32,13 @@ public class FileSendThread extends Thread {
 			if (fileAndPath.startsWith("/") || fileAndPath.startsWith("C:\\") || fileAndPath.startsWith("D:\\")) {
 
 			} else {
-				fileAndPath = "DZ_Chat/" + fileAndPath;
+//				fileAndPath = "DZ_Chat/" + fileAndPath;
 			}
 
 			if (!fileValid(fileAndPath))
 				return;
 
-			StringBuilder fileSaveTargetSb = new StringBuilder();
-			fileSaveTargetSb.append(Property.server().get("DOWNLOAD_PATH")).append(map.get("chatRoomName")).append("/")
-					.append(originFile.getName());
-
-			byte[] buffer = new byte[Integer.parseInt(Property.client().get("DEFAULT_BUFFER_SIZE"))];
+			byte[] buffer = new byte[Integer.parseInt(ClientProperties.getDefaultBufferSize())];
 			File originFileTarget = new File(fileAndPath);
 			System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > " + fileAndPath);
 			long fileSize = originFileTarget.length();
@@ -71,7 +68,6 @@ public class FileSendThread extends Thread {
 			}
 
 			System.out.println("Client에서 파일 전송 완료");
-//            fis.close();
 			os.close();
 		} catch (IOException e) {
 			System.out.println("ClientToServerThread IOException");

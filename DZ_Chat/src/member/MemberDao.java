@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import message.ftp.FileCommon;
-import property.Property;
+import property.ServerProperties;
 
 public class MemberDao {
-	private static final String filePath = Property.server().get("MEMBER_FILE");
+	private static final String filePath = ServerProperties.getMemberFile();
 	private static MemberDao dao = new MemberDao();
 
 	private MemberDao() {

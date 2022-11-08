@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 import org.json.JSONObject;
 
 import core.client.mapper.RequestType;
-import property.Property;
+import property.ServerProperties;
 
 public abstract class Client {
-	private static final String SERVER_HOST = Property.server().get("IP");
-	private static final int PORT_NUMBER = Integer.parseInt(Property.server().get("SERVER_PORT"));
+	private static final String SERVER_HOST = ServerProperties.getIP();
+	private static final int PORT_NUMBER = Integer.parseInt(ServerProperties.getServerPort());
 	private Socket socket;
 	private BufferedWriter bw;
 	private BufferedReader br;

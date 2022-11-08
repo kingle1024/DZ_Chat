@@ -10,15 +10,14 @@ import core.service.Service;
 import log.Log;
 import log.LogQueue;
 import member.MemberManager;
-import property.Property;
+import property.ServerProperties;
 
 public class FindPWService extends Service {
-	private static final MemberManager memberManager = MemberManager.getInstance();
 
 	@Override
 	public void request() throws IOException {
 		String id = receive().getString("id");
-		String findPW = memberManager.findPw(id);
+		String findPW = MemberManager.findPw(id);
 		JSONObject sendJSON = new JSONObject();
 		sendJSON.put("success", findPW != null);
 		sendJSON.put("findPW", findPW);
@@ -27,7 +26,7 @@ public class FindPWService extends Service {
 	}
 
 	public Log toLog() {
-		return new Log(Property.server().get("CHAT_LOG_FILE"), "Find Pw");
+		return new Log(ServerProperties.getChatLogFile(), "Find Pw");
 	}
 
 }
