@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class ServerProperties {
-	private static Properties serverProperties = null;
+	private static Properties serverProperties = new Properties();
 
 	static {
 		try {

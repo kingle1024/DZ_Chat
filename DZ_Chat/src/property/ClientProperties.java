@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ClientProperties {
-	private static Properties clientProperties = null;
+	private static Properties clientProperties = new Properties();
 	
 	static {
 		try {
