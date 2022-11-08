@@ -3,11 +3,12 @@ package property;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Properties;
 
 public class ServerProperties {
-	private static Properties serverProperties = null;
+	private static Properties serverProperties = new Properties();
 
 	static {
 		try {
@@ -48,12 +49,11 @@ public class ServerProperties {
 	public static String getMemberFile() {
 		return serverProperties.getProperty("MEMBER_FILE");
 	}
-	
-	public static String getDBInfo() {
-		return serverProperties.getProperty("DB_INFO");
+
+	public static String getConnectProperties() {
+		return serverProperties.getProperty("connect.properties");
 	}
 	
-
     public static void main(String[] args) {
         File file = new File("resource");
         System.out.println(file.getAbsolutePath());
