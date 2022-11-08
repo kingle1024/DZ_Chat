@@ -5,9 +5,7 @@ import java.util.Objects;
 
 import org.json.JSONObject;
 
-public class Member implements Comparable<Member>, Serializable {
-
-	private static final long serialVersionUID = -4338769178604718663L;
+public class Member {
 	private String userId;
 	private String password;
 	private String name;
@@ -19,10 +17,6 @@ public class Member implements Comparable<Member>, Serializable {
 		this.password = password;
 		this.name = name;
 		this.birth = birth;
-		json.put("userId", userId);
-		json.put("password", password);
-		json.put("name", name);
-		json.put("birth", birth);
 	}
 
 	public String getUserId() {
@@ -34,7 +28,6 @@ public class Member implements Comparable<Member>, Serializable {
 	}
 
 	public void setPassword(String password) {
-		json.put("password", password);
 		this.password = password;
 	}
 
@@ -55,6 +48,10 @@ public class Member implements Comparable<Member>, Serializable {
 	}
 	
 	public JSONObject getJSON() {
+		json.put("userId", userId);
+		json.put("password", password);
+		json.put("name", name);
+		json.put("birth", birth);
 		return json;
 	}
 	
@@ -83,11 +80,6 @@ public class Member implements Comparable<Member>, Serializable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(userId);
-	}
-
-	@Override
-	public int compareTo(Member o) {
-		return this.getName().compareTo(o.getName());
 	}
 
 	@Override
