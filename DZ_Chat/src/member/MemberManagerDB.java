@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import property.DBProperties;
+
 public class MemberManagerDB {
 	private static Connection conn;
 	private static PreparedStatement pstmt;
@@ -14,12 +16,12 @@ public class MemberManagerDB {
 	
 	private static void open() {
 		try {
-			Class.forName("oracle.jdbc.OracleDriver");
+			Class.forName(DBProperties.getDriverClass());
 			System.out.println("JDBC 드라이버 로딩");
 			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521/xe"
-					, "user1"
-					, "passwd");
+					DBProperties.getDbServerConn()
+					, DBProperties.getDbUser()
+					, DBProperties.getDbPasswd());
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -42,7 +44,7 @@ public class MemberManagerDB {
 		if (!tmpMember.getPassword().equals(pwChk)) return false;
 		try {
 			open();
-			pstmt = conn.prepareStatement("insert into member (userid, password, name, birth) values (?, ?, ?, ?)");
+			pstmt = conn.prepareStatement(DBProperties.getInsertMemberQuery());
 			pstmt.setString(1, tmpMember.getUserId());
 			pstmt.setString(2, tmpMember.getPassword());
 			pstmt.setString(3, tmpMember.getName());
@@ -59,7 +61,7 @@ public class MemberManagerDB {
 	public static Member login(String id, String pw) {
 		try {
 			open();
-			pstmt = conn.prepareStatement("select * from member where userid = ?");
+			pstmt = conn.prepareStatement(DBProperties.getFindMemberByUserIdQuery());
 			pstmt.setString(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -81,7 +83,8 @@ public class MemberManagerDB {
 		if (!member.getPassword().equals(pw)) return false;
 		try {
 			open();
-			pstmt = conn.prepareStatement("delete from member where userId = ?");
+			pstmt = conn.prepareStatement(DBProperties.getDeleteMemberByUserIdQuery());
+			pstmt.setString(1, pw);
 			return pstmt.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -94,7 +97,8 @@ public class MemberManagerDB {
 	public static String findPw(String id) {
 		try {
 			open();
-			pstmt = conn.prepareStatement("select password from member where userId = id");
+			pstmt = conn.prepareStatement(DBProperties.getFindMemberPasswordByUserIdQuery());
+			pstmt.setString(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				return rs.getString("password");
@@ -110,7 +114,7 @@ public class MemberManagerDB {
 	public static boolean updatePw(Member me, String validatePw, String newPw) {
 		try {
 			open();
-			pstmt = conn.prepareStatement("update member set password = ? where userId = ?, password = ?");
+			pstmt = conn.prepareStatement(DBProperties.getUpdateMemberPasswordQuery());
 			pstmt.setString(1, newPw);
 			pstmt.setString(2, me.getUserId());
 			pstmt.setString(3,  validatePw);

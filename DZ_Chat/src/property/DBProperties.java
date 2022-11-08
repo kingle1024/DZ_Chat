@@ -15,10 +15,6 @@ public class DBProperties {
 		}
 	}
 	
-	public static String getInsertLog() {
-		return queryProperties.getProperty("INSERT_LOG");
-	}
-	
 	public static String getDriverClass() {
 		return queryProperties.getProperty("driverClass");
 	}
@@ -33,5 +29,29 @@ public class DBProperties {
 	
 	public static String getDbUser() {
 		return queryProperties.getProperty("dbUser");
+	}
+	
+	public static String getInsertLogQuery() {
+		return queryProperties.getProperty("INSERT_LOG");
+	}
+	
+	public static String getInsertMemberQuery() {
+		return queryProperties.getProperty("INSERT_MEMBER");
+	}
+	
+	public static String getFindMemberByUserIdQuery() {
+		return queryProperties.getProperty("FIND_MEMBER_BY_USERID");
+	}
+	
+	public static String getDeleteMemberByUserIdQuery() {
+		return queryProperties.getProperty("DELETE_MEMBER_BY_USERID");
+	}
+	
+	public static String getFindMemberPasswordByUserIdQuery() {
+		return queryProperties.getProperty("FIND_MEMBER_PASSWORD_BY_USERID");
+	}
+	
+	public static String getUpdateMemberPasswordQuery() {
+		return queryProperties.getProperty("UPDATE_MEMBER_PASSWORD");
 	}
 }
