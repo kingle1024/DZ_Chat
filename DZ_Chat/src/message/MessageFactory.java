@@ -10,7 +10,7 @@ public class MessageFactory {
 	public static Message create(ChatService chatService, JSONObject json) {
 		String type = json.getString("type");
 		if ("@".equals(type)) return createPrivateChatMessage(chatService, json);
-		if ("#dir".equals(type)) return createDirMessage(chatService, json);
+		if ("#dir".equals(type)) return createDirMessage(chatService);
 		return createChatMessage(chatService, json);
 	}
 
@@ -27,11 +27,8 @@ public class MessageFactory {
 				, json.getString("to"));
 	}
 
-	private static DirMessage createDirMessage(ChatService chatService, JSONObject json) {
-		return new DirMessage(
-				chatService
-				, Member.parseJSON(json.getJSONObject("sender"))
-				, json.getString("message"));
+	private static DirMessage createDirMessage(ChatService chatService) {
+		return new DirMessage(chatService);
 	}
 
 	private static ChatMessage createChatMessage(ChatService chatService, JSONObject json) {

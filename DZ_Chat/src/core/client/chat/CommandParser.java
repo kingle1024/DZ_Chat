@@ -2,7 +2,6 @@ package core.client.chat;
 
 import java.io.IOException;
 import java.util.HashMap;
-
 import org.json.JSONObject;
 
 import member.Member;
@@ -58,12 +57,7 @@ public class CommandParser {
 	
 	private JSONObject createFileJSON(String chat) throws IOException {
 		System.out.println("createFileMessage");
-		String[] message = chat.split(" ");
-		if(message.length == 1){
-			message = new String[3];
-			message[1] = "temp";
-			message[2] = "temp2";
-		}
+		String[] message = getMessageSplit(chat);
 		String fileName = message[1];
 		boolean result = fileMessage(chat);
 
@@ -82,10 +76,7 @@ public class CommandParser {
 	}
 	
 	private JSONObject createDirJSON(String chat) {
-		json.put("type", "dir");
-		json.put("message", chat);
-		json.put("chatRoomName", chatRoomName);
-		json.put("sender", sender.getJSON());
+		json.put("type", "#dir");
 		return json;
 	}
 
