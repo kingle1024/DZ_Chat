@@ -22,7 +22,6 @@ public class ChatService extends Service {
 	public void request() {
 		init();
 		System.out.println("Chat Service");
-		chatRoom.entrance(this);
 		MainServer.threadPool.execute(() -> {
 			try {
 				while (true) {
@@ -43,6 +42,9 @@ public class ChatService extends Service {
 			chatRoomName = initData.getString("chatRoomName");
 			me = Member.parseJSON(initData.getJSONObject("me"));
 			chatRoom = MainServer.chatRoomMap.get(chatRoomName);
+			chatRoom.entrance(this);
+			System.out.println(chatRoom.getChatRoomName());
+			System.out.println(chatRoom.getChatServices());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,10 +64,6 @@ public class ChatService extends Service {
 	
 	public ChatRoom getChatRoom() {
 		return chatRoom;
-	}
-	
-	public List<ChatService> getChatServices() {
-		return chatRoom.getChatServices();
 	}
 	
 	@Override
