@@ -17,7 +17,7 @@ public class LogManagerDB implements LogManagerInterface{
 
 	private void open() {
 		try {
-			// TODO 클래스 계속 로딩(X) 리팩토링 필요
+			// TODO 클래스 계속 로딩(X) 리팩토링 필요 
 			Class.forName(dbProperties.getDriverClass());
 			System.out.println("JDBC 드라이버 로딩");
 			conn = DriverManager.getConnection(dbProperties.getDbServerConn(), dbProperties.getDbUser(),
