@@ -13,13 +13,13 @@ public class ChatMessage implements Message {
 	private final ChatService chatService;
 	private final Member sender;
 	private final String message;
-	
+
 	public ChatMessage(ChatService chatService, Member sender, String message) {
 		this.chatService = chatService;
 		this.sender = sender;
 		this.message = message;
 	}
-	
+
 	@Override
 	public void push() {
 		System.out.println("message push: " + message);
@@ -33,10 +33,10 @@ public class ChatMessage implements Message {
 				e.printStackTrace();
 			}
 		});
-		
+
 		LogQueue.add(toLog());
 	}
-	
+
 	@Override
 	public String toString() {
 		return new StringBuilder()

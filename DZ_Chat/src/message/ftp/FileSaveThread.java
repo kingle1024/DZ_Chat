@@ -1,8 +1,7 @@
 package message.ftp;
 
-import property.ServerProperties;
-
 import java.io.*;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
 
@@ -44,12 +43,13 @@ public class FileSaveThread extends Thread{
 		
 		try {
 			FtpService ftp = new FtpService();
-			String filePath = ServerProperties.getDownloadPath() +chatRoomAndFileName;
+//			String filePath = ServerProperties.getDownloadPath() + chatRoomAndFileName;
 
 			StringBuffer downloadPath =
 					new StringBuffer(ftp.getDownloadPath((String)map.get("fileName")));
 
-			if(ftp.sendTargetFileInputStream(filePath, downloadPath.toString())){
+			if(ftp.sendSocketInputStream((Socket) map.get("socket"), downloadPath.toString())){
+				System.out.println("downloadPath:"+downloadPath);
 				ftp.showPicture(downloadPath);
 				System.out.println("FtpClient > start() > 파일 저장이 완료되었습니다.");
 			}

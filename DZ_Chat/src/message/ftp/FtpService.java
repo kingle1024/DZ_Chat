@@ -105,34 +105,27 @@ public class FtpService {
 	}
 
 	public String getDownloadPath(String fileName) {
-		StringBuffer downloadPath = new StringBuffer();
-		downloadPath.append(getOsDownloadPath()).append(fileName);
 
-		return downloadPath.toString();
+		return getOsDownloadPath() + fileName;
 	}
 
 	public void showPicture(StringBuffer downloadPath) throws IOException, InterruptedException {
-		
 		String osName = System.getProperty("os.name").toLowerCase();
 		String downloadPathStr = downloadPath.toString();
-		Process p = null;
-		
-		if (downloadPathStr.contains("png") ? downloadPathStr.contains("jpg")
-				: downloadPathStr.contains("jpeg")) {
-			if (osName.contains("mac")) {
-				String[] cmd = { "/bin/sh", "-c", "open " + downloadPath };
+		if(downloadPathStr.contains("png") ||
+				downloadPathStr.contains("jpg") ||
+				downloadPathStr.contains("jpeg")) {
+			Process p = null;
+			if(osName.contains("mac")){
+				String[] cmd = {"/bin/sh","-c","open "+downloadPath};
 				p = Runtime.getRuntime().exec(cmd);
-
-			} else if (osName.contains("window")) {
-				String[] cmd = { "cmd /c " + "mspaint " + downloadPath };
-				p = Runtime.getRuntime().exec(cmd);
+			}else if(osName.contains("window")) {
+				p = Runtime.getRuntime().exec("cmd /c " + "mspaint "+downloadPath);
 			}
-	}
-		//if문 밖으로 뺌
-		assert p != null;
-		p.waitFor();
-		p.destroy();
-
+			assert p != null;
+			p.waitFor();
+			p.destroy();
+		}
 	}
 
 	public String clientMessageReceive(Socket socket) throws IOException {
