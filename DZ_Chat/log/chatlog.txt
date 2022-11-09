@@ -49,3 +49,11 @@
 [2022-11-09 11:42:05]Entrance TEST ROOM1 123
 [2022-11-09 11:42:06]ChatMessage 123 : dfdf
 [2022-11-09 11:42:07]ChatMessage 123 : dfdf
+[2022-11-09 12:12:50]Exit TEST ROOM1 123
+[2022-11-09 12:12:50]RemoveChatRoom TEST ROOM1
+[2022-11-09 12:13:18]Register Success
+[2022-11-09 12:14:42]id : q Login Success
+[2022-11-09 12:14:44]MakeChatRoom : q
+[2022-11-09 12:14:45]Entrance q q
+[2022-11-09 12:14:46]Exit q q
+[2022-11-09 12:14:46]RemoveChatRoom q
