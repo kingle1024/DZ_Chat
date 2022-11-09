@@ -26,12 +26,12 @@ public class FtpService {
 		return saveFile(socket.getInputStream(), saveFilePath);
 	}
 
-	public boolean sendTargetFileInputStream(String targetFilePath, String saveFilePath) throws IOException {
-		// 파일 경로로 데이터 위치를 알려주는 경우
-		System.out.println("FtpService > targetFilePath > " + targetFilePath);
-		System.out.println("FtpService > saveFilePath > " + saveFilePath);
-		return saveFile(new FileInputStream(targetFilePath), saveFilePath);
-	}
+//	public boolean sendTargetFileInputStream(String targetFilePath, String saveFilePath) throws IOException {
+//		// 파일 경로로 데이터 위치를 알려주는 경우
+//		System.out.println("FtpService > targetFilePath > " + targetFilePath);
+//		System.out.println("FtpService > saveFilePath > " + saveFilePath);
+//		return saveFile(new FileInputStream(targetFilePath), saveFilePath);
+//	}
 
 	public boolean saveFile(InputStream is, String saveFilePath) {
 		try {
