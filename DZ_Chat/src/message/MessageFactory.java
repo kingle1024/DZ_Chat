@@ -1,8 +1,10 @@
 package message;
 
 import message.chat.*;
+import server.service.serviceimpl.chat.ChatService;
+
 import org.json.JSONObject;
-import core.service.serviceimpl.chat.ChatService;
+
 import member.Member;
 
 public class MessageFactory {

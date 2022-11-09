@@ -1,68 +1,79 @@
 package member;
 
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+import java.util.Map.Entry;
+
+import property.ServerProperties;
+
 public class MemberManager {
-	private static MemberManager memberManager;
-
-	private MemberManager() {
-
+	private static List<MemberManagerInterface> impls = new ArrayList<>();
+	
+	static {
+		try {
+			Properties clsNames = new Properties();
+			clsNames.load(new FileInputStream(ServerProperties.getConnectProperties()));
+			for (Entry<Object, Object> entry : clsNames.entrySet()) {
+				String key = (String) entry.getKey();
+				String value = (String) entry.getValue();
+				if (!key.startsWith("member")) continue;
+				String[] cls = value.split(",");
+				System.out.println(Arrays.toString(cls));
+				if (cls.length > 1) {
+					impls.add((MemberManagerInterface) Class.forName(cls[0])
+							.getConstructor(String.class)
+							.newInstance(cls[1]));
+				} else {
+					impls.add((MemberManagerInterface) Class.forName(cls[0])
+							.getConstructor()
+							.newInstance());
+				}
+			}	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static MemberManager getInstance() {
-		if (memberManager == null)
-			return memberManager = new MemberManager();
-		return memberManager;
+	
+	private MemberManager() { }
+	
+	public static boolean register(Member tmpMember, String pwChk) {
+		return impls.stream()
+				.map(x -> x.register(tmpMember, pwChk))
+				.reduce((acc, x) -> acc && x)
+				.orElse(false);
 	}
 
-	// 회원 가입
-	public boolean register(Member tmpMember, String pwChk) {
-		if (!tmpMember.validatePw(pwChk)) {
-			System.out.println("회원가입실패:비밀번호불일치");
-			return false;
-		}
-		if (MemberMap.containsKey(tmpMember.getUserId())) {
-			System.out.println("회원가입실패:이미존재하는회원");
-			return false;
-		}
-		MemberMap.put(tmpMember.getUserId(), tmpMember);
-		System.out.println("회원가입성공:" + tmpMember);
-		return true;
+	public static Member login(String id, String pw) {
+		return impls.stream()
+				.map(x -> x.login(id, pw))
+				.filter(x -> x != null)
+				.findAny()
+				.orElse(null);
 	}
 
-	// 로그인
-	public Member login(String id, String pw) {
-		if (!MemberMap.containsKey(id)) {
-			return null;
-		}
-		Member member = MemberMap.get(id);
-		if (!member.validatePw(pw))
-			return null;
-		return member;
+	public static boolean deleteMember(Member member, String pw) {
+		return impls.stream()
+				.map(x -> x.deleteMember(member, pw))
+				.reduce((acc, x) -> acc && x)
+				.orElse(false);
 	}
 
-	// 탈퇴
-	public boolean delete(Member member, String pw) {
-		if (!member.getPassword().equals(pw)) {
-			return false;
-		}
-		MemberMap.deleteMember(member.getUserId());
-		return true;
+	public static String findPw(String id) {
+		return impls.stream()
+				.map(x -> x.findPw(id))
+				.filter(x -> x != null)
+				.findAny()
+				.orElse(null);
 	}
 
-	// 비밀번호 찾기
-	public String findPw(String id) {
-		if (MemberMap.containsKey(id)) {
-			return MemberMap.getpw(id);
-		}
-		return null;
-	}
-
-	// 정보수정 - 비밀번호 변경
-	public boolean updatePw(Member me, String validatePw, String newPw) {
-		if (!me.validatePw(validatePw)) {
-			return false;
-		}
-		me.setPassword(newPw);
-		MemberMap.put(me.getUserId(), me);
-		return true;
+	public static boolean updatePw(Member me, String validatePw, String newPw) {
+		return impls.stream()
+				.map(x -> x.updatePw(me, validatePw, newPw))
+				.reduce((acc, x) -> acc && x)
+				.orElse(false);
 	}
 }

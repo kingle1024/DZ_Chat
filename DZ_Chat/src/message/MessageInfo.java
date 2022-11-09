@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 import org.json.JSONObject;
 
-import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import property.ServerProperties;
+import server.service.serviceimpl.chat.ChatService;
 
 public class MessageInfo {
 	private ChatService chatService;
