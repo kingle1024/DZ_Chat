@@ -24,8 +24,7 @@ public class ChatMessage implements Message {
 	public void push() {
 		System.out.println("message push: " + message);
 		JSONObject json = new JSONObject().put("message", this.toString());
-		System.out.println(json);
-		chatService.getChatRoom().getChatServices().stream().forEach(s -> {
+		chatService.getChatRoom().getChatServices().forEach(s -> {
 			System.out.println(s.getChatRoom() + ": " + s.getMe());
 			try {
 				s.send(json);
@@ -39,11 +38,9 @@ public class ChatMessage implements Message {
 
 	@Override
 	public String toString() {
-		return new StringBuilder()
-				.append(sender.nickname())
-				.append("> ")
-				.append(message)
-				.toString();
+		return sender.nickname() +
+				"> " +
+				message;
 	}
 
 	public Log toLog() {
