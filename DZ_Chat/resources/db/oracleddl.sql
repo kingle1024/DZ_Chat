@@ -6,6 +6,9 @@ grant connect, resource, dba to masamo;
 -- create log sequence
 create sequence seq_logid increment by 1;
 
+-- create deleteMember sequence
+create sequence seq_deleteno increment by 1;
+
 -- create table
 create table tb_member (
 	userid varchar2(50) primary key
@@ -17,6 +20,13 @@ create table tb_log (
 	logid number primary key
 	, createdate date
 	, msg varchar2(4000)
+);
+create table tb_delete_member (
+	deleteno number primary key
+	, userid varchar2(50)
+	, password varchar2(50)
+	, name varchar2(50)
+	, birth varchar2(50)
 );
 
 -- find member by userid
@@ -70,3 +80,17 @@ begin
 	select seq_logid.nextval into p_logid from dual;
 	insert into tb_log (logid, createdate, msg) values (p_logid, p_createdate, p_msg);
 end sp_insert_log;
+
+-- delete member procedure(insert deleteTable)
+CREATE OR REPLACE PROCEDURE SP_INSERT_DELETEMEMBER
+(
+  p_userid IN VARCHAR2 
+, p_password IN VARCHAR2 
+, p_name IN VARCHAR2 
+, p_birth IN VARCHAR2 
+, p_deleteno out number
+) AS 
+BEGIN
+    select seq_deleteno.nextval into p_deleteno from dual;
+    insert into tb_delete_member(deleteno, userid, password, name, birth) values (p_deleteno, p_userid, p_password, p_name, p_birth);
+END SP_INSERT_DELETEMEMBER;
