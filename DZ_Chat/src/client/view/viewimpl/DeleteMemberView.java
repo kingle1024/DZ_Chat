@@ -2,26 +2,24 @@ package client.view.viewimpl;
 
 import static client.Main.*;
 
-import java.util.Iterator;
-
 import org.json.JSONObject;
 
 import client.ClientMap;
-import client.view.TextInputView;
+import client.view.TextInput;
 import client.view.View;
 import client.view.ViewMap;
 
-public class DeleteMemberView extends TextInputView {
+public class DeleteMemberView implements View {
 	private String pw;
-
+	private TextInput textInput;
 	public DeleteMemberView() {
-		super("pw");
+		textInput = new TextInput("pw");
 	}
 
 	@Override
 	public View nextView() {
-		Iterator<String> answerIterator = answerIterator();
-		pw = answerIterator.next();
+		textInput.init();
+		pw = textInput.next();
 		JSONObject response = ClientMap.runClient("member.DeleteMemberClient", pw);
 		if (response.getBoolean("result")) {
 			setMe(null);

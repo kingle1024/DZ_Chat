@@ -1,9 +1,27 @@
 package client.view.viewimpl;
 
-import client.view.MenuChooseView;
+import client.view.MenuChoose;
+import client.view.View;
 
-public class SuccessLoginView extends MenuChooseView {
+public class SuccessLoginView implements View {
+	private MenuChoose menuChoose;
+	
 	public SuccessLoginView() {
-		super("SuccessLogin", "UserInfo", "GetChatRoomList", "EntranceChatRoom", "MakeChatRoom");
+		menuChoose = new MenuChoose(
+				"UserInfo",
+				"GetChatRoomList",
+				"EntranceChatRoom",
+				"MakeChatRoom");
+	}
+
+	@Override
+	public View nextView() {
+		return menuChoose.choose();
+		
+	}
+
+	@Override
+	public String getViewName() {
+		return "로그인 성공";
 	}
 }

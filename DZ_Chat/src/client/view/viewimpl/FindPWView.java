@@ -1,25 +1,23 @@
 package client.view.viewimpl;
 
-import java.util.Iterator;
-
 import org.json.JSONObject;
 
 import client.ClientMap;
-import client.view.TextInputView;
+import client.view.TextInput;
 import client.view.View;
 import client.view.ViewMap;
 
-public class FindPWView extends TextInputView {
+public class FindPWView implements View {
 	private String id;
-	
+	private TextInput textInput;
 	public FindPWView() {
-		super("id");
+		textInput = new TextInput("id");
 	}
 
 	@Override
 	public View nextView() {
-		Iterator<String> answerIterator = answerIterator();
-		id = answerIterator.next();
+		textInput.init();
+		id = textInput.next();
 		JSONObject response = ClientMap.runClient("member.FindPWClient", id);
 
 		if (response.getBoolean("success")) {

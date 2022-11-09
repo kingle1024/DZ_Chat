@@ -2,28 +2,26 @@ package client.view.viewimpl;
 
 import static client.Main.*;
 
-import java.util.Iterator;
-
 import org.json.JSONObject;
 
 import client.ClientMap;
-import client.view.TextInputView;
+import client.view.TextInput;
 import client.view.View;
 import client.view.ViewMap;
 import member.Member;
 
-public class LoginView extends TextInputView {
+public class LoginView implements View {
 	private String id;
 	private String pw;
-	
+	private TextInput textInput;
 	public LoginView() {
-		super("id", "pw");
+		textInput = new TextInput("id", "pw");
 	}
 
 	public View nextView() {
-		Iterator<String> answerIterator = answerIterator();
-		id = answerIterator.next();
-		pw = answerIterator.next();
+		textInput.init();
+		id = textInput.next();
+		pw = textInput.next();
 		JSONObject response = ClientMap.runClient("member.LoginClient", id, pw);
 		boolean hasMember = response.getBoolean("hasMember");
 		Member me = hasMember

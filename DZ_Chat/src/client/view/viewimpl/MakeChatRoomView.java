@@ -1,25 +1,24 @@
 package client.view.viewimpl;
 
-import java.util.Iterator;
-
 import org.json.JSONObject;
 
 import client.ClientMap;
-import client.view.TextInputView;
+import client.view.TextInput;
 import client.view.View;
 import client.view.ViewMap;
 
-public class MakeChatRoomView extends TextInputView {
+public class MakeChatRoomView implements View {
 	private String chatRoomName;
+	private TextInput textInput;
 	
 	public MakeChatRoomView() {
-		super("만들 채팅방 이름을 입력하세요.");
+		textInput = new TextInput("만들 채팅방 이름");
 	}
 
 	@Override
 	public View nextView() {
-		Iterator<String> answerIterator = answerIterator();
-		chatRoomName = answerIterator.next();
+		textInput.init();
+		chatRoomName = textInput.next();
 		JSONObject hasChatRoom = ClientMap.runClient("chat.HasChatRoomClient", chatRoomName);
 		if (!hasChatRoom.getBoolean("result")) {
 			ClientMap.runClient("chat.MakeChatRoomClient", chatRoomName);	
