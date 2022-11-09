@@ -3,6 +3,8 @@ package property;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class ServerProperties {
@@ -47,26 +49,11 @@ public class ServerProperties {
 	public static String getMemberFile() {
 		return serverProperties.getProperty("MEMBER_FILE");
 	}
-	
-	public static String getInsertLog() {
-		return serverProperties.getProperty("INSERT_LOG");
+
+	public static String getConnectProperties() {
+		return serverProperties.getProperty("connect.properties");
 	}
 	
-	public static String getDriverClass() {
-		return serverProperties.getProperty("driverClass");
-	}
-	
-	public static String getDbServerConn() {
-		return serverProperties.getProperty("dbServerConn");
-	}
-	
-	public static String getDbPasswd() {
-		return serverProperties.getProperty("dbPasswd");
-	}
-	
-	public static String getDbUser() {
-		return serverProperties.getProperty("dbUser");
-	}
     public static void main(String[] args) {
         File file = new File("resource");
         System.out.println(file.getAbsolutePath());
