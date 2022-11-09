@@ -3,7 +3,6 @@ package message.chat;
 import java.io.*;
 
 import org.json.JSONObject;
-
 import log.Log;
 import log.LogQueue;
 import member.Member;
