@@ -24,13 +24,12 @@ public class FileSendThread extends Thread {
 			return;
 		}
 		String fileAndPath = (String) map.get("fileAndPath");
-		File originFile = new File(fileAndPath);
+//		File originFile = new File(fileAndPath);
 
 		System.out.println("ClientToServer > run() > fileName:" + fileAndPath);
 		Socket socket = (Socket) map.get("socket");
 		try {
-			if (!fileValid(fileAndPath))
-				return;
+			if (!fileValid(fileAndPath)) return;
 
 			byte[] buffer = new byte[Integer.parseInt(ClientProperties.getDefaultBufferSize())];
 			File originFileTarget = new File(fileAndPath);
