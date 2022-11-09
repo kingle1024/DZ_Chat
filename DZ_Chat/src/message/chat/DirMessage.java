@@ -5,40 +5,34 @@ import java.io.IOException;
 import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import member.Member;
+import message.ftp.FtpService;
+import org.json.JSONObject;
 import property.ServerProperties;
 
 public class DirMessage implements Message {
 	private final ChatService chatService;
-	private final Member sender;
-	private final String message;
-	
-	public DirMessage(ChatService chatService, Member sender, String message) {
-		this.chatService = chatService;
-		this.sender = sender;
-		this.message = message;
-	}
 
-	public void send() throws IOException {
-		// TODO JSON
-//		FtpService ftp = new FtpService();
-//		chatService.send(ftp.dir(chatRoomName));
-//		System.out.println("[System] "+ftp.dir(chatRoomName));
+	public DirMessage(ChatService chatService) {
+		this.chatService = chatService;
 	}
 
 	@Override
 	public void push() {
-		chatService.getChatServices().forEach(s -> {
-			try {
-				System.out.println(s.getMe());
-				send();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
+		FtpService ftp = new FtpService();
+		String chatRoomName = chatService.getChatRoom().getChatRoomName();
+		JSONObject json = new JSONObject();
+		json.put("message", ftp.dir(chatRoomName));
+		try {
+			chatService.send(json);
+		}catch (IOException exception){
+			exception.printStackTrace();
+		}
 	}
 	
 	public Log toLog() {
-		String DirMessage = "Dir:" + sender.getUserId() + ":" + message;
+		String sender = chatService.getMe().getUserId();
+		String message = "dir 명령어 호출함";
+		String DirMessage = "Dir:" + sender + ":" + message;
 		return new Log(ServerProperties.getDirLogFile(), DirMessage);
 	}
 
