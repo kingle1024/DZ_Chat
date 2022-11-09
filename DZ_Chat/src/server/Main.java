@@ -21,14 +21,10 @@ public class Main {
 		
 		try {
 			memberDao.readContent();
-			System.out.println("memberMap size: " + MemberMap.size());
-			for (Member m : MemberMap.values()) {
-				System.out.println(m);
-			}
-			Server server = new MainServer(Integer.parseInt(ServerProperties.getServerPort()));
+			Server server = new MainServer(ServerProperties.getServerPort());
 			server.start();
 
-			FtpServer ftpServer = new FtpServer(Integer.parseInt(ServerProperties.getFTPPort()));
+			Server ftpServer = new FtpServer(ServerProperties.getFTPPort());
 			ftpServer.start();
 			
 			Thread logConsumer = new Thread(new LogConsumer());
@@ -59,7 +55,7 @@ public class Main {
 
 	public static void exit() {
 		System.out.println("exit call");
-		// log
+		// TODO: LogQueue 남아 있는 것 모두 해소
 		memberDao.writeContent();
 		System.out.println("SAVE COMMAND");
 	}

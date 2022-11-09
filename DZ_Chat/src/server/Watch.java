@@ -33,43 +33,25 @@ public class Watch {
 	private static final int PORT_NUMBER = Integer.parseInt(ServerProperties.getServerPort());
 	public static void main(String[] args) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("java", "-cp", "./bin", "core.server.Main");
+			ProcessBuilder pb = new ProcessBuilder("java", "-cp", "./bin;./lib/*", "server.Main");
 			WatchService watcher = FileSystems.getDefault().newWatchService();
 			Path dir = FileSystems.getDefault().getPath("./bin");
 			registerRecursive(dir, watcher);
 			WatchKey key = dir.register(watcher, ENTRY_MODIFY);
 
 			while (true) {
+				pb.inheritIO();
 				Process process = pb.start();
-				InputStreamReader is = new InputStreamReader(process.getInputStream(), "EUC-KR");
-				OutputStreamWriter os = new OutputStreamWriter(process.getOutputStream(), "EUC-KR");
-				Thread thread = new Thread(() ->{
-					while (true) {
-						if (Thread.currentThread().isInterrupted()) return;
-						try {
-							char input = (char) is.read();
-							if (input != -1) System.out.print(input);
-						} catch (IOException e) {
-						}
-					}
-				});
-				thread.start();					
 				try {
 					key = watcher.take();
-					System.out.println("Process RUN");
 					for (WatchEvent<?> event : key.pollEvents()) {
 						if (event.kind() == ENTRY_MODIFY) {
-							System.out.println("변경 감지");
-							os.write("q\n");
-							os.flush();
-							os.close();
-							thread.interrupt();
+							System.out.println("q");
 							process.waitFor(3000, TimeUnit.MILLISECONDS);
 							process.destroy();
 						}
 					}
 					key.reset();
-					System.out.println("key.reset()");
 				} catch (InterruptedException e) {
 				}
 			}

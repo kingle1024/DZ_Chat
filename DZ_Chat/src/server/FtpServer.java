@@ -11,21 +11,22 @@ import java.util.concurrent.Executors;
 import message.ftp.FtpService;
 
 // 받는곳(Server)
-public class FtpServer extends Server {
+public class FtpServer implements Server {
+	private ServerInfo serverInfo;
 	private static ServerSocket serverSocket;
 	public static final ExecutorService threadPool =
 			Executors.newFixedThreadPool(
 					Integer.parseInt(ServerProperties.getThreadPool()));
 
-	public FtpServer(int port) throws UnknownHostException {
-		super(port);
+	public FtpServer(String port) {
+		serverInfo = new ServerInfo("FTP 서버", port);
 	}
 
 	@Override
 	public void start() {
 		try {
-			serverSocket = new ServerSocket(PORT_NUMBER);
-			System.out.println("[FTP 서버] 시작 " + HOST + ":" + PORT_NUMBER);
+			serverSocket = new ServerSocket(serverInfo.getPort());
+			serverInfo.printStartMessage();
 		} catch (IOException e) {
 			System.out.println("FtpServer > start() > Exception");
 			throw new RuntimeException(e);
@@ -33,7 +34,7 @@ public class FtpServer extends Server {
 
 		threadPool.execute(() -> {
 			while (true) {
-				System.out.println("FTP server is listening... (Port: " + PORT_NUMBER + ")");
+				System.out.println("FTP server is listening... (Port: " + serverInfo.getPort() + ")");
 				command();
 			}
 		});
