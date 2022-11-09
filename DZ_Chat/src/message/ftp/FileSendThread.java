@@ -29,12 +29,6 @@ public class FileSendThread extends Thread {
 		System.out.println("ClientToServer > run() > fileName:" + fileAndPath);
 		Socket socket = (Socket) map.get("socket");
 		try {
-			if (fileAndPath.startsWith("/") || fileAndPath.startsWith("C:\\") || fileAndPath.startsWith("D:\\")) {
-
-			} else {
-//				fileAndPath = "DZ_Chat/" + fileAndPath;
-			}
-
 			if (!fileValid(fileAndPath))
 				return;
 
