@@ -33,6 +33,12 @@
 [2022-11-09 09:10:36]Exit APPLE 123
 [2022-11-09 09:10:53]Exit APPLE apple
 [2022-11-09 09:10:53]RemoveChatRoom APPLE
+[2022-11-09 10:42:37]Login 123
+[2022-11-09 10:42:43]Entrance TEST ROOM1 123
+[2022-11-09 10:42:44]ChatMessage 123 : dfdf
+[2022-11-09 10:42:45]ChatMessage 123 : dfdf
+[2022-11-09 11:48:50]Exit TEST ROOM1 123
+[2022-11-09 11:48:50]RemoveChatRoom TEST ROOM1
 [2022-11-09 11:29:24]id : 123 Login Success
 [2022-11-09 11:29:29]Register Success
 [2022-11-09 11:33:26]id : 123 Login Success
