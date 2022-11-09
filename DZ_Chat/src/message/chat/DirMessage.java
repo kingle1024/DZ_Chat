@@ -27,7 +27,7 @@ public class DirMessage implements Message {
 
 	@Override
 	public void push() {
-		chatService.getChatServices().forEach(s -> {
+		chatService.getChatRoom().getChatServices().forEach(s -> {
 			try {
 				System.out.println(s.getMe());
 				send();

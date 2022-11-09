@@ -25,11 +25,11 @@ public class PrivateChatMessage implements Message {
 	@Override
 	public void push() {
 		JSONObject json = new JSONObject("message", toString());
-		chatService.getChatServices().stream()
+		chatService.getChatRoom().getChatServices().stream()
 			.filter(s -> s.equalsUser(to))
 			.forEach(s -> {
 			try {
-				chatService.send(json);
+				s.send(json);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
