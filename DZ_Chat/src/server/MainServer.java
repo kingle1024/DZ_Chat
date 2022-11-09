@@ -8,6 +8,7 @@ import java.util.concurrent.*;
 import member.Member;
 import message.chat.ChatRoom;
 import server.service.ServiceMap;
+import server.service.serviceimpl.chat.FileSendService;
 
 public class MainServer implements Server {
 	public static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>());
@@ -30,7 +31,11 @@ public class MainServer implements Server {
 				while (true) {
 					Socket socket = serverSocket.accept();
 					System.out.println("New Socket Accept");
-					ServiceMap.getService("MapperService", socket).request();
+//					ServiceMap.getService("MapperService", socket).request();
+					InputStream is = socket.getInputStream();
+					OutputStream os = socket.getOutputStream();
+					FileSendService fileSendService = new FileSendService(is, os);
+					fileSendService.run();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

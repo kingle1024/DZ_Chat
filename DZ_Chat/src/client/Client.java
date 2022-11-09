@@ -17,7 +17,6 @@ public abstract class Client {
 	private BufferedWriter bw;
 	private BufferedReader br;
 
-	
 	public void connect(RequestType command) throws IOException {
 		System.out.println("[클라이언트] 서버 연결 시도");
 		socket = new Socket(SERVER_HOST, PORT_NUMBER);
