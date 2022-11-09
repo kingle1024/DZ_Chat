@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
-import client.mapper.RequestType;
 import member.Member;
 
 public class RegisterClient extends Client {
@@ -23,7 +22,7 @@ public class RegisterClient extends Client {
 		try {
 			json.put("member", tmpMember.getJSON());
 			json.put("pwChk", pwChk);
-			connect(new RequestType("member.RegisterService"));
+			connect("member.RegisterService");
 			send(json);
 			JSONObject response = receive();
 			return response;			

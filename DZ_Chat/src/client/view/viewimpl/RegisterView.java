@@ -10,6 +10,11 @@ import member.Member;
 
 public class RegisterView implements View {
 	private TextInput textInput;
+	private String id;
+	private String pw;
+	private String pwChk;
+	private String name;
+	private String birth;
 	
 	public RegisterView() {
 		textInput = new TextInput("id", "pw", "pwChk", "name", "birth");
@@ -18,11 +23,11 @@ public class RegisterView implements View {
 	@Override
 	public View nextView() {
 		textInput.init();
-		String id = textInput.next();
-		String pw = textInput.next();
-		String pwChk = textInput.next();
-		String name = textInput.next();
-		String birth = textInput.next();
+		id = textInput.next();
+		pw = textInput.next();
+		pwChk = textInput.next();
+		name = textInput.next();
+		birth = textInput.next();
 		Member tmp = new Member(id, pw, name, birth);
 		JSONObject response = ClientMap.runClient("member.RegisterClient", tmp, pwChk);
 		System.out.println(response.getBoolean("success") ? "회원가입 성공" : "회원가입 실패");

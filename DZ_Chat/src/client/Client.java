@@ -3,11 +3,9 @@ package client;
 import java.io.*;
 
 import java.net.Socket;
-import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 
-import client.mapper.RequestType;
 import property.ServerProperties;
 
 public abstract class Client {
@@ -17,15 +15,14 @@ public abstract class Client {
 	private BufferedWriter bw;
 	private BufferedReader br;
 
-	
-	public void connect(RequestType command) throws IOException {
+	public void connect(String commandType) throws IOException {
 		System.out.println("[클라이언트] 서버 연결 시도");
 		socket = new Socket(SERVER_HOST, PORT_NUMBER);
 		System.out.println("Socket 생성");
 		this.bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		System.out.println("[클라이언트] 서버에 연결 성공");
-		send(command.toJson());
+		send(new JSONObject().put("commandType", commandType));
 		System.out.println("send command");
 	}
 

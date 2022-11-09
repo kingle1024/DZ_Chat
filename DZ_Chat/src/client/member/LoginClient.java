@@ -7,7 +7,6 @@ import java.io.*;
 import org.json.JSONObject;
 
 import client.Client;
-import client.mapper.RequestType;
 import member.Member;
 
 public class LoginClient extends Client {
@@ -27,7 +26,7 @@ public class LoginClient extends Client {
 			loginJSON.put("id", id);
 			loginJSON.put("pw", pw);
 			
-			connect(new RequestType("member.LoginService"));
+			connect("member.LoginService");
 			send(loginJSON);
 			JSONObject response = receive();
 			unconnect();

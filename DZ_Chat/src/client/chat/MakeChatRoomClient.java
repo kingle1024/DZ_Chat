@@ -5,7 +5,6 @@ import java.io.*;
 import org.json.JSONObject;
 
 import client.Client;
-import client.mapper.RequestType;
 
 public class MakeChatRoomClient extends Client {
 	private String chatRoomName;
@@ -16,7 +15,7 @@ public class MakeChatRoomClient extends Client {
 	@Override
 	public JSONObject run() {
 		try {
-			connect(new RequestType("chat.MakeChatRoomService"));
+			connect("chat.MakeChatRoomService");
 			send(new JSONObject().put("chatRoomName", chatRoomName));
 			unconnect();
 		} catch (IOException e) {

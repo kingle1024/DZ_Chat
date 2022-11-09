@@ -1,6 +1,7 @@
 /.metadata/
 /DZ_Chat/bin/
 /DZ_Chat/chatlog.txt
-/DZ_Chat/fileName.txt
-/DZ_Chat/MemberFile.txt
-/DZ_Chat/*.jpg
+/DZ_Chat/log/fileName.txt
+/DZ_Chat/log/MemberFile.txt
+/DZ_Chat/resources/room/*
+/DZ_Chat/resources/*.jpg
