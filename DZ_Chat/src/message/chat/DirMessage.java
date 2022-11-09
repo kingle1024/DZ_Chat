@@ -2,10 +2,10 @@ package message.chat;
 
 import java.io.IOException;
 
-import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import member.Member;
 import property.ServerProperties;
+import server.service.serviceimpl.chat.ChatService;
 
 public class DirMessage implements Message {
 	private final ChatService chatService;

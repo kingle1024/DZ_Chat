@@ -4,10 +4,10 @@ import java.io.*;
 
 import org.json.JSONObject;
 
-import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import member.Member;
 import property.ServerProperties;
+import server.service.serviceimpl.chat.ChatService;
 
 public class PrivateChatMessage implements Message {
 	private final ChatService chatService;

@@ -3,12 +3,13 @@ package message.chat;
 import java.io.*;
 
 import org.json.JSONObject;
-import core.service.serviceimpl.chat.ChatService;
+
 import log.Log;
 import log.LogQueue;
 import member.Member;
 import property.ClientProperties;
 import property.ServerProperties;
+import server.service.serviceimpl.chat.ChatService;
 
 public class ChatMessage implements Message {
 	private final ChatService chatService;
