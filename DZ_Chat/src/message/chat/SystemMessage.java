@@ -4,8 +4,8 @@ import java.io.*;
 
 import org.json.JSONObject;
 
-import core.service.serviceimpl.chat.ChatService;
 import log.Log;
+import server.service.serviceimpl.chat.ChatService;
 
 public class SystemMessage implements Message {
 	private final ChatService chatService;
@@ -18,9 +18,9 @@ public class SystemMessage implements Message {
 
 	@Override
 	public void push() {
-		chatService.getChatServices().stream().forEach(s -> {
+		chatService.getChatRoom().getChatServices().stream().forEach(s -> {
 			try {
-				chatService.send(new JSONObject().put("message", toString()));
+				s.send(new JSONObject().put("message", toString()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

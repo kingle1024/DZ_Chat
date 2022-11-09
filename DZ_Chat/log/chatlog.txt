@@ -33,6 +33,7 @@
 [2022-11-09 09:10:36]Exit APPLE 123
 [2022-11-09 09:10:53]Exit APPLE apple
 [2022-11-09 09:10:53]RemoveChatRoom APPLE
+<<<<<<< HEAD
 [2022-11-09 10:42:37]Login 123
 [2022-11-09 10:42:43]Entrance TEST ROOM1 123
 [2022-11-09 10:42:44]ChatMessage 123 : dfdf
@@ -40,3 +41,21 @@
 [2022-11-09 11:48:50]Exit TEST ROOM1 123
 [2022-11-09 11:48:50]RemoveChatRoom TEST ROOM1
 
+=======
+[2022-11-09 11:29:24]id : 123 Login Success
+[2022-11-09 11:29:29]Register Success
+[2022-11-09 11:33:26]id : 123 Login Success
+[2022-11-09 11:33:29]Register Success
+[2022-11-09 11:33:41]Register Success
+[2022-11-09 11:33:42]Register Success
+[2022-11-09 11:33:43]Register Success
+[2022-11-09 11:41:40]id : 123 Login Success
+[2022-11-09 11:41:43]Register Success
+[2022-11-09 11:41:47]Delete MemberData
+[2022-11-09 11:41:48]Register Success
+[2022-11-09 11:41:57]Find Pw
+[2022-11-09 11:42:00]id : 123 Login Success
+[2022-11-09 11:42:05]Entrance TEST ROOM1 123
+[2022-11-09 11:42:06]ChatMessage 123 : dfdf
+[2022-11-09 11:42:07]ChatMessage 123 : dfdf
+>>>>>>> branch 'memberdb' of https://github.com/kingle1024/DZ_Chat.git

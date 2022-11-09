@@ -4,10 +4,10 @@ import java.io.*;
 
 import org.json.JSONObject;
 
-import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import member.Member;
 import property.ServerProperties;
+import server.service.serviceimpl.chat.ChatService;
 
 public class PrivateChatMessage implements Message {
 	private final ChatService chatService;
@@ -25,11 +25,11 @@ public class PrivateChatMessage implements Message {
 	@Override
 	public void push() {
 		JSONObject json = new JSONObject("message", toString());
-		chatService.getChatServices().stream()
+		chatService.getChatRoom().getChatServices().stream()
 			.filter(s -> s.equalsUser(to))
 			.forEach(s -> {
 			try {
-				chatService.send(json);
+				s.send(json);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -3,12 +3,11 @@ package message.chat;
 import java.io.*;
 
 import org.json.JSONObject;
-import core.service.serviceimpl.chat.ChatService;
 import log.Log;
 import log.LogQueue;
 import member.Member;
 import property.ClientProperties;
-import property.ServerProperties;
+import server.service.serviceimpl.chat.ChatService;
 
 public class ChatMessage implements Message {
 	private final ChatService chatService;
@@ -26,9 +25,10 @@ public class ChatMessage implements Message {
 		System.out.println("message push: " + message);
 		JSONObject json = new JSONObject().put("message", this.toString());
 		System.out.println(json);
-		chatService.getChatServices().stream().forEach(s -> {
+		chatService.getChatRoom().getChatServices().stream().forEach(s -> {
+			System.out.println(s.getChatRoom() + ": " + s.getMe());
 			try {
-				chatService.send(json);
+				s.send(json);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
