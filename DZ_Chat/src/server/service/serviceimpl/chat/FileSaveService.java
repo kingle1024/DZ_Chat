@@ -2,11 +2,11 @@ package server.service.serviceimpl.chat;
 
 import java.io.*;
 
-public class FileSendService {
+public class FileSaveService {
 	private InputStream is;
 	private OutputStream os;
 	
-	public FileSendService(InputStream is, OutputStream os) {
+	public FileSaveService(InputStream is, OutputStream os) {
 		this.is = is;
 		this.os = os;
 	}

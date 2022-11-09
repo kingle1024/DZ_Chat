@@ -5,7 +5,7 @@ import java.net.Socket;
 
 import org.json.JSONObject;
 
-public class FileSendClient {
+public class FileSaveClient {
 	Socket socket;
 	private InputStream is;
 	private OutputStream os;

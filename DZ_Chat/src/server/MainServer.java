@@ -8,7 +8,7 @@ import java.util.concurrent.*;
 import member.Member;
 import message.chat.ChatRoom;
 import server.service.ServiceMap;
-import server.service.serviceimpl.chat.FileSendService;
+import server.service.serviceimpl.chat.FileSaveService;
 
 public class MainServer implements Server {
 	public static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>());
@@ -34,7 +34,7 @@ public class MainServer implements Server {
 //					ServiceMap.getService("MapperService", socket).request();
 					InputStream is = socket.getInputStream();
 					OutputStream os = socket.getOutputStream();
-					FileSendService fileSendService = new FileSendService(is, os);
+					FileSaveService fileSendService = new FileSaveService(is, os);
 					fileSendService.run();
 				}
 			} catch (IOException e) {

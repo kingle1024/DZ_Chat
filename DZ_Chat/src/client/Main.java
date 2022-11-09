@@ -4,7 +4,7 @@ import member.Member;
 
 import java.util.*;
 
-import client.chat.FileSendClient;
+import client.chat.FileSaveClient;
 import client.view.View;
 import client.view.ViewMap;
 
@@ -26,7 +26,7 @@ public class Main {
 //		} finally {
 //			scanner.close();
 //		}
-		FileSendClient fileSendClient = new FileSendClient();
+		FileSaveClient fileSendClient = new FileSaveClient();
 		fileSendClient.run();
 	}
 
