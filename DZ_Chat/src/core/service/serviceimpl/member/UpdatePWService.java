@@ -39,6 +39,6 @@ public class UpdatePWService extends Service {
 	}
 
 	public Log toLog() {
-		return new Log(ServerProperties.getChatLogFile(), "Register Success");
+		return new Log(ServerProperties.getChatLogFile(), "UpdatePw " + member.getUserId());
 	}
 }

@@ -37,7 +37,7 @@ public class LoginService extends Service {
 
 
 	public Log toLog() {
-		return new Log(ServerProperties.getChatLogFile(), "id : " + this.id + " Login Success");
+		return new Log(ServerProperties.getChatLogFile(), "Login " + this.id);
 	}
 
 }

@@ -38,7 +38,7 @@ public class DirMessage implements Message {
 	}
 	
 	public Log toLog() {
-		String DirMessage = "Dir:" + sender.getUserId() + ":" + message;
+		String DirMessage = "DirMessage " + sender.getUserId();
 		return new Log(ServerProperties.getDirLogFile(), DirMessage);
 	}
 

@@ -19,7 +19,7 @@ public class MakeChatRoomService extends Service {
 	}
 
 	public Log toLog() {
-		String logMessage = "MakeChatRoom : " + this.chatRoomName;
+		String logMessage = "MakeChatRoom " + this.chatRoomName;
 		return new Log(ServerProperties.getChatLogFile(), logMessage);
 	}
 }

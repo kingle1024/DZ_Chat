@@ -48,7 +48,6 @@ public class LogManagerDB implements LogManagerInterface{
 			pstmt.setString(1, log.getCreateDateStr());
 			pstmt.setString(2, log.getLog());
 			pstmt.executeUpdate();
-			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

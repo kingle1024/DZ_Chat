@@ -12,11 +12,12 @@ import member.MemberManager;
 import property.ServerProperties;
 
 public class DeleteMemberService extends Service {
-
+	private Member me = null;
+	
 	@Override
 	public void request() throws IOException {
 		JSONObject receiveJSON = receive();
-		Member me = Member.parseJSON(receiveJSON.getJSONObject("member"));
+		me = Member.parseJSON(receiveJSON.getJSONObject("member"));
 		String pw = receiveJSON.getString("pw");
 		
 		JSONObject sendJSON = new JSONObject();
@@ -26,6 +27,6 @@ public class DeleteMemberService extends Service {
 	}
 
 	public Log toLog() {
-		return new Log(ServerProperties.getChatLogFile(), "Delete MemberData");
+		return new Log(ServerProperties.getChatLogFile(), "Delete " + me.getUserId());
 	}
 }

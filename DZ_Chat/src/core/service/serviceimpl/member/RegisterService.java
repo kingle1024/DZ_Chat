@@ -9,13 +9,14 @@ import member.*;
 import property.ServerProperties;
 
 public class RegisterService extends Service {
+	private Member tmpMember = null;
 
 	@Override
 	public void request() throws IOException {
 		try {
 			System.out.println("member.RegisterService");
 			JSONObject receive = receive();
-			Member tmpMember = Member.parseJSON(receive.getJSONObject("member"));
+			tmpMember = Member.parseJSON(receive.getJSONObject("member"));
 			String pwChk = receive.getString("pwChk");
 			boolean successRegister = MemberManager.register(tmpMember, pwChk);
 			if (successRegister) LogQueue.add(toLog());
@@ -29,6 +30,6 @@ public class RegisterService extends Service {
 	}
 
 	public Log toLog() {
-		return new Log(ServerProperties.getChatLogFile(), "Register Success");
+		return new Log(ServerProperties.getChatLogFile(), "Register " + tmpMember.getUserId());
 	}
 }

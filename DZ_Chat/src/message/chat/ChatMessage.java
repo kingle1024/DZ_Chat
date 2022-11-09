@@ -47,7 +47,7 @@ public class ChatMessage implements Message {
 	}
 
 	public Log toLog() {
-		String logMessage = "ChatMessage:" + sender.getUserId() + ":" + message;
+		String logMessage = "ChatMessage " + sender.getUserId() + " : " + message;
 		return new Log(ClientProperties.getChatLogFile(), logMessage);
 	}
 }
