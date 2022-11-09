@@ -1,6 +1,5 @@
 package message.chat;
 
-import java.io.Serializable;
 import java.util.*;
 
 import log.Log;
@@ -10,8 +9,7 @@ import property.ServerProperties;
 import server.MainServer;
 import server.service.serviceimpl.chat.ChatService;
 
-public class ChatRoom implements Serializable {
-	private static final long serialVersionUID = 1823559605769244050L;
+public class ChatRoom {
 	private final String chatRoomName;
 	private final List<ChatService> chatServices;
 	private final String logPath;
