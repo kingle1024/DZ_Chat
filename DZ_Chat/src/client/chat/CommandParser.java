@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.json.JSONObject;
 
 import member.Member;
-import message.chat.FileMessage;
+import message.ftp.FileMessage;
 
 public class CommandParser {
 	private final Member sender;

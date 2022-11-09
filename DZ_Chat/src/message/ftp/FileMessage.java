@@ -1,7 +1,5 @@
-package message.chat;
+package message.ftp;
 
-import message.ftp.FileSaveThread;
-import message.ftp.FileSendThread;
 import property.ServerProperties;
 
 import java.io.*;

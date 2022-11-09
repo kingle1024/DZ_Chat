@@ -1,0 +1,6 @@
+[2022-11-09 18:24:55]id : q Login Success
+[2022-11-09 18:24:56]MakeChatRoom : q
+[2022-11-09 18:24:59]Entrance q q
+[2022-11-09 18:25:05]ChatMessage q q : chatlog.txt 파일 전송
+[2022-11-09 18:25:27]ChatMessage q q : chatlog.txt 파일 전송
+[2022-11-09 18:26:02]ChatMessage q q : images.jpg 파일 전송

@@ -3,8 +3,10 @@ package message.ftp;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class FileCommon {
+	private String os;
 	/**
 	 * 
 	 * @param isAppend true이면 연속해서 파일 작성, false이면 새로 파일 작성
@@ -25,38 +27,39 @@ public class FileCommon {
 		return true;		
 	}
 	
-	public String fileNameBalance(String path, String fileName) {
-		String[] files = fileName.split("\\.");
+	public boolean isAbsolutPath(String path) {
+		switch (System.getProperty("os.name")) {
+		case "Window":
+			return path.matches("([A-Z]):\\\\");
+		case "Max":
+			return path.startsWith("/");
+		default:
+			throw new IllegalArgumentException("지원하지 않는 OS 입니다.");
+		}
+	}
+	
+	public String makeFileName(String storeDirPath, String filePath) {
+		String[] files = filePath.split("\\.");
 		if(files.length < 2){ 
-			System.out.println("파일명이 올바르지 않습니다. (ex test.txt)");
-			return null;
+			throw new IllegalArgumentException("파일명이 올바르지 않습니다. (ex test.txt)");
 		}
 
-		File file = new File(fileName);
-		fileName = file.getName();
+		File file = new File(filePath);
+		String fileFullName = file.getName();
+		String fileName = fileFullName.replaceAll("\\..*", "");
+		System.out.println("fileName: " + fileName);
+		file = new File(storeDirPath);
+		file.mkdirs();
 
-		int idx = 1;
-		StringBuilder sbFileName = new StringBuilder(path + fileName);
-
-		file = new File(path);
-		if(!new File(path).exists()) {
-			file.mkdirs();
-		}
-		//경로에 폴더가 있는지 확인
-
-		while(true) {
-			file = new File(sbFileName.toString());
-
-			if (file.exists()) {
-				sbFileName = new StringBuilder(
-						path + files[0] + " ("+idx+")." + files[1]);
-				idx++;
-			}else {
-				break;
-			}
-		}
-		
-		System.out.println("사용할 파일위치와 파일명 : "+sbFileName);
-		return sbFileName.toString();
+		long idx = Arrays.asList(file.list()).stream()
+			.filter(x -> x.matches(fileName + "(\\([0-9])?.*"))
+			.map(x -> x.replaceAll("[^0-9]*", ""))
+			.filter(x -> !"".equals(x))
+			.map(Long::parseLong)
+			.max(Long::compare)
+			.orElse(-1L);
+		return idx == -1
+				? storeDirPath + fileFullName
+				: storeDirPath + files[0] + "(" + (idx+1) + ")" + files[1];
 	}
 }
