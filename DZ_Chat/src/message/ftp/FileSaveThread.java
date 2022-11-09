@@ -7,7 +7,7 @@ import java.util.*;
 
 // 보내는 곳 (Client)
 public class FileSaveThread extends Thread{
-	private volatile HashMap<String, Object> map;
+	private final HashMap<String, Object> map;
 	
 	public FileSaveThread(ThreadGroup threadGroup, HashMap<String, Object> map) {
 		super(threadGroup, map.get("threadName").toString());
@@ -36,20 +36,12 @@ public class FileSaveThread extends Thread{
 		}
 	}
 	public void saveFile() throws Exception {
-		String chatRoomAndFileName = (String) map.get("chatRoomAndFileName");
-		File file = new File(chatRoomAndFileName);
-		System.out.println("chatRoomAndFileName:"+chatRoomAndFileName);
-		System.out.println("file:"+file.getAbsolutePath());
-		
 		try {
 			FtpService ftp = new FtpService();
-//			String filePath = ServerProperties.getDownloadPath() + chatRoomAndFileName;
-
 			StringBuffer downloadPath =
 					new StringBuffer(ftp.getDownloadPath((String)map.get("fileName")));
 
 			if(ftp.sendSocketInputStream((Socket) map.get("socket"), downloadPath.toString())){
-				System.out.println("downloadPath:"+downloadPath);
 				ftp.showPicture(downloadPath);
 				System.out.println("FtpClient > start() > 파일 저장이 완료되었습니다.");
 			}
@@ -61,10 +53,9 @@ public class FileSaveThread extends Thread{
 	public String getSaveRoomAndFileName(){
 		String chatRoomName = (String) map.get("chatRoomName");
 		File originFileAndPath = new File((String)map.get("fileAndPath"));
-		StringBuilder saveRoomAndFileName = new StringBuilder();
-		saveRoomAndFileName.append(chatRoomName)
-				.append("/")
-				.append(originFileAndPath.getName());
-		return saveRoomAndFileName.toString();
+		String saveRoomAndFileName = chatRoomName +
+				"/" +
+				originFileAndPath.getName();
+		return saveRoomAndFileName;
 	}
 }
