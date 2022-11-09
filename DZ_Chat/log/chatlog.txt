@@ -63,3 +63,9 @@
 [2022-11-09 12:14:45]Entrance q q
 [2022-11-09 12:14:46]Exit q q
 [2022-11-09 12:14:46]RemoveChatRoom q
+[2022-11-09 17:53:36]id : 123 Login Success
+[2022-11-09 17:56:18]id : 123 Login Success
+[2022-11-09 17:56:26]Entrance TEST ROOM2 123
+[2022-11-09 17:56:30]Exit TEST ROOM2 123
+[2022-11-09 17:56:30]RemoveChatRoom TEST ROOM2
+[2022-11-09 17:56:36]Delete MemberData
