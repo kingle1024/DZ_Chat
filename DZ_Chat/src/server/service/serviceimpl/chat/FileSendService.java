@@ -15,8 +15,11 @@ public class FileSendService {
 		try {
 			FileInputStream fis = new FileInputStream(new File("C:\\Users\\KOSA\\Desktop\\images.jpg"));
 			BufferedOutputStream bos = new BufferedOutputStream(os);
+			int len = -1;
 			byte[] buff = new byte[4096];
-			while (fis.read(buff) != -1) {
+			while (true) {
+				len = fis.read(buff);
+				if (len == -1) break;
 				bos.write(buff);
 			}
 			fis.close();
