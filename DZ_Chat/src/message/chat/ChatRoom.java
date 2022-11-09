@@ -53,15 +53,15 @@ public class ChatRoom implements Serializable {
 	}
 	
 	public Log entranceLog(ChatService chatService) {
-		return new Log(logPath, "Entrance:" + chatService.getMe());
+		return new Log(logPath, "Entrance " + chatRoomName + " " + chatService.getMe().getUserId());
 	}
 	
 	public Log exitLog(ChatService chatService) {
-		return new Log(logPath, "Exit:" + chatService.getMe());
+		return new Log(logPath, "Exit " + chatRoomName + " " + chatService.getMe().getUserId());
 	}
 	
 	public Log removeChatRoomLog(ChatService chatService) {
-		return new Log(logPath, "RemoveChatRoom:" + chatRoomName);
+		return new Log(logPath, "RemoveChatRoom " + chatRoomName);
 	}
 	
 	public List<ChatService> getChatServices() {

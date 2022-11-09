@@ -46,7 +46,7 @@ public class PrivateChatMessage implements Message {
 	}
 
 	public Log toLog() {
-		String logMessage = "PrivateMessage:" + sender.getUserId() + ":" + message;
+		String logMessage = "PrivateMessage:" + sender.getUserId() + " > " + to + " : "+ message;
 		return new Log(ServerProperties.getChatLogFile(), logMessage);
 	}
 }

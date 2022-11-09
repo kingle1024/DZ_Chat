@@ -8,7 +8,6 @@ import log.Log;
 import log.LogQueue;
 import member.Member;
 import property.ClientProperties;
-import property.ServerProperties;
 import server.service.serviceimpl.chat.ChatService;
 
 public class ChatMessage implements Message {
@@ -48,7 +47,7 @@ public class ChatMessage implements Message {
 	}
 
 	public Log toLog() {
-		String logMessage = "ChatMessage:" + sender.getUserId() + ":" + message;
+		String logMessage = "ChatMessage " + sender.getUserId() + " : " + message;
 		return new Log(ClientProperties.getChatLogFile(), logMessage);
 	}
 }
