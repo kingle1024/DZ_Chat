@@ -9,6 +9,7 @@ import java.util.*;
 // 보내는 곳 (Client)
 public class FileSaveThread extends Thread{
 	private volatile HashMap<String, Object> map;
+	
 	public FileSaveThread(ThreadGroup threadGroup, HashMap<String, Object> map) {
 		super(threadGroup, map.get("threadName").toString());
 		this.map = map;
@@ -36,13 +37,15 @@ public class FileSaveThread extends Thread{
 		}
 	}
 	public void saveFile() throws Exception {
-		File file = new File((String)map.get("chatRoomAndFileName"));
 		String chatRoomAndFileName = (String) map.get("chatRoomAndFileName");
+		File file = new File(chatRoomAndFileName);
 		System.out.println("chatRoomAndFileName:"+chatRoomAndFileName);
 		System.out.println("file:"+file.getAbsolutePath());
+		
 		try {
 			FtpService ftp = new FtpService();
 			String filePath = ServerProperties.getDownloadPath() +chatRoomAndFileName;
+
 			StringBuffer downloadPath =
 					new StringBuffer(ftp.getDownloadPath((String)map.get("fileName")));
 
@@ -50,6 +53,7 @@ public class FileSaveThread extends Thread{
 				ftp.showPicture(downloadPath);
 				System.out.println("FtpClient > start() > 파일 저장이 완료되었습니다.");
 			}
+			
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
