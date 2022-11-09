@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import client.Client;
-import client.mapper.RequestType;
 import message.MessageFactory;
 
 public class ChatClient extends Client {
@@ -46,7 +45,7 @@ public class ChatClient extends Client {
 				initData.put("chatRoomName", chatRoomName);
 				initData.put("me", getMe().getJSON());
 			
-				connect(new RequestType("chat.ChatService"));
+				connect("chat.ChatService");
 				send(initData);
 				
 				messageListener.setChatClient(this);

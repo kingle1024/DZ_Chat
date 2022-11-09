@@ -7,12 +7,11 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
-import client.mapper.RequestType;
 
 public class DeleteMemberClient extends Client {
 	private String pw;
 	private JSONObject json = new JSONObject();
-	
+
 	public DeleteMemberClient(String pw) {
 		this.pw = pw;
 	}
@@ -22,7 +21,7 @@ public class DeleteMemberClient extends Client {
 		try {
 			json.put("member", getMe().getJSON());
 			json.put("pw", pw);
-			connect(new RequestType("member.DeleteMemberService"));
+			connect("member.DeleteMemberService");
 			send(json);
 			JSONObject response = receive();
 			unconnect();

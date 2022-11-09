@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
-import client.mapper.RequestType;
 
 public class UpdatePWClient extends Client {
 	private final String validatePW;
@@ -28,7 +27,7 @@ public class UpdatePWClient extends Client {
 			json.put("member", getMe().getJSON());
 			json.put("validatePW", validatePW);
 			json.put("newPW", newPW);
-			connect(new RequestType("member.UpdatePWService"));
+			connect("member.UpdatePWService");
 			send(json);
 			JSONObject response = receive();
 			unconnect();
