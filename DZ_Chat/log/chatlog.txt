@@ -49,3 +49,13 @@
 [2022-11-10 17:12:50]ChatMessage TESTROOM1 qwe : sdf
 [2022-11-10 17:13:03]Exit TESTROOM1 qwe
 [2022-11-10 17:13:03]RemoveChatRoom TESTROOM1
+[2022-11-10 17:31:11]id : qwe Login Success
+[2022-11-10 17:31:43]id : asd Login Success
+[2022-11-10 17:32:51]id : qwe Login Success
+[2022-11-10 17:32:59]id : asd Login Success
+[2022-11-10 17:33:02]Entrance TESTROOM1 asd
+[2022-11-10 17:33:13]Entrance TESTROOM1 qwe
+[2022-11-10 17:33:38]ChatMessage TESTROOM1 asd : ���� �̰�
+[2022-11-10 17:34:08]Exit TESTROOM1 asd
+[2022-11-10 17:34:10]Exit TESTROOM1 qwe
+[2022-11-10 17:34:10]RemoveChatRoom TESTROOM1

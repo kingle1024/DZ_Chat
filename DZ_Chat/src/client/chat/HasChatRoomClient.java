@@ -19,7 +19,7 @@ public class HasChatRoomClient extends Client {
 	public JSONObject run() {
 		try {
 			connect("chat.HasChatRoomService");
-			send(new JSONObject("chatRoomName", chatRoomName));
+			send(new JSONObject().put("chatRoomName", chatRoomName));
 //			send(Transfer.toJSON(new HasChatRoomDto.Request(chatRoomName)));
 			JSONObject response = receive();
 			unconnect();
