@@ -7,12 +7,13 @@ import log.LogConsumer;
 import member.MemberDao;
 import message.chat.ChatRoom;
 import property.ServerProperties;
+import server.map.ChatRoomMap;
 
 public class Main {
 	public static void main(String[] args) {
 		// Mock ChatRoom
 		for (int i = 0; i < 5; i++) {
-			MainServer.chatRoomMap.put("TESTROOM" + i, new ChatRoom("TESTROOM" + i));
+			ChatRoomMap.put("TESTROOM" + i, new ChatRoom("TESTROOM" + i));
 		}
 		
 		try {

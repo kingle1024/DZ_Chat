@@ -6,7 +6,7 @@ import log.Log;
 import log.LogQueue;
 import message.chat.ChatRoom;
 import property.ServerProperties;
-import server.MainServer;
+import server.map.ChatRoomMap;
 import server.service.Service;
 
 public class MakeChatRoomService extends Service {
@@ -15,7 +15,7 @@ public class MakeChatRoomService extends Service {
 	@Override
 	public void request() throws IOException {
 		this.chatRoomName = receive().getString("chatRoomName");
-		MainServer.chatRoomMap.put(chatRoomName, new ChatRoom(chatRoomName));
+		ChatRoomMap.put(chatRoomName, new ChatRoom(chatRoomName));
 		LogQueue.add(toLog());
 	}
 

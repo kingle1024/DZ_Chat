@@ -10,6 +10,7 @@ import message.MessageFactory;
 import message.chat.ChatRoom;
 import message.chat.Message;
 import server.MainServer;
+import server.map.ChatRoomMap;
 import server.service.Service;
 
 public class ChatService extends Service {
@@ -40,7 +41,7 @@ public class ChatService extends Service {
 			JSONObject initData = receive();
 			chatRoomName = initData.getString("chatRoomName");
 			me = Member.parseJSON(initData.getJSONObject("me"));
-			chatRoom = MainServer.chatRoomMap.get(chatRoomName);
+			chatRoom = ChatRoomMap.get(chatRoomName);
 			chatRoom.entrance(this);
 			System.out.println(chatRoom.getChatRoomName());
 			System.out.println(chatRoom.getChatServices());

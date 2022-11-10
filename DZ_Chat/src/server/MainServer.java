@@ -10,10 +10,7 @@ import message.chat.ChatRoom;
 import server.service.ServiceMap;
 
 public class MainServer implements Server {
-	public static final Map<String, ChatRoom> chatRoomMap = Collections.synchronizedMap(new HashMap<>());
-	public static final Map<String, Member> memberMap = Collections.synchronizedMap(new TreeMap<>());
 	public static final ExecutorService threadPool = Executors.newFixedThreadPool(16);
-
 	private ServerInfo serverInfo;
 	private ServerSocket serverSocket;	
 

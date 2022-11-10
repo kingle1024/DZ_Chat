@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
-import server.MainServer;
+import server.map.ChatRoomMap;
 import server.service.Service;
 
 public class HasChatRoomService extends Service {
@@ -12,6 +12,6 @@ public class HasChatRoomService extends Service {
 	public void request() throws IOException {
 		System.out.println("HasChatRoomService");
 		String chatRoomName = receive().getString("chatRoomName");
-		send(new JSONObject().put("result", MainServer.chatRoomMap.containsKey(chatRoomName)));
+		send(new JSONObject().put("result", ChatRoomMap.containsKey(chatRoomName)));
 	}
 }
