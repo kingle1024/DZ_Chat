@@ -26,3 +26,7 @@
 [2022-11-10 11:27:45]Exit TESTROOM1 zxc
 [2022-11-10 11:27:47]Exit TESTROOM1 qwe
 [2022-11-10 11:27:47]RemoveChatRoom TESTROOM1
+[2022-11-10 15:02:54]id : qwe Login Success
+[2022-11-10 15:04:45]id : qwe Login Success
+[2022-11-10 15:22:46]id : qwe Login Success
+[2022-11-10 15:25:12]id : qwe Login Success

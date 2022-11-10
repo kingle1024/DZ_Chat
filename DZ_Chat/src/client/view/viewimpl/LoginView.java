@@ -23,14 +23,14 @@ public class LoginView implements View {
 		id = textInput.next();
 		pw = textInput.next();
 		JSONObject response = ClientMap.runClient("member.LoginClient", id, pw);
-		boolean hasMember = response.getBoolean("hasMember");
+		
+		boolean hasMember = response.has("member");
 		Member me = hasMember
-				? Member.parseJSON(response.getJSONObject("member"))
+				? Member.parseJSON(new JSONObject(response.getString("member")))
 				: null;
 		setMe(me);
 		System.out.println(hasMember ? "로그인 성공" : "로그인 실패");
 		return hasMember ? ViewMap.getView("SuccessLogin") : ViewMap.getView("Main");
-	
 	}
 
 	@Override

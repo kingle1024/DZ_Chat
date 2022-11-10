@@ -4,7 +4,8 @@ import java.io.*;
 
 import org.json.JSONObject;
 
-import dto.IdPw;
+import dto.LoginDto;
+import dto.Transfer;
 import log.Log;
 import log.LogQueue;
 import member.*;
@@ -23,11 +24,9 @@ public class LoginService extends Service {
 			id = loginJSON.getString("id");
 			pw = loginJSON.getString("pw");
 			Member member = MemberManager.login(id, pw);
-			JSONObject sendJSON = new JSONObject();
-			sendJSON.put("hasMember", member != null);
+			JSONObject sendJSON = Transfer.toJSON(new LoginDto.Response(member));
 			if (member != null) {
 				LogQueue.add(toLog());
-				sendJSON.put("member", member.getJSON());
 			}
 			send(sendJSON);
 		} catch (IOException e) {

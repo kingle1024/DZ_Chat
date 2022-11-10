@@ -11,6 +11,7 @@ public class Transfer {
 		Arrays.asList(obj.getClass().getDeclaredFields())
 			.stream()
 			.peek(x -> x.setAccessible(true))
+			.filter(x -> x != null)
 			.filter(x -> x.getType().equals("".getClass()))
 			.forEach(x -> {
 				try {
@@ -19,7 +20,6 @@ public class Transfer {
 					e.printStackTrace();
 				}
 			});
-		ret.put("type", obj.getClass().toString());
 		return ret;
 	}
 }

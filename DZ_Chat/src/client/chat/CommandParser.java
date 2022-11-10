@@ -1,13 +1,10 @@
 package client.chat;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import dto.IdPw;
 import member.Member;
 import message.ftp.FileMessage;
 

@@ -5,7 +5,8 @@ import java.io.*;
 import org.json.JSONObject;
 
 import client.Client;
-import dto.IdPw;
+import dto.LoginDto;
+import dto.Transfer;
 
 public class LoginClient extends Client {
 	private String id;
@@ -20,9 +21,7 @@ public class LoginClient extends Client {
 	@Override
 	public JSONObject run() {
 		try {
-			loginJSON = new JSONObject();
-			loginJSON.put("id", id);
-			loginJSON.put("pw", pw);
+			loginJSON = Transfer.toJSON(new LoginDto.Request(id, pw));
 			connect("member.LoginService");
 			send(loginJSON);
 			JSONObject response = receive();
