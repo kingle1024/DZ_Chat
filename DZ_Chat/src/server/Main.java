@@ -9,8 +9,6 @@ import message.chat.ChatRoom;
 import property.ServerProperties;
 
 public class Main {
-	private static final MemberDao memberDao = MemberDao.getInstance();
-
 	public static void main(String[] args) {
 		// Mock ChatRoom
 		for (int i = 0; i < 5; i++) {
@@ -18,7 +16,7 @@ public class Main {
 		}
 		
 		try {
-			memberDao.readContent();
+			MemberDao.readContent();
 			Server server = new MainServer(ServerProperties.getServerPort());
 			server.start();
 
@@ -54,7 +52,7 @@ public class Main {
 	public static void exit() {
 		System.out.println("exit call");
 		// TODO: LogQueue 남아 있는 것 모두 해소
-		memberDao.writeContent();
+		MemberDao.writeContent();
 		System.out.println("SAVE COMMAND");
 	}
 }

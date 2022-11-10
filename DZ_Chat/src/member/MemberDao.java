@@ -8,17 +8,11 @@ import property.ServerProperties;
 
 public class MemberDao {
 	private static final String filePath = ServerProperties.getMemberFile();
-	private static MemberDao dao = new MemberDao();
 
 	private MemberDao() {
 	}
-	
-	public static MemberDao getInstance() {
-		return dao;
-	}
 
-	// 파일에서 회원정보 받아와서 Map에 저장
-	public void readContent() {
+	public static void readContent() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 			String readStr = "";
@@ -34,8 +28,7 @@ public class MemberDao {
 		}
 	}
 
-	// Map에 있는 정보 파일에 쓰기 - 서버 종료 시 한번 반영하도록
-	public void writeContent() {
+	public static void writeContent() {
 		FileCommon fileCommon = new FileCommon();
 		fileCommon.saveContent(filePath, "", false);		
 		for (Member member : MemberMap.values()) {
