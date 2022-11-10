@@ -30,3 +30,22 @@
 [2022-11-10 15:04:45]id : qwe Login Success
 [2022-11-10 15:22:46]id : qwe Login Success
 [2022-11-10 15:25:12]id : qwe Login Success
+[2022-11-10 15:42:29]id : qwe Login Success
+[2022-11-10 16:56:00]id : qwe Login Success
+[2022-11-10 17:00:09]id : qwe Login Success
+[2022-11-10 17:00:15]Register Success
+[2022-11-10 17:02:05]id : qwe Login Success
+[2022-11-10 17:02:09]Register Success
+[2022-11-10 17:02:55]id : qwe Login Success
+[2022-11-10 17:03:44]id : qwe Login Success
+[2022-11-10 17:09:39]id : qwe Login Success
+[2022-11-10 17:09:42]Entrance TESTROOM1 qwe
+[2022-11-10 17:09:44]Exit TESTROOM1 qwe
+[2022-11-10 17:09:44]RemoveChatRoom TESTROOM1
+[2022-11-10 17:12:40]id : qwe Login Success
+[2022-11-10 17:12:45]Entrance TESTROOM1 qwe
+[2022-11-10 17:12:46]ChatMessage TESTROOM1 qwe : dfdf
+[2022-11-10 17:12:47]ChatMessage TESTROOM1 qwe : sdf
+[2022-11-10 17:12:50]ChatMessage TESTROOM1 qwe : sdf
+[2022-11-10 17:13:03]Exit TESTROOM1 qwe
+[2022-11-10 17:13:03]RemoveChatRoom TESTROOM1

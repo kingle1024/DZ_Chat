@@ -5,6 +5,10 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
+import dto.ChatDto;
+import dto.DirDto;
+import dto.PrivateChatDto;
+import dto.Transfer;
 import member.Member;
 import message.ftp.FileMessage;
 
@@ -30,10 +34,7 @@ public class CommandParser {
 	}
 	
 	private JSONObject createChatJSON(String msg) {
-		json.put("type", "chat");
-		json.put("message", msg);
-		json.put("sender", sender.getJSON());
-		return json;
+		return Transfer.toJSON(new ChatDto("chat", msg, sender));
 	}
 	
 	private JSONObject createPrivateChatJSON(String msg) {
@@ -45,11 +46,7 @@ public class CommandParser {
 		}
 		String to = msg.substring(1, idx);
 		msg = msg.substring(idx + 1);
-		json.put("type", "privateChat");
-		json.put("message", msg);
-		json.put("sender", sender.getJSON());
-		json.put("to", to);
-		return json;
+		return Transfer.toJSON(new PrivateChatDto("pirvateChat", msg, sender, to));
 	}
 	
 	private JSONObject createExitJSON() throws ChatRoomExitException {
@@ -57,11 +54,7 @@ public class CommandParser {
 	}
 	
 	private JSONObject createDirJSON(String chat) {
-		json.put("type", "#dir");
-		json.put("message", chat);
-		json.put("chatRoomName", chatRoomName);
-		json.put("sender", sender.getJSON());
-		return json;
+		return Transfer.toJSON(new DirDto("#dir", chat, chatRoomName, sender));
 	}
 	
 	private JSONObject createFileJSON(String chat) throws IOException {
@@ -75,18 +68,9 @@ public class CommandParser {
 		String fileName = message[1];
 		boolean result = fileMessage(chat);
 
-		if(!result){
-			json.put("type", "privateChat");
-			json.put("message", fileName + " 파일 전송 취소");
-			json.put("sender", sender.getJSON());
-			json.put("to", "privateMan");
-			return json;
-		}else{
-			json.put("type", "chat");
-			json.put("message", fileName + " 파일 전송");
-			json.put("sender", sender.getJSON());
-			return json;
-		}
+		return result
+				? Transfer.toJSON(new ChatDto("chat", fileName + " 파일 전송", sender))
+				: Transfer.toJSON(new PrivateChatDto("privateChat", fileName + " 파일 전송 취소", sender, "privateMan"));
 	}
 	
 

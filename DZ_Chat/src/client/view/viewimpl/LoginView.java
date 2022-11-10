@@ -26,7 +26,7 @@ public class LoginView implements View {
 		
 		boolean hasMember = response.has("member");
 		Member me = hasMember
-				? Member.parseJSON(new JSONObject(response.getString("member")))
+				? Member.parseJSONString(response.getString("member"))
 				: null;
 		setMe(me);
 		System.out.println(hasMember ? "로그인 성공" : "로그인 실패");

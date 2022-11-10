@@ -16,10 +16,8 @@ public class FindPWClient extends Client {
 	@Override
 	public JSONObject run() {
 		try {
-			JSONObject sendJSON = new JSONObject();
 			connect("member.FindPWService");
-			sendJSON.put("id", id);
-			send(sendJSON);
+			send(new JSONObject().put("id", id));
 			JSONObject response = receive();
 			unconnect();
 			return response;

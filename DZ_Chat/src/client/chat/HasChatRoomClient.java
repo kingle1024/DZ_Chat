@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
+import dto.HasChatRoomDto;
+import dto.Transfer;
 
 public class HasChatRoomClient extends Client {
 	private String chatRoomName;
@@ -16,10 +18,9 @@ public class HasChatRoomClient extends Client {
 	@Override
 	public JSONObject run() {
 		try {
-			JSONObject json = new JSONObject();
-			json.put("chatRoomName", chatRoomName);
 			connect("chat.HasChatRoomService");
-			send(json);
+			send(new JSONObject("chatRoomName", chatRoomName));
+//			send(Transfer.toJSON(new HasChatRoomDto.Request(chatRoomName)));
 			JSONObject response = receive();
 			unconnect();
 			return response;
@@ -28,5 +29,4 @@ public class HasChatRoomClient extends Client {
 		}
 		return null;
 	}
-
 }

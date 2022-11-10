@@ -23,8 +23,8 @@ public class MessageFactory {
 	private static PrivateChatMessage createPrivateChatMessage(ChatService chatService, JSONObject json) {
 		return new PrivateChatMessage(
 				chatService,
-				Member.parseJSON(
-						json.getJSONObject("sender"))
+				Member.parseJSONString(
+						json.getString("sender"))
 				, json.getString("message")
 				, json.getString("to"));
 	}
@@ -36,7 +36,7 @@ public class MessageFactory {
 	private static ChatMessage createChatMessage(ChatService chatService, JSONObject json) {
 		return new ChatMessage(
 				chatService,
-				Member.parseJSON(json.getJSONObject("sender"))
+				Member.parseJSONString(json.getString("sender"))
 				, json.getString("message"));
 	}
 }

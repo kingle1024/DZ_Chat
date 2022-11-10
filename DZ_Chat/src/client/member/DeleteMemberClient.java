@@ -7,10 +7,11 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
+import dto.DeleteMemberDto;
+import dto.Transfer;
 
 public class DeleteMemberClient extends Client {
 	private String pw;
-	private JSONObject json = new JSONObject();
 
 	public DeleteMemberClient(String pw) {
 		this.pw = pw;
@@ -19,10 +20,8 @@ public class DeleteMemberClient extends Client {
 	@Override
 	public JSONObject run() {
 		try {
-			json.put("member", getMe().getJSON());
-			json.put("pw", pw);
 			connect("member.DeleteMemberService");
-			send(json);
+			send(Transfer.toJSON(new DeleteMemberDto.Request(getMe(), pw)));
 			JSONObject response = receive();
 			unconnect();
 			return response;

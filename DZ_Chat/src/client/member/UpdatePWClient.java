@@ -7,6 +7,8 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
+import dto.Transfer;
+import dto.UpdatePWDto;
 
 public class UpdatePWClient extends Client {
 	private final String validatePW;
@@ -24,11 +26,8 @@ public class UpdatePWClient extends Client {
 			if (!validatePW.equals(getMe().getPassword())) {
 				return new JSONObject().put("success", false);
 			}
-			json.put("member", getMe().getJSON());
-			json.put("validatePW", validatePW);
-			json.put("newPW", newPW);
 			connect("member.UpdatePWService");
-			send(json);
+			send(Transfer.toJSON(new UpdatePWDto.Request(getMe(), validatePW, newPW)));
 			JSONObject response = receive();
 			unconnect();
 			return response;

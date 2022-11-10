@@ -11,7 +11,11 @@ public class GetChatRoomListView implements View {
 	@Override
 	public View nextView() {
 		JSONObject response = ClientMap.runClient("chat.GetChatRoomListClient");
-		response.getJSONArray("chatRoomList").toList().forEach(chatRoomName -> System.out.println("[" + chatRoomName + "]"));
+		response.getJSONArray("chatRoomList")
+			.toList()
+			.stream()
+			.map(chatRoomName -> "[" + chatRoomName + "]")
+			.forEach(System.out::println);
 		return ViewMap.getView("SuccessLogin");
 	}
 

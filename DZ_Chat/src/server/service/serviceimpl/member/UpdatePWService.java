@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
+import dto.Transfer;
+import dto.UpdatePWDto;
 import log.Log;
 import log.LogQueue;
 import member.Member;
@@ -22,16 +24,15 @@ public class UpdatePWService extends Service {
 		try {
 			JSONObject receiveJSON = receive();
 			System.out.println("receiveJSON: " + receiveJSON);
-			member = Member.parseJSON(receiveJSON.getJSONObject("member"));
+			member = Member.parseJSON(new JSONObject(receiveJSON.getString("member")));
 			validatePW = receiveJSON.getString("validatePW");
 			newPW = receiveJSON.getString("newPW");
 			
-			JSONObject sendJSON = new JSONObject();
-			sendJSON.put("success", MemberManager.updatePw(member, validatePW, newPW));
-			sendJSON.put("member", MemberMap.get(member.getUserId()).getJSON());
-			System.out.println(sendJSON);
-			send(sendJSON);
-			System.out.println("UpdatePWService: " + sendJSON);
+			send(
+				Transfer.toJSON(new UpdatePWDto.Response(
+					MemberManager.updatePw(member, validatePW, newPW)
+					, MemberMap.get(member.getUserId())
+				)));
 			LogQueue.add(toLog());
 		} catch (IOException e) {
 			e.printStackTrace();

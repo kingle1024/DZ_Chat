@@ -8,6 +8,8 @@ import java.util.Arrays;
 import org.json.JSONObject;
 
 import client.Client;
+import dto.ChatInitDto;
+import dto.Transfer;
 
 public class ChatClient extends Client {
 	private String chatRoomName;
@@ -39,12 +41,8 @@ public class ChatClient extends Client {
 
 		while (true) {
 			try {
-				JSONObject initData = new JSONObject();
-				initData.put("chatRoomName", chatRoomName);
-				initData.put("me", getMe().getJSON());
-
 				connect("chat.ChatService");
-				send(initData);
+				send(Transfer.toJSON(new ChatInitDto.Request(chatRoomName, getMe())));
 
 				messageListener.setChatClient(this);
 				messageConsumer.setChatClient(this);

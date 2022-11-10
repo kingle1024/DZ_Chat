@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 public class Transfer {
 	public static JSONObject toJSON(Object obj) {
+		if (obj == null) return null;
 		JSONObject ret = new JSONObject();
 		Arrays.asList(obj.getClass().getDeclaredFields())
 			.stream()

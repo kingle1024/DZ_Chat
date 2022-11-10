@@ -31,7 +31,8 @@ public class ChatService extends Service {
 				}
 			} catch (Exception e) {
 				chatRoom.exit(this);
-				System.out.println("ChatService > IOException > " + e);
+				System.out.println("ChatService > IOException > ");
+				e.printStackTrace();
 			}
 		});
 	}
@@ -39,8 +40,9 @@ public class ChatService extends Service {
 	private void init() {
 		try {
 			JSONObject initData = receive();
+			System.out.println(initData);
 			chatRoomName = initData.getString("chatRoomName");
-			me = Member.parseJSON(initData.getJSONObject("me"));
+			me = Member.parseJSONString(initData.getString("me"));
 			chatRoom = ChatRoomMap.get(chatRoomName);
 			chatRoom.entrance(this);
 			System.out.println(chatRoom.getChatRoomName());

@@ -27,7 +27,7 @@ public class UpdatePWView implements View {
 		JSONObject response = ClientMap.runClient("member.UpdatePWClient", validatePW, newPW);
 		if (response.getBoolean("success")) {
 			System.out.println("비밀번호 변경 성공");
-			setMe(Member.parseJSON(response.getJSONObject("member")));
+			setMe(Member.parseJSONString(response.getString("member")));
 			return ViewMap.getView("SuccessLogin");	
 		} else {
 			System.out.println("비밀번호 변경 실패");

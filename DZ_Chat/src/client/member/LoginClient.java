@@ -21,9 +21,8 @@ public class LoginClient extends Client {
 	@Override
 	public JSONObject run() {
 		try {
-			loginJSON = Transfer.toJSON(new LoginDto.Request(id, pw));
 			connect("member.LoginService");
-			send(loginJSON);
+			send(Transfer.toJSON(new LoginDto.Request(id, pw)));
 			JSONObject response = receive();
 			unconnect();
 			return response;
