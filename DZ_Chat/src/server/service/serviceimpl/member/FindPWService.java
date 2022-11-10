@@ -1,8 +1,6 @@
 package server.service.serviceimpl.member;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import org.json.JSONObject;
 
@@ -22,7 +20,7 @@ public class FindPWService extends Service {
 		sendJSON.put("success", findPW != null);
 		sendJSON.put("findPW", findPW);
 		send(sendJSON);
-		LogQueue.add(toLog());	
+		LogQueue.add(toLog());
 	}
 
 	public Log toLog() {

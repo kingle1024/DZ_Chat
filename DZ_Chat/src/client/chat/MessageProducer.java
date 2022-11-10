@@ -3,21 +3,18 @@ package client.chat;
 import static client.Main.*;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 import org.json.JSONObject;
-
-import message.MessageFactory;
 
 public class MessageProducer implements Runnable {
 	private static final MessageQueue messageQueue = MessageQueue.getInstance();
 	private static final Monitor monitor = MessageQueue.getMonitor();
 	private CommandParser commandParser;
-	
+
 	public MessageProducer(CommandParser commandParser) {
 		this.commandParser = commandParser;
 	}
-	
+
 	@Override
 	public void run() {
 		while (getScanner().hasNext()) {
@@ -33,9 +30,9 @@ public class MessageProducer implements Runnable {
 				}
 				return;
 			} catch (IOException e) {
-				
+
 			}
 		}
 	}
-	
+
 }

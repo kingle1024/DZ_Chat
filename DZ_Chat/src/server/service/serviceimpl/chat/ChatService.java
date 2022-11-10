@@ -1,7 +1,6 @@
 package server.service.serviceimpl.chat;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 import org.json.JSONObject;
@@ -17,7 +16,7 @@ public class ChatService extends Service {
 	private Member me;
 	private String chatRoomName;
 	private ChatRoom chatRoom;
-	
+
 	@Override
 	public void request() {
 		init();
@@ -31,11 +30,11 @@ public class ChatService extends Service {
 				}
 			} catch (Exception e) {
 				chatRoom.exit(this);
-				System.out.println("ChatService > IOException > "+e);
+				System.out.println("ChatService > IOException > " + e);
 			}
 		});
 	}
-	
+
 	private void init() {
 		try {
 			JSONObject initData = receive();
@@ -49,23 +48,23 @@ public class ChatService extends Service {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Member getMe() {
 		return me;
 	}
-	
+
 	public String nickname() {
 		return me.nickname();
 	}
-	
+
 	public boolean equalsUser(String id) {
 		return me.getUserId().equals(id);
 	}
-	
+
 	public ChatRoom getChatRoom() {
 		return chatRoom;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(chatRoomName, me);

@@ -1,8 +1,6 @@
 package server.service.serviceimpl.member;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import org.json.JSONObject;
 
 import log.Log;
@@ -19,7 +17,7 @@ public class DeleteMemberService extends Service {
 		JSONObject receiveJSON = receive();
 		Member me = Member.parseJSON(receiveJSON.getJSONObject("member"));
 		String pw = receiveJSON.getString("pw");
-		
+
 		JSONObject sendJSON = new JSONObject();
 		sendJSON.put("result", MemberManager.deleteMember(me, pw));
 		send(sendJSON);

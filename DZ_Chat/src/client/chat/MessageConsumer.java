@@ -1,11 +1,8 @@
 package client.chat;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import org.json.JSONObject;
-
-import message.chat.Message;
 
 public class MessageConsumer implements Runnable {
 	private static final MessageQueue messageQueue = MessageQueue.getInstance();
@@ -20,7 +17,7 @@ public class MessageConsumer implements Runnable {
 	public void setChatClient(ChatClient chatClient) {
 		this.chatClient = chatClient;
 	}
-	
+
 	@Override
 	public void run() {
 		while (true) {
@@ -34,10 +31,10 @@ public class MessageConsumer implements Runnable {
 				} else {
 					synchronized (monitor) {
 						monitor.wait();
-					}					
+					}
 				}
 			} catch (InterruptedException e) {
-				
+
 			} catch (IOException e) {
 
 			}

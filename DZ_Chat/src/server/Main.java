@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import log.LogConsumer;
-import member.Member;
 import member.MemberDao;
-import member.MemberMap;
 import message.chat.ChatRoom;
 import property.ServerProperties;
 

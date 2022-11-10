@@ -1,6 +1,5 @@
 package member;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import org.json.JSONObject;

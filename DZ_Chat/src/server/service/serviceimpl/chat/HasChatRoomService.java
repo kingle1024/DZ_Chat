@@ -1,8 +1,6 @@
 package server.service.serviceimpl.chat;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import org.json.JSONObject;
 
