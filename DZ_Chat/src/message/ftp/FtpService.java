@@ -21,16 +21,8 @@ public class FtpService {
 	}
 
 	public boolean sendSocketInputStream(Socket socket, String saveFilePath) throws IOException {
-		// Socket으로 데이터가 오는 경우
 		System.out.println("FtpServer > saveFilePath > " + saveFilePath);
 		return saveFile(socket.getInputStream(), saveFilePath);
-	}
-
-	public boolean sendTargetFileInputStream(String targetFilePath, String saveFilePath) throws IOException {
-		// 파일 경로로 데이터 위치를 알려주는 경우
-		System.out.println("FtpService > targetFilePath > " + targetFilePath);
-		System.out.println("FtpService > saveFilePath > " + saveFilePath);
-		return saveFile(new FileInputStream(targetFilePath), saveFilePath);
 	}
 
 	public boolean saveFile(InputStream is, String saveFilePath) {
@@ -72,16 +64,18 @@ public class FtpService {
 		.append("\n");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd a HH:mm");
-		
-		for (File f : contents) {
-			sb.append(String.format("%-25s", sdf.format(new Date(f.lastModified()))));
-			
-			if (f.isDirectory()) {
-				sb.append(String.format("%-10s%-20s", "<DIR>", f.getName()));
-			} else {
-				sb.append(String.format("%-20s", f.getName()));
+
+		if (contents != null) {
+			for (File f : contents) {
+				sb.append(String.format("%-25s", sdf.format(new Date(f.lastModified()))));
+
+				if (f.isDirectory()) {
+					sb.append(String.format("%-10s%-20s", "<DIR>", f.getName()));
+				} else {
+					sb.append(String.format("%-20s", f.getName()));
+				}
+				sb.append("\n");
 			}
-			sb.append("\n");
 		}
 		return sb.toString();
 	}
@@ -105,7 +99,6 @@ public class FtpService {
 	}
 
 	public String getDownloadPath(String fileName) {
-
 		return getOsDownloadPath() + fileName;
 	}
 

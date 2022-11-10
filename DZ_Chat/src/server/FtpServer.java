@@ -1,6 +1,6 @@
 package server;
 
-import property.ClientProperties;
+import message.ftp.FileCommon;
 import property.ServerProperties;
 import java.io.*;
 import java.net.ServerSocket;
@@ -54,31 +54,12 @@ public class FtpServer implements Server {
 				System.out.println("FileTransferReceiver > startServer() > #fileSend > " + chat);
 				ftpService.fileSend(chat, socket);
 			}else {
-				File originFileTarget = new File("resources/"+roomName+"/"+fileName);
-				System.out.println("origin:"+originFileTarget.getAbsolutePath());
-				InputStream fis = new FileInputStream(originFileTarget);
-
-				byte[] buffer = new byte[Integer.parseInt(ClientProperties.getDefaultBufferSize())];
-
-				// 앞으로 저장할 파일
-				OutputStream os = socket.getOutputStream();
-				int readBytes;
-				long totalReadBytes = 0;
-				int cnt = 0;
-				int loopTime = 2;
-				long fileSize = originFileTarget.length();
-
-				while ((readBytes = fis.read(buffer)) > 0) {
-					os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
-					totalReadBytes += readBytes;
-					if (cnt % loopTime == 0) {
-						System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-								+ (totalReadBytes * 100 / fileSize) + " %)");
-					}
-					cnt++;
+				try {
+					new FileCommon().fileSave("resources/" + roomName + "/" + fileName, socket);
+					System.out.println("서버에서 파일 전송 완료");
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
 				}
-				System.out.println("서버에서 파일 전송 완료");
-				os.close();
 			}
 		} catch (IOException e) {
 			System.out.println("FtpServer > command > "+e);
@@ -86,7 +67,7 @@ public class FtpServer implements Server {
 		}
 	}
 	@Override
-	public void stop() throws IOException {
+	public void stop() {
 		try {
 			// ServerSocket을 닫고 Port 언바인딩
 			serverSocket.close();

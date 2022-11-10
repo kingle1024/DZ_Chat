@@ -1,8 +1,5 @@
 package message.ftp;
 
-import property.ClientProperties;
-import property.ServerProperties;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
@@ -10,7 +7,7 @@ import java.util.HashMap;
 import static message.ftp.FtpService.fileValid;
 
 public class FileSendThread extends Thread {
-	private volatile HashMap<String, Object> map;
+	private final HashMap<String, Object> map;
 	public FileSendThread(ThreadGroup threadGroup, HashMap<String, Object> map) {
 		super(threadGroup, (String) map.get("threadName")); // 스레드 그룹과 스레드 이름을 설정
 		this.map = map;
@@ -23,45 +20,14 @@ public class FileSendThread extends Thread {
 			System.out.println("fileStop");
 			return;
 		}
-		String fileAndPath = (String) map.get("fileAndPath");
-//		File originFile = new File(fileAndPath);
 
-		System.out.println("ClientToServer > run() > fileName:" + fileAndPath);
-		Socket socket = (Socket) map.get("socket");
+		String filePathAndName = (String) map.get("fileAndPath");
+		System.out.println("ClientToServer > run() > fileName:" + filePathAndName);
+
 		try {
-			if (!fileValid(fileAndPath)) return;
-
-			byte[] buffer = new byte[Integer.parseInt(ClientProperties.getDefaultBufferSize())];
-			File originFileTarget = new File(fileAndPath);
-			System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > " + fileAndPath);
-			long fileSize = originFileTarget.length();
-
-			// 여기에 파일이 있음
-			InputStream fis = new FileInputStream(originFileTarget);
-
-			// 앞으로 저장할 파일
-			OutputStream os = socket.getOutputStream();
-			int readBytes;
-			long totalReadBytes = 0;
-			int cnt = 0;
-			int loopTime = 2;
-			while ((readBytes = fis.read(buffer)) > 0) {
-				Thread.sleep(1);
-				os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
-				totalReadBytes += readBytes;
-				if (cnt % loopTime == 0) {
-					System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-							+ (totalReadBytes * 100 / fileSize) + " %)");
-				}
-				cnt++;
-			}
-			if ((cnt - 1) % loopTime != 0) {
-				System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-						+ (totalReadBytes * 100 / fileSize) + " %)");
-			}
-
-			System.out.println("Client에서 파일 전송 완료");
-			os.close();
+			if (!fileValid(filePathAndName)) return;
+			new FileCommon().fileSave(filePathAndName, (Socket) map.get("socket"));
+			System.out.println("클라이언트에서 파일 전송 완료");
 		} catch (IOException e) {
 			System.out.println("ClientToServerThread IOException");
 			throw new RuntimeException(e);
