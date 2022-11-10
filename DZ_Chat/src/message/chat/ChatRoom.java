@@ -6,7 +6,7 @@ import log.Log;
 import log.LogQueue;
 import message.MessageFactory;
 import property.ServerProperties;
-import server.MainServer;
+import server.map.ChatRoomMap;
 import server.service.serviceimpl.chat.ChatService;
 
 public class ChatRoom {
@@ -32,7 +32,7 @@ public class ChatRoom {
 		LogQueue.add(exitLog(chatService));
 		MessageFactory.createSystemMessage(chatService, exitMessage(chatService)).push();
 		if (size() == 0) {
-			MainServer.chatRoomMap.remove(chatRoomName);
+			ChatRoomMap.remove(chatRoomName);
 			LogQueue.add(removeChatRoomLog(chatService));
 		}
 		//닫고

@@ -29,4 +29,8 @@ public class ChatRoomMap {
 	public static boolean containsKey(String key) {
 		return chatRoomMap.containsKey(key);
 	}
+	
+	public static ChatRoom remove(String key) {
+		return chatRoomMap.remove(key);
+	}
 }
