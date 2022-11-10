@@ -36,8 +36,8 @@ public class ServerProperties {
 		return serverProperties.getProperty("DOWNLOAD_PATH");
 	}
 	
-	public static String getThreadPool() {
-		return serverProperties.getProperty("THREAD_POOL");
+	public static int getThreadPool() {
+		return Integer.parseInt(serverProperties.getProperty("THREAD_POOL"));
 	}
 	
 	public static int getServerPort() {

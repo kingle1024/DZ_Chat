@@ -16,7 +16,7 @@ public class FtpServer implements Server {
 	private static ServerSocket serverSocket;
 	public static final ExecutorService threadPool =
 			Executors.newFixedThreadPool(
-					Integer.parseInt(ServerProperties.getThreadPool()));
+					ServerProperties.getThreadPool());
 
 	public FtpServer(int port) {
 		serverInfo = new ServerInfo("FTP 서버", port);
