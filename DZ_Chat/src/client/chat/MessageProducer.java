@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
+import message.chat.Message;
+
 public class MessageProducer implements Runnable {
 	private static final MessageQueue messageQueue = MessageQueue.getInstance();
 	private static final Monitor monitor = MessageQueue.getMonitor();

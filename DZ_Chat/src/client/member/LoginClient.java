@@ -5,6 +5,7 @@ import java.io.*;
 import org.json.JSONObject;
 
 import client.Client;
+import dto.IdPw;
 
 public class LoginClient extends Client {
 	private String id;
@@ -22,7 +23,6 @@ public class LoginClient extends Client {
 			loginJSON = new JSONObject();
 			loginJSON.put("id", id);
 			loginJSON.put("pw", pw);
-
 			connect("member.LoginService");
 			send(loginJSON);
 			JSONObject response = receive();

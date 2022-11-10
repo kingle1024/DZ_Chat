@@ -4,6 +4,7 @@ import java.io.*;
 
 import org.json.JSONObject;
 
+import dto.IdPw;
 import log.Log;
 import log.LogQueue;
 import member.*;
@@ -21,7 +22,6 @@ public class LoginService extends Service {
 			JSONObject loginJSON = receive();
 			id = loginJSON.getString("id");
 			pw = loginJSON.getString("pw");
-			System.out.println("id: " + id + ", pw: " + pw);
 			Member member = MemberManager.login(id, pw);
 			JSONObject sendJSON = new JSONObject();
 			sendJSON.put("hasMember", member != null);
