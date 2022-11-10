@@ -18,6 +18,7 @@ public class Main {
 		
 		try {
 			MemberDao.readContent();
+			ChatRoomMap.init();
 			Server server = new MainServer(ServerProperties.getServerPort());
 			server.start();
 

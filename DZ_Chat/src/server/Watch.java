@@ -22,7 +22,7 @@ public class Watch {
 			Path dir = FileSystems.getDefault().getPath("./bin");
 			registerRecursive(dir, watcher);
 			WatchKey key = dir.register(watcher, ENTRY_MODIFY);
-
+//
 			while (true) {
 				pb.inheritIO();
 				Process process = pb.start();

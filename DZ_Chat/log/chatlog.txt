@@ -1,0 +1,28 @@
+[2022-11-10 11:23:16]id : qwe Login Success
+[2022-11-10 11:23:25]Register Success
+[2022-11-10 11:23:28]id : asd Login Success
+[2022-11-10 11:23:38]Entrance TESTROOM1 asd
+[2022-11-10 11:23:42]Entrance TESTROOM1 qwe
+[2022-11-10 11:23:44]ChatMessage TESTROOM1 qwe : ¤¾¤·
+[2022-11-10 11:23:45]ChatMessage TESTROOM1 qwe : ¤¾¤·
+[2022-11-10 11:23:48]ChatMessage TESTROOM1 qwe : ¤¾¤·
+[2022-11-10 11:23:50]ChatMessage TESTROOM1 qwe : ¤·¤©¤·¤©
+[2022-11-10 11:23:51]ChatMessage TESTROOM1 qwe : ¤·¤©¤·¤©
+[2022-11-10 11:23:52]ChatMessage TESTROOM1 qwe : ¤·¤©¤·¤©
+[2022-11-10 11:25:14]Register Success
+[2022-11-10 11:25:17]id : zxc Login Success
+[2022-11-10 11:25:20]Entrance TESTROOM1 zxc
+[2022-11-10 11:25:20]ChatMessage TESTROOM1 zxc : df
+[2022-11-10 11:25:21]ChatMessage TESTROOM1 zxc : df
+[2022-11-10 11:25:22]ChatMessage TESTROOM1 zxc : df
+[2022-11-10 11:25:23]ChatMessage TESTROOM1 zxc : df
+[2022-11-10 11:27:15]Entrance TESTROOM1 zxc
+[2022-11-10 11:27:15]Entrance TESTROOM1 asd
+[2022-11-10 11:27:15]Entrance TESTROOM1 qwe
+[2022-11-10 11:27:18]Entrance TESTROOM1 asd
+[2022-11-10 11:27:18]Entrance TESTROOM1 zxc
+[2022-11-10 11:27:18]Entrance TESTROOM1 qwe
+[2022-11-10 11:27:44]Exit TESTROOM1 asd
+[2022-11-10 11:27:45]Exit TESTROOM1 zxc
+[2022-11-10 11:27:47]Exit TESTROOM1 qwe
+[2022-11-10 11:27:47]RemoveChatRoom TESTROOM1

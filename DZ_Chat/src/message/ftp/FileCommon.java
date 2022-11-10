@@ -61,7 +61,7 @@ public class FileCommon {
 			.orElse(-1L);
 		return idx == -1
 				? storeDirPath + fileFullName
-				: storeDirPath + files[0] + "(" + (idx+1) + ")" + files[1];
+				: storeDirPath + files[0] + "(" + (idx+1) + ")." + files[1];
 	}
 
 	public void fileSave(String filePathAndName, Socket socket) throws IOException, InterruptedException {
