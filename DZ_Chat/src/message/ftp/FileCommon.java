@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Objects;
 
 import property.ClientProperties;
 
@@ -29,20 +30,9 @@ public class FileCommon {
 
 	}
 
-	public boolean isAbsolutPath(String path) {
-		switch (System.getProperty("os.name")) {
-		case "Window":
-			return path.matches("([A-Z]):\\\\");
-		case "Max":
-			return path.startsWith("/");
-		default:
-			throw new IllegalArgumentException("지원하지 않는 OS 입니다.");
-		}
-	}
-	
 	public String makeFileName(String storeDirPath, String filePath) {
 		String[] files = filePath.split("\\.");
-		if(files.length < 2){ 
+		if(files.length < 2){
 			throw new IllegalArgumentException("파일명이 올바르지 않습니다. (ex test.txt)");
 		}
 
@@ -52,13 +42,13 @@ public class FileCommon {
 		file = new File(storeDirPath);
 		file.mkdirs();
 
-		long idx = Arrays.asList(file.list()).stream()
-			.filter(x -> x.matches(fileName + "(\\([0-9])?.*"))
-			.map(x -> x.replaceAll("[^0-9]+", ""))
-			.map(x -> 0 + x)
-			.map(Long::parseLong)
-			.max(Long::compare)
-			.orElse(-1L);
+		long idx = Arrays.stream(Objects.requireNonNull(file.list()))
+				.filter(x -> x.matches(fileName + "(\\([0-9])?.*"))
+				.map(x -> x.replaceAll("[^0-9]+", ""))
+				.map(x -> 0 + x)
+				.map(Long::parseLong)
+				.max(Long::compare)
+				.orElse(-1L);
 		return idx == -1
 				? storeDirPath + fileFullName
 				: storeDirPath + files[0] + "(" + (idx+1) + ")." + files[1];
@@ -90,6 +80,7 @@ public class FileCommon {
 		os.close();
 		fis.close();
 	}
+
 	private long printStreamProgress(int cnt, int loopTime, long totalReadBytes, long fileSize) {
 		if (cnt % loopTime == 0) {
 			long percent = totalReadBytes * 100 / fileSize;
@@ -99,7 +90,7 @@ public class FileCommon {
 		}
 		return -1;
 	}
-	
+
 	public static void main(String[] args) {
 		FileCommon fc = new FileCommon();
 		System.out.println(fc.makeFileName("C:\\Users\\KOSA\\Desktop\\", "images.jpg"));

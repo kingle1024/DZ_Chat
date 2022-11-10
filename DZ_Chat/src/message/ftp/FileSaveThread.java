@@ -1,27 +1,25 @@
 package message.ftp;
 
+import dto.ChatInfo;
+import org.json.JSONObject;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.*;
 
 // 보내는 곳 (Client)
 public class FileSaveThread extends Thread{
-	private final HashMap<String, Object> map;
+	private final JSONObject map;
+	private final ChatInfo chatInfo;
 	
-	public FileSaveThread(ThreadGroup threadGroup, HashMap<String, Object> map) {
+	public FileSaveThread(ThreadGroup threadGroup, JSONObject map) {
 		super(threadGroup, map.get("threadName").toString());
 		this.map = map;
+		this.chatInfo = (ChatInfo) map.get("chatInfo");
 	}
 
 	@Override
 	public void start() {
-		String saveRoomAndFileNameStr = getSaveRoomAndFileName();
-		File file = new File(saveRoomAndFileNameStr);
-
-		map.put("chatRoomAndFileName", saveRoomAndFileNameStr);
-		map.put("fileName", file.getName());
-
 		try {
 			System.out.println("FtpClient > run() > ");
 			saveFile();
@@ -39,9 +37,10 @@ public class FileSaveThread extends Thread{
 		try {
 			FtpService ftp = new FtpService();
 			StringBuffer downloadPath =
-					new StringBuffer(ftp.getDownloadPath((String)map.get("fileName")));
+					new StringBuffer(ftp.getDownloadPath(chatInfo.getFilePath()));
+			Socket socket = (Socket)map.get("socket");
 
-			if(ftp.sendSocketInputStream((Socket) map.get("socket"), downloadPath.toString())){
+			if(ftp.saveFile(socket.getInputStream(), downloadPath.toString())){
 				ftp.showPicture(downloadPath);
 				System.out.println("FtpClient > start() > 파일 저장이 완료되었습니다.");
 			}
@@ -49,13 +48,5 @@ public class FileSaveThread extends Thread{
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
-	}
-	public String getSaveRoomAndFileName(){
-		String chatRoomName = (String) map.get("chatRoomName");
-		File originFileAndPath = new File((String)map.get("fileAndPath"));
-		String saveRoomAndFileName = chatRoomName +
-				"/" +
-				originFileAndPath.getName();
-		return saveRoomAndFileName;
 	}
 }

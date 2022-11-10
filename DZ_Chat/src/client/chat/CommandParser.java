@@ -1,14 +1,8 @@
 package client.chat;
 
 import java.io.IOException;
-import java.util.HashMap;
-
+import dto.*;
 import org.json.JSONObject;
-
-import dto.ChatDto;
-import dto.DirDto;
-import dto.PrivateChatDto;
-import dto.Transfer;
 import member.Member;
 import message.ftp.FileMessage;
 
@@ -32,11 +26,11 @@ public class CommandParser {
 		if (msg.startsWith("#dir")) return createDirJSON(msg);
 		return createChatJSON(msg);
 	}
-	
+
 	private JSONObject createChatJSON(String msg) {
 		return Transfer.toJSON(new ChatDto("chat", msg, sender));
 	}
-	
+
 	private JSONObject createPrivateChatJSON(String msg) {
 		int idx = msg.indexOf(' ');
 		if (idx == -1 || idx+1 >= msg.length())  {
@@ -48,15 +42,15 @@ public class CommandParser {
 		msg = msg.substring(idx + 1);
 		return Transfer.toJSON(new PrivateChatDto("pirvateChat", msg, sender, to));
 	}
-	
+
 	private JSONObject createExitJSON() throws ChatRoomExitException {
 		throw new ChatRoomExitException();
 	}
-	
+
 	private JSONObject createDirJSON(String chat) {
 		return Transfer.toJSON(new DirDto("#dir", chat, chatRoomName, sender));
 	}
-	
+
 	private JSONObject createFileJSON(String chat) throws IOException {
 		System.out.println("createFileMessage");
 		String[] message = chat.split(" ");
@@ -72,31 +66,25 @@ public class CommandParser {
 				? Transfer.toJSON(new ChatDto("chat", fileName + " 파일 전송", sender))
 				: Transfer.toJSON(new PrivateChatDto("privateChat", fileName + " 파일 전송 취소", sender, "privateMan"));
 	}
-	
+
 
 
 	public boolean fileMessage(String chat) throws IOException {
 		if(threadGroup == null){
 			threadGroup = new ThreadGroup(sender.getUserId()+chatRoomName);
 		}
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("chat", chat); //  삭제 예정
-		map.put("chatRoomName", this.chatRoomName);
-		map.put("threadGroup", threadGroup);
-		map.put("chatAndRoomName", getChatAndRoomNameStr(chat));
+		JSONObject json = new JSONObject();
+		json.put("threadGroup", threadGroup);
 
 		final String[] message = getMessageSplit(chat);
-		map.put("command", message[0]);
-		map.put("fileAndPath", message[1]);
+		String command = message[0];
+		String fileName = message[1];
 
-		return new FileMessage().client(map);
+		json.put("chatInfo", new ChatInfo(command, fileName, this.chatRoomName));
+
+		return new FileMessage().client(json);
 	}
-	public String getChatAndRoomNameStr(String chat){
-		return chat +
-				" " +
-				"room/" +
-				chatRoomName;
-	}
+
 	public String[] getMessageSplit(String chat){
 		String[] message = chat.split(" ");
 		if(message.length == 1){
