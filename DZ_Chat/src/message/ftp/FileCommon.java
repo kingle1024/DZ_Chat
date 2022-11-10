@@ -49,14 +49,13 @@ public class FileCommon {
 		File file = new File(filePath);
 		String fileFullName = file.getName();
 		String fileName = fileFullName.replaceAll("\\..*", "");
-		System.out.println("fileName: " + fileName);
 		file = new File(storeDirPath);
 		file.mkdirs();
 
 		long idx = Arrays.asList(file.list()).stream()
 			.filter(x -> x.matches(fileName + "(\\([0-9])?.*"))
-			.map(x -> x.replaceAll("[^0-9]*", ""))
-			.filter(x -> !"".equals(x))
+			.map(x -> x.replaceAll("[^0-9]+", ""))
+			.map(x -> 0 + x)
 			.map(Long::parseLong)
 			.max(Long::compare)
 			.orElse(-1L);
@@ -99,5 +98,10 @@ public class FileCommon {
 			return percent;
 		}
 		return -1;
+	}
+	
+	public static void main(String[] args) {
+		FileCommon fc = new FileCommon();
+		System.out.println(fc.makeFileName("C:\\Users\\KOSA\\Desktop\\", "images.jpg"));
 	}
 }
