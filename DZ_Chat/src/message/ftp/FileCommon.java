@@ -69,7 +69,7 @@ public class FileCommon {
 	public void fileSave(String filePathAndName, Socket socket) throws IOException, InterruptedException {
 		File originFileTarget = new File(filePathAndName);
 
-		byte[] buffer = new byte[Integer.parseInt(ClientProperties.getDefaultBufferSize())];
+		byte[] buffer = new byte[ClientProperties.getDefaultBufferSize()];
 		System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > " + originFileTarget.getAbsolutePath());
 		long fileSize = originFileTarget.length();
 

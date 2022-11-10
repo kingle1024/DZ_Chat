@@ -19,7 +19,7 @@ public class ClientProperties {
 		return clientProperties.getProperty("CHAT_LOG_FILE");
 	}
 
-	public static String getDefaultBufferSize() {
-		return clientProperties.getProperty("DEFAULT_BUFFER_SIZE");
+	public static int getDefaultBufferSize() {
+		return Integer.parseInt(clientProperties.getProperty("DEFAULT_BUFFER_SIZE"));
 	}
 }
