@@ -17,7 +17,7 @@ public class MainServer implements Server {
 	private ServerInfo serverInfo;
 	private ServerSocket serverSocket;	
 
-	public MainServer(String port) {
+	public MainServer(int port) {
 		serverInfo = new ServerInfo("Main 서버", port);
 	}
 	

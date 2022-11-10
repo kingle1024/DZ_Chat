@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String[] args) {
 		// Mock ChatRoom
 		for (int i = 0; i < 5; i++) {
-			MainServer.chatRoomMap.put("TEST ROOM" + i, new ChatRoom("TEST ROOM" + i));
+			MainServer.chatRoomMap.put("TESTROOM" + i, new ChatRoom("TESTROOM" + i));
 		}
 		
 		try {

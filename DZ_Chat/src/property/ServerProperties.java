@@ -30,8 +30,8 @@ public class ServerProperties {
 		return serverProperties.getProperty("IP");
 	}
 	
-	public static String getFTPPort() {
-		return serverProperties.getProperty("FTP_PORT");
+	public static int getFTPPort() {
+		return Integer.parseInt(serverProperties.getProperty("FTP_PORT"));
 	}
 	
 	public static String getDownloadPath() {
@@ -42,8 +42,8 @@ public class ServerProperties {
 		return serverProperties.getProperty("THREAD_POOL");
 	}
 	
-	public static String getServerPort() {
-		return serverProperties.getProperty("SERVER_PORT");
+	public static int getServerPort() {
+		return Integer.parseInt(serverProperties.getProperty("SERVER_PORT"));
 	}
 	
 	public static String getMemberFile() {

@@ -1,12 +1,16 @@
 package client.chat;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.HashMap;
 
 import org.json.JSONObject;
 
 import member.Member;
 import message.ftp.FileMessage;
+import property.ServerProperties;
 
 public class CommandParser {
 	private final Member sender;
@@ -56,6 +60,14 @@ public class CommandParser {
 		throw new ChatRoomExitException();
 	}
 	
+	private JSONObject createDirJSON(String chat) {
+		json.put("type", "#dir");
+		json.put("message", chat);
+		json.put("chatRoomName", chatRoomName);
+		json.put("sender", sender.getJSON());
+		return json;
+	}
+	
 	private JSONObject createFileJSON(String chat) throws IOException {
 		System.out.println("createFileMessage");
 		String[] message = chat.split(" ");
@@ -81,13 +93,7 @@ public class CommandParser {
 		}
 	}
 	
-	private JSONObject createDirJSON(String chat) {
-		json.put("type", "dir");
-		json.put("message", chat);
-		json.put("chatRoomName", chatRoomName);
-		json.put("sender", sender.getJSON());
-		return json;
-	}
+
 
 	public boolean fileMessage(String chat) throws IOException {
 		if(threadGroup == null){

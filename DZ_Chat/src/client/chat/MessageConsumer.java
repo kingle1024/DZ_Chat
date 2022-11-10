@@ -29,9 +29,6 @@ public class MessageConsumer implements Runnable {
 			}
 			try {
 				if (!messageQueue.isEmpty() && !monitor.equalsStatus("close")) {
-					// TODO 클라이언트 전용 메세지 객체를 만들어, JSONizable 구현 시켜서 바로 보내기
-					// ClientMessage clientMessage = messageQueue.poll();
-					// chatClient.send(messageQueue.poll());
 					JSONObject message = messageQueue.poll();
 					chatClient.send(message);
 				} else {

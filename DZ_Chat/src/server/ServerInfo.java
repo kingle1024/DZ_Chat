@@ -8,11 +8,11 @@ public class ServerInfo {
 	private String HOST = "";
 	private int PORT_NUMBER = -1;
 	
-	public ServerInfo(String name, String port) {
+	public ServerInfo(String name, int port) {
 		this.name = name;
 		try {
 			this.HOST = InetAddress.getLocalHost().toString();
-			this.PORT_NUMBER = Integer.parseInt(port);
+			this.PORT_NUMBER = port;
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

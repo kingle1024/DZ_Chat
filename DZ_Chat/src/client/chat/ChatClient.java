@@ -5,18 +5,16 @@ import static client.Main.*;
 import java.io.*;
 import java.util.Arrays;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import client.Client;
-import message.MessageFactory;
 
 public class ChatClient extends Client {
 	private String chatRoomName;
 	private boolean sendExit = false;
 	private ThreadGroup threadGroup;
 	private CommandParser commandParser;
-	
+
 	private static final Monitor monitor = MessageQueue.getMonitor();
 	private boolean isMessageConsumerStarted = false;
 
@@ -44,10 +42,10 @@ public class ChatClient extends Client {
 				JSONObject initData = new JSONObject();
 				initData.put("chatRoomName", chatRoomName);
 				initData.put("me", getMe().getJSON());
-			
+
 				connect("chat.ChatService");
 				send(initData);
-				
+
 				messageListener.setChatClient(this);
 				messageConsumer.setChatClient(this);
 				if (!isMessageConsumerStarted) {
@@ -58,7 +56,7 @@ public class ChatClient extends Client {
 
 				System.out.println("채팅방 입장");
 				monitorControl();
-				
+
 			} catch (IOException e) {
 				if (sendExit) {
 					exit(producerThread, consumerThread, listenerThread);
@@ -67,7 +65,7 @@ public class ChatClient extends Client {
 					connectTry(1000);
 				}
 			} catch (InterruptedException e) {
-				
+
 			}
 		}
 	}
@@ -89,8 +87,8 @@ public class ChatClient extends Client {
 			}
 		}
 	}
-	
-	private void exit(Thread...threads) {
+
+	private void exit(Thread... threads) {
 		System.out.println("채팅 종료");
 		Arrays.asList(threads).forEach(Thread::interrupt);
 		try {
@@ -99,7 +97,7 @@ public class ChatClient extends Client {
 
 		}
 	}
-	
+
 	private void connectTry(int time) {
 		try {
 			Thread.sleep(time);
@@ -107,7 +105,7 @@ public class ChatClient extends Client {
 		} catch (InterruptedException e) {
 		}
 	}
-	
+
 	public boolean getSendExit() {
 		return sendExit;
 	}

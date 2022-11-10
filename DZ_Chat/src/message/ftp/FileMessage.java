@@ -48,7 +48,7 @@ public class FileMessage {
         try {
             return new Socket(
                     ServerProperties.getIP(),
-                    Integer.parseInt(ServerProperties.getFTPPort()));
+                    ServerProperties.getFTPPort());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

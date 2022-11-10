@@ -12,7 +12,6 @@ import java.util.Arrays;
 import property.ClientProperties;
 
 public class FileCommon {
-	private String os;
 	/**
 	 * @param isAppend true이면 연속해서 파일 작성, false이면 새로 파일 작성
 	 */
@@ -68,34 +67,37 @@ public class FileCommon {
 
 	public void fileSave(String filePathAndName, Socket socket) throws IOException, InterruptedException {
 		File originFileTarget = new File(filePathAndName);
-
-		byte[] buffer = new byte[ClientProperties.getDefaultBufferSize()];
-		System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > " + originFileTarget.getAbsolutePath());
-		long fileSize = originFileTarget.length();
-
-		// 여기에 파일이 있음
 		InputStream fis = new FileInputStream(originFileTarget);
-
-		// 앞으로 저장할 파일
 		OutputStream os = socket.getOutputStream();
-		int readBytes;
+
+		long fileSize = originFileTarget.length();
+		byte[] buffer = new byte[ClientProperties.getDefaultBufferSize()];
+
+		System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > " + originFileTarget.getAbsolutePath());
+
+		int readBytes = -1;
 		long totalReadBytes = 0;
 		int cnt = 0;
 		int loopTime = 2;
+		long percent = -1;
+		
 		while ((readBytes = fis.read(buffer)) > 0) {
 			Thread.sleep(1);
 			os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
 			totalReadBytes += readBytes;
-			if (cnt % loopTime == 0) {
-				System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-						+ (totalReadBytes * 100 / fileSize) + " %)");
-			}
-			cnt++;
+			percent = printStreamProgress(cnt++, loopTime, totalReadBytes, fileSize);
 		}
-		if ((cnt - 1) % loopTime != 0) {
-			System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
-					+ (totalReadBytes * 100 / fileSize) + " %)");
-		}
+		if (percent != 100) printStreamProgress(0, 1, totalReadBytes, fileSize);
 		os.close();
+		fis.close();
+	}
+	private long printStreamProgress(int cnt, int loopTime, long totalReadBytes, long fileSize) {
+		if (cnt % loopTime == 0) {
+			long percent = totalReadBytes * 100 / fileSize;
+			System.out.println("sendFile In progress: " + totalReadBytes + "/" + fileSize + " Byte(s) ("
+					+ percent + " %)");
+			return percent;
+		}
+		return -1;
 	}
 }

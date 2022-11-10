@@ -10,7 +10,7 @@ import property.ServerProperties;
 
 public abstract class Client {
 	private static final String SERVER_HOST = ServerProperties.getIP();
-	private static final int PORT_NUMBER = Integer.parseInt(ServerProperties.getServerPort());
+	private static final int PORT_NUMBER = ServerProperties.getServerPort();
 	private Socket socket;
 	private BufferedWriter bw;
 	private BufferedReader br;
