@@ -24,7 +24,7 @@ public class PrivateChatMessage implements Message {
 
 	@Override
 	public void push() {
-		JSONObject json = new JSONObject("message", toString());
+		JSONObject json = new JSONObject().put("message", this.toString());
 		chatService.getChatRoom().getChatServices().stream()
 			.filter(s -> s.equalsUser(to))
 			.forEach(s -> {
