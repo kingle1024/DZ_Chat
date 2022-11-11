@@ -51,9 +51,4 @@ public class ServerProperties {
 	public static String getConnectProperties() {
 		return serverProperties.getProperty("connect.properties");
 	}
-	
-    public static void main(String[] args) {
-        File file = new File("resource");
-        System.out.println(file.getAbsolutePath());
-    }
 }
