@@ -94,7 +94,6 @@ public class MemberManagerDB implements MemberManagerInterface {
 	}
 
 	public boolean deleteMember(Member member, String pw) {
-		System.out.println(member);
 		if (!member.getPassword().equals(pw)) return false;
 		try {
 			open();
