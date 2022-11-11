@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import dto.Transfer;
-import dto.UpdatePWDto;
+import dto.member.UpdatePWDto;
 import log.Log;
 import log.LogQueue;
 import member.Member;

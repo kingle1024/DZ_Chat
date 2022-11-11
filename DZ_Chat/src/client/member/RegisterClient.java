@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
-import dto.RegisterDto;
 import dto.Transfer;
+import dto.member.RegisterDto;
 import member.Member;
 
 public class RegisterClient extends Client {

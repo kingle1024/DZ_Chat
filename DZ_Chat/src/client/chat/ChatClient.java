@@ -8,8 +8,8 @@ import java.util.Arrays;
 import org.json.JSONObject;
 
 import client.Client;
-import dto.ChatInitDto;
 import dto.Transfer;
+import dto.chat.ChatInitDto;
 
 public class ChatClient extends Client {
 	private String chatRoomName;

@@ -5,8 +5,8 @@ import java.io.*;
 import org.json.JSONObject;
 
 import client.Client;
-import dto.LoginDto;
 import dto.Transfer;
+import dto.member.LoginDto;
 
 public class LoginClient extends Client {
 	private String id;

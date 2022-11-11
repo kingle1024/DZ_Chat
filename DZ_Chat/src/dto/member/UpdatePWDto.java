@@ -1,5 +1,6 @@
-package dto;
+package dto.member;
 
+import dto.Transfer;
 import member.Member;
 
 public class UpdatePWDto {

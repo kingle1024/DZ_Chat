@@ -1,8 +1,9 @@
 package server;
 
-import dto.ChatInfo;
 import message.ftp.FileCommon;
 import org.json.JSONObject;
+
+import dto.chat.ChatInfo;
 import property.ServerProperties;
 import java.io.*;
 import java.net.ServerSocket;

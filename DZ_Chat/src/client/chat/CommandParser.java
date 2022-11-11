@@ -2,6 +2,11 @@ package client.chat;
 
 import java.io.IOException;
 import dto.*;
+import dto.chat.ChatDto;
+import dto.chat.ChatInfo;
+import dto.chat.DirDto;
+import dto.chat.PrivateChatDto;
+
 import org.json.JSONObject;
 import member.Member;
 import message.ftp.FileMessage;

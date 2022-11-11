@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import client.Client;
 import dto.Transfer;
-import dto.UpdatePWDto;
+import dto.member.UpdatePWDto;
 
 public class UpdatePWClient extends Client {
 	private final String validatePW;

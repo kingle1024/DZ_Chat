@@ -7,8 +7,8 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
-import dto.DeleteMemberDto;
 import dto.Transfer;
+import dto.member.DeleteMemberDto;
 
 public class DeleteMemberClient extends Client {
 	private String pw;

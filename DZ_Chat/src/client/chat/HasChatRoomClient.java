@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import client.Client;
-import dto.HasChatRoomDto;
 import dto.Transfer;
+import dto.chat.HasChatRoomDto;
 
 public class HasChatRoomClient extends Client {
 	private String chatRoomName;

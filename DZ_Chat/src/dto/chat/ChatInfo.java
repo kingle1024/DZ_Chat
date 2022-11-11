@@ -1,5 +1,6 @@
-package dto;
+package dto.chat;
 
+import dto.Transfer;
 import lombok.Getter;
 
 @Getter

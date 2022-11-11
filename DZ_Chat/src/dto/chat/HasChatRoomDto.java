@@ -1,4 +1,4 @@
-package dto;
+package dto.chat;
 
 public class HasChatRoomDto {
 	public static class Request {
