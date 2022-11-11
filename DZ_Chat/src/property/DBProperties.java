@@ -53,6 +53,10 @@ public class DBProperties {
 		return queryProperties.getProperty("FIND_MEMBER_BY_USERID");
 	}
 	
+	public String getInsertDeleteMemberQuery() {
+		return queryProperties.getProperty("INSERT_DELETE_MEMBER");
+	}
+	
 	public String getDeleteMemberByUserIdQuery() {
 		return queryProperties.getProperty("DELETE_MEMBER_BY_USERID");
 	}
