@@ -10,7 +10,6 @@ public class MessageListener implements Runnable {
 
 	public MessageListener(ChatClient chatClient) {
 		this.chatClient = chatClient;
-		System.out.println("MessageListener 생성 완료");
 	}
 
 	public void setChatClient(ChatClient chatClient) {
@@ -24,8 +23,6 @@ public class MessageListener implements Runnable {
 			try {
 				JSONObject json = chatClient.receive();
 				System.out.println(json.get("message"));
-
-				
 			} catch (IOException e) {
 				try {
 					synchronized (monitor) {
