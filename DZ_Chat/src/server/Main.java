@@ -11,11 +11,6 @@ import server.map.ChatRoomMap;
 
 public class Main {
 	public static void main(String[] args) {
-		// Mock ChatRoom
-		for (int i = 0; i < 5; i++) {
-			ChatRoomMap.put("TESTROOM" + i, new ChatRoom("TESTROOM" + i));
-		}
-		
 		try {
 			MemberDao.readContent();
 			ChatRoomMap.init();
@@ -44,10 +39,8 @@ public class Main {
 			server.stop();
 			scanner.close();
 
-		} catch (IOException e) {
-			System.out.println("IOException" + e);
 		} catch (Exception e) {
-			System.out.println("Exception" + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -55,6 +48,7 @@ public class Main {
 		System.out.println("exit call");
 		// TODO: LogQueue 남아 있는 것 모두 해소
 		MemberDao.writeContent();
+		ChatRoomMap.record();
 		System.out.println("SAVE COMMAND");
 	}
 }

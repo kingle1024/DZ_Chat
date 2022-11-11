@@ -19,6 +19,8 @@ public class Transfer {
 	private static Map<String, Constructor<?>> dtoConstructorMap = new HashMap<>();
 	
 	// DTO 클래스 로딩
+	// java compile 옵션 -parameters
+	// Eclipse: Window > Preferences > Java > Compiler > Store information about method parameters
 	static {
 		try {
 			String src = "." + File.separator + "src" + File.separator;
