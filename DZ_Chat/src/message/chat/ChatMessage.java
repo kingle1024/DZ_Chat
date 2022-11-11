@@ -22,10 +22,8 @@ public class ChatMessage implements Message {
 
 	@Override
 	public void push() {
-		System.out.println("message push: " + message);
 		JSONObject json = new JSONObject().put("message", this.toString());
 		chatService.getChatRoom().getChatServices().forEach(s -> {
-			System.out.println(s.getChatRoom() + ": " + s.getMe());
 			try {
 				s.send(json);
 			} catch (IOException e) {
