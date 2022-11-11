@@ -45,7 +45,7 @@ public class CommandParser {
 		}
 		String to = msg.substring(1, idx);
 		msg = msg.substring(idx + 1);
-		return Transfer.toJSON(new PrivateChatDto("pirvateChat", msg, sender, to));
+		return Transfer.toJSON(new PrivateChatDto("@", msg, sender, to));
 	}
 
 	private JSONObject createExitJSON() throws ChatRoomExitException {

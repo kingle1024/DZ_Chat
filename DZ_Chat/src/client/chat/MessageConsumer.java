@@ -11,7 +11,6 @@ public class MessageConsumer implements Runnable {
 
 	public MessageConsumer(ChatClient chatClient) {
 		this.chatClient = chatClient;
-		System.out.println("MessageConsumer  생성 완료");
 	}
 
 	public void setChatClient(ChatClient chatClient) {
