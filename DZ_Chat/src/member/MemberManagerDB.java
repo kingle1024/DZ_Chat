@@ -1,11 +1,13 @@
 package member;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Types;
 
 import property.DBProperties;
 
@@ -13,6 +15,7 @@ public class MemberManagerDB implements MemberManagerInterface {
 	private DBProperties dbProperties;
 	private Connection conn;
 	private PreparedStatement pstmt;
+	private CallableStatement cstmt;
 	
 	public MemberManagerDB(String dbProperties) {
 		this.dbProperties = DBProperties.getInstance(dbProperties);
@@ -39,6 +42,9 @@ public class MemberManagerDB implements MemberManagerInterface {
 				}
 				if (conn != null) {
 					conn.close();
+				}
+				if (cstmt != null) {
+					cstmt.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -92,6 +98,16 @@ public class MemberManagerDB implements MemberManagerInterface {
 		if (!member.getPassword().equals(pw)) return false;
 		try {
 			open();
+			
+			cstmt = conn.prepareCall(dbProperties.getInsertDeleteMemberQuery());
+			cstmt.setString(1, member.getUserId());
+			cstmt.setString(2, member.getPassword());
+			cstmt.setString(3, member.getName());
+			cstmt.setString(4, member.getBirth());
+			cstmt.registerOutParameter(5, Types.INTEGER);
+			cstmt.execute();
+			cstmt.close();
+			
 			pstmt = conn.prepareStatement(dbProperties.getDeleteMemberByUserIdQuery());
 			pstmt.setString(1, member.getUserId());
 			return pstmt.executeUpdate() == 1;
