@@ -8,6 +8,9 @@ import client.ClientMap;
 import client.view.TextInput;
 import client.view.View;
 import client.view.ViewMap;
+import dto.Transfer;
+import dto.member.LoginDto;
+import dto.member.LoginDto.Response;
 import member.Member;
 
 public class LoginView implements View {
@@ -23,14 +26,12 @@ public class LoginView implements View {
 		id = textInput.next();
 		pw = textInput.next();
 		JSONObject response = ClientMap.runClient("member.LoginClient", id, pw);
-		
-		boolean hasMember = response.has("member");
-		Member me = hasMember
-				? Member.parseJSONString(response.getString("member"))
-				: null;
+		LoginDto.Response dto = (Response) Transfer.toDTO(response);
+		Member me = Member.parseJSONString(dto.getMember());
+//		Member me = Member.parseJSONString(response.getString("member"));
 		setMe(me);
-		System.out.println(hasMember ? "로그인 성공" : "로그인 실패");
-		return hasMember ? ViewMap.getView("SuccessLogin") : ViewMap.getView("Main");
+		System.out.println(me != null ? "로그인 성공" : "로그인 실패");
+		return me != null ? ViewMap.getView("SuccessLogin") : ViewMap.getView("Main");
 	}
 
 	@Override

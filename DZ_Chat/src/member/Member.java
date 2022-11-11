@@ -18,6 +18,7 @@ public class Member {
 	}
 
 	public static Member parseJSON(JSONObject json) {
+		if (!json.has("userId")) return null;
 		return new Member(json.getString("userId")
 				, json.getString("password")
 				, json.getString("name"),

@@ -24,7 +24,7 @@ public class LoginService extends Service {
 			id = loginJSON.getString("id");
 			pw = loginJSON.getString("pw");
 			Member member = MemberManager.login(id, pw);
-			JSONObject sendJSON = Transfer.toJSON(new LoginDto.Response(member));
+			JSONObject sendJSON = Transfer.toJSON(new LoginDto.Response(member != null, member));
 			if (member != null) {
 				LogQueue.add(toLog());
 			}

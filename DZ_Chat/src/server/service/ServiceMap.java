@@ -22,7 +22,9 @@ public class ServiceMap {
 						que.offer(next);
 					} else {
 						String fileName = next.toString();
-						fileName = fileName.substring(6, fileName.length()-5).replace(File.separator, ".");
+						fileName = fileName.replace("." + File.separator + "src" + File.separator, "");
+						fileName = fileName.replace(".java", "");
+						fileName = fileName.replace(File.separator, ".");
 						Constructor<?> constructor = Class.forName(fileName).getConstructors()[0];
 						fileName = fileName.replace("server.service.serviceimpl.", "");
 						serviceMap.put(fileName, constructor);

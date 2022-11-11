@@ -15,12 +15,20 @@ public class LoginDto {
 	}
 
 	public static class Response {
+		private String hasMember;
 		private String member;
 		
-		public Response(Member member) {
-			this.member = member != null
-					? Transfer.toJSON(member).toString()
-					: null;
+		public Response(String hasMember, String member) {
+			this.hasMember = hasMember;
+			this.member = member;
+		}
+		
+		public Response(boolean hasMember, Member member) {
+			this(Boolean.toString(hasMember), Transfer.toJSON(member).toString());
+		}
+		
+		public String getMember() {
+			return member;
 		}
 	}
 }

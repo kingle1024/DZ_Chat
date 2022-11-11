@@ -23,7 +23,6 @@ public class MessageProducer implements Runnable {
 		while (getScanner().hasNext()) {
 			try {
 				String msg = getScanner().nextLine();
-				msg = Transfer.getUTF8(msg);
 				JSONObject msgJson = commandParser.createJSONObject(msg);
 				messageQueue.add(msgJson);
 			} catch (ChatRoomExitException e) {

@@ -13,7 +13,6 @@ public abstract class Service {
 		int len = dis.readInt();
 		buff = new byte[len];
 		dis.read(buff, 0, len);
-		System.out.println(len);
 		return new JSONObject(new String(buff, "UTF-8"));
 	}
 	
