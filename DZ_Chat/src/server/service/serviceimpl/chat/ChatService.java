@@ -26,7 +26,6 @@ public class ChatService extends Service {
 			try {
 				while (true) {
 					JSONObject messageJSON = receive();
-					System.out.println(messageJSON);
 					Message message = MessageFactory.create(this, messageJSON);
 					message.push();
 				}
