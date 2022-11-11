@@ -17,19 +17,14 @@ public abstract class Client {
 	private byte[] buff;
 	
 	public void connect(String commandType) throws IOException {
-		System.out.println("[클라이언트] 서버 연결 시도");
 		socket = new Socket(SERVER_HOST, PORT_NUMBER);
-		System.out.println("Socket 생성");
 		dos = new DataOutputStream(socket.getOutputStream());
 		dis = new DataInputStream(socket.getInputStream());
-		System.out.println("[클라이언트] 서버에 연결 성공");
 		send(new JSONObject().put("commandType", commandType));
-		System.out.println("send command");
 	}
 
 	public void unconnect() throws IOException {
 		socket.close();
-		System.out.println("[클라이언트] 연결 종료");
 	}
 
 	public JSONObject receive() throws IOException {
