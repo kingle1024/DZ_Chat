@@ -1,6 +1,8 @@
 package server;
 
+import dto.ChatInfo;
 import message.ftp.FileCommon;
+import org.json.JSONObject;
 import property.ServerProperties;
 import java.io.*;
 import java.net.ServerSocket;
@@ -43,19 +45,23 @@ public class FtpServer implements Server {
 		try {
 			Socket socket = serverSocket.accept();
 			FtpService ftpService = new FtpService();
-			String chat = ftpService.clientMessageReceive(socket);
-			System.out.println("chat:"+chat);
-			String[] message = chat.split(" ");
-			File commandFileAndPath = new File(message[1]);
-			String fileName = commandFileAndPath.getName();
-			String roomName = message[2];
+			JSONObject response = ftpService.reponseMessage(socket);
+			ChatInfo chatInfo = getChatInfo(response);
 
-			if (chat.startsWith("#fileSend")) {
-				System.out.println("FileTransferReceiver > startServer() > #fileSend > " + chat);
-				ftpService.fileSend(chat, socket);
+			String command = chatInfo.getCommand();
+			String fileName = new File(chatInfo.getFilePath()).getName();
+			String chatRoomName = chatInfo.getRoomName();
+
+			JSONObject request = new JSONObject();
+			request.put("fileName", fileName);
+			request.put("chatRoomName", chatRoomName);
+
+			if (command.startsWith("#fileSend")) {
+				System.out.println("FileTransferReceiver > startServer() > #fileSend > " + fileName);
+				ftpService.fileSend(request, socket);
 			}else {
 				try {
-					new FileCommon().fileSave("resources/" + roomName + "/" + fileName, socket);
+					new FileCommon().fileSave("resources/" + chatRoomName + "/" + fileName, socket);
 					System.out.println("서버에서 파일 전송 완료");
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
@@ -66,6 +72,16 @@ public class FtpServer implements Server {
 			throw new RuntimeException(e);
 		}
 	}
+
+	private ChatInfo getChatInfo(JSONObject response) {
+		String chatInfoStr = response.getString("chatInfo");
+		JSONObject chatInfo = new JSONObject(chatInfoStr);
+		String command = chatInfo.getString("command");
+		String filePath = chatInfo.getString("filePath");
+		String roomName = chatInfo.getString("roomName");
+		return new ChatInfo(command, filePath, roomName);
+	}
+
 	@Override
 	public void stop() {
 		try {
@@ -76,4 +92,5 @@ public class FtpServer implements Server {
 			e.printStackTrace();
 		}
 	}
+
 }

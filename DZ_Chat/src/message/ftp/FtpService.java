@@ -1,8 +1,10 @@
 package message.ftp;
+import org.json.JSONObject;
 import property.ClientProperties;
 import property.ServerProperties;
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,11 +20,6 @@ public class FtpService {
 		}
 
 		return true;
-	}
-
-	public boolean sendSocketInputStream(Socket socket, String saveFilePath) throws IOException {
-		System.out.println("FtpServer > saveFilePath > " + saveFilePath);
-		return saveFile(socket.getInputStream(), saveFilePath);
 	}
 
 	public boolean saveFile(InputStream is, String saveFilePath) {
@@ -121,31 +118,35 @@ public class FtpService {
 		}
 	}
 
-	public String clientMessageReceive(Socket socket) throws IOException {
-		BufferedReader bufferedReader = new BufferedReader(
-				new InputStreamReader(new ObjectInputStream(socket.getInputStream())));
-		String clientMessage = bufferedReader.readLine();
-		System.out.println("클라이언트가 보내온 내용 :" + clientMessage);
+	public JSONObject reponseMessage(Socket socket) throws IOException {
+		DataInputStream dis = new DataInputStream(socket.getInputStream());
+		int length = dis.readInt();
+		int pos = 0;
+		byte[] recvData = new byte[length];
+		do{
+			int len = dis.read(recvData, pos, length - pos);
+			pos += len;
+		}while(length != pos);
 
-		return clientMessage;
+		String responseJson = new String(recvData, StandardCharsets.UTF_8);
+
+		return new JSONObject(responseJson);
 	}
 
-	public void fileSend(String chat, Socket socket) {
+	public void fileSend(JSONObject response, Socket socket) {
 		try {
-			String[] message = chat.split(" ");
-			File file = new File(message[1]);
-			String fileName = file.getName();
-			String roomName = message[2];
+			String fileName = response.getString("fileName");
+			String roomName = response.getString("chatRoomName");
 			FileCommon fileCommon = new FileCommon();
 
-			String saveFilePath = fileCommon.makeFileName("resources/" + roomName + "/", fileName);
+			String saveFilePath = fileCommon.makeFileName("resources/room/" + roomName + "/", fileName);
+			System.out.println("saveFilePath:"+saveFilePath);
 			if (saveFilePath != null) {
-				sendSocketInputStream(socket, saveFilePath);
+				saveFile(socket.getInputStream(), saveFilePath);
 			}
 		} catch (IOException e) {
 			System.out.println("FtpService > fileSend > " + e);
 			throw new RuntimeException(e);
 		}
 	}
-
 }

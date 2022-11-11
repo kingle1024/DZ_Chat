@@ -1,65 +1,77 @@
 package message.ftp;
 
+import dto.ChatInfo;
+import org.json.JSONObject;
 import property.ServerProperties;
-
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
 
 public class FileMessage {
-	public boolean client(HashMap<String, Object> map) throws IOException {
-		ThreadGroup threadGroup = (ThreadGroup) map.get("threadGroup");
-		String chat = (String) map.get("chat");
-		if (chat.startsWith("#fileStop")) {
-			threadGroup.interrupt();
-			return false;
-		}
+    private ChatInfo chatInfo;
+    private Socket socket;
+    public boolean client(JSONObject json) throws IOException {
+        ThreadGroup threadGroup = (ThreadGroup) json.get("threadGroup");
+        chatInfo = (ChatInfo) json.get("chatInfo");
+        String command = chatInfo.getCommand();
+        if(command.startsWith("#fileStop")) {
+            threadGroup.interrupt();
+            return false;
+        }
 
-		// FTP Client
-		Socket socket = getSocket();
-		String chatAndRoomName = (String) map.get("chatAndRoomName");
-		String chatRoomName = (String) map.get("chatRoomName");
+        createSocket();
+        sendMessageFtpServer();
 
-		// FTP 서버에다가 메시지를 전달해줌
-		sendMessageFtpServer(chatAndRoomName, socket);
+        JSONObject threadMap = new JSONObject();
 
-		HashMap<String, Object> threadMap = new HashMap<>();
-		String[] message = chatAndRoomName.split(" ");
-		System.out.println("message:" + message[1]);
 
-		threadMap.put("chat", chat);
-		threadMap.put("threadName", message[1]);
-		threadMap.put("socket", socket);
-		threadMap.put("chatRoomName", chatRoomName);
-		// common
-		threadMap.put("command", map.get("command"));
-		// common
-		threadMap.put("fileAndPath", map.get("fileAndPath"));
+        threadMap.put("chat", command);
+        threadMap.put("threadName", chatInfo.getRoomName());
+        threadMap.put("socket", socket);
+        threadMap.put("chatInfo", chatInfo);
 
-		if (chat.startsWith("#fileSend")) {
-			new FileSendThread(threadGroup, threadMap).start();
-		} else if (chat.startsWith("#fileSave")) {
-			new FileSaveThread(threadGroup, threadMap).start();
-		}
+        if(command.startsWith("#fileSend")) {
+            new FileSendThread(threadGroup, threadMap).start();
+        }else if(command.startsWith("#fileSave")){
+            new FileSaveThread(threadGroup, threadMap).start();
+        }
 
-		return true;
-	}
+        return true;
+    }
+    public void createSocket(){
+        try {
+            socket = new Socket(
+                    ServerProperties.getIP(),
+                    ServerProperties.getFTPPort());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public Socket getSocket() {
-		try {
-			return new Socket(ServerProperties.getIP(), ServerProperties.getFTPPort());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+    public void sendMessageFtpServer() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("chatInfo", chatInfo.toString());
 
-	}
+        String json = jsonObject.toString();
+        DataOutputStream dos = new DataOutputStream((socket.getOutputStream()));
 
-	public void sendMessageFtpServer(String input, Socket socket) throws IOException {
-		BufferedWriter bufferedWriter = new BufferedWriter(
-				new OutputStreamWriter(new ObjectOutputStream(socket.getOutputStream())));
-		bufferedWriter.write(input);
-		bufferedWriter.newLine();
-		bufferedWriter.flush();
-//		System.out.println("메시지 전송 완료");
-	}
+        byte[] sendData =  json.getBytes(StandardCharsets.UTF_8);
+        dos.writeInt(sendData.length);
+
+        int remainder = sendData.length;
+        int sendBlock = remainder > 4069 ? 4069 : remainder;
+        int pos = 0;
+
+        while(remainder > 0){
+            dos.write(sendData, pos, sendBlock);
+            remainder -= sendBlock;
+            pos += sendBlock;
+            if(remainder < sendBlock){
+                sendBlock = remainder;
+            }
+            System.out.println("length = " + sendData.length + "      pos = " + pos + "   sendBlock = " + sendBlock);
+        }
+
+        dos.flush();
+    }
 }

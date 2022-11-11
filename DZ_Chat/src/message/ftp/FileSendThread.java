@@ -1,27 +1,30 @@
 package message.ftp;
 
+import dto.ChatInfo;
+import org.json.JSONObject;
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
 
 import static message.ftp.FtpService.fileValid;
 
 public class FileSendThread extends Thread {
-	private final HashMap<String, Object> map;
-	public FileSendThread(ThreadGroup threadGroup, HashMap<String, Object> map) {
+	private final JSONObject map;
+	private final ChatInfo chatInfo;
+	public FileSendThread(ThreadGroup threadGroup, JSONObject map) {
 		super(threadGroup, (String) map.get("threadName")); // 스레드 그룹과 스레드 이름을 설정
 		this.map = map;
+		this.chatInfo = (ChatInfo) map.get("chatInfo");
 	}
 
 	@Override
 	public void run() {
-		String command = (String) map.get("command");
+		String command = chatInfo.getCommand();
 		if (command.startsWith("#fileStop")) {
 			System.out.println("fileStop");
 			return;
 		}
 
-		String filePathAndName = (String) map.get("fileAndPath");
+		String filePathAndName = chatInfo.getFilePath();
 		System.out.println("ClientToServer > run() > fileName:" + filePathAndName);
 
 		try {
