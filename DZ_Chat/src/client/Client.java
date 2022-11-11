@@ -12,15 +12,16 @@ public abstract class Client {
 	private static final String SERVER_HOST = ServerProperties.getIP();
 	private static final int PORT_NUMBER = ServerProperties.getServerPort();
 	private Socket socket;
-	private BufferedWriter bw;
-	private BufferedReader br;
-
+	private DataOutputStream dos;
+	private DataInputStream dis;
+	private byte[] buff;
+	
 	public void connect(String commandType) throws IOException {
 		System.out.println("[클라이언트] 서버 연결 시도");
 		socket = new Socket(SERVER_HOST, PORT_NUMBER);
 		System.out.println("Socket 생성");
-		this.bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		dos = new DataOutputStream(socket.getOutputStream());
+		dis = new DataInputStream(socket.getInputStream());
 		System.out.println("[클라이언트] 서버에 연결 성공");
 		send(new JSONObject().put("commandType", commandType));
 		System.out.println("send command");
@@ -32,22 +33,18 @@ public abstract class Client {
 	}
 
 	public JSONObject receive() throws IOException {
-		return new JSONObject(br.readLine());
+		int len = dis.readInt();
+		buff = new byte[len];
+		dis.read(buff, 0, len);
+		return new JSONObject(new String(buff, "UTF-8"));
 	}
 	
 	public void send(JSONObject json) throws IOException {
-		bw.write(json.toString());
-		bw.newLine();
-		bw.flush();
+		buff = json.toString().getBytes("UTF-8");
+		dos.writeInt(buff.length);
+		dos.write(buff);
+		dos.flush();
 	}
-	
-	public void send(String key, String value) throws IOException {
-		JSONObject json = new JSONObject();
-		json.put(key, value);
-		bw.write(json.toString());
-		bw.flush();
-	}
-	
 
 	public abstract JSONObject run();
 }

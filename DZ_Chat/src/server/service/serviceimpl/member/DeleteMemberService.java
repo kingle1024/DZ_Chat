@@ -15,7 +15,7 @@ public class DeleteMemberService extends Service {
 	@Override
 	public void request() throws IOException {
 		JSONObject receiveJSON = receive();
-		Member me = Member.parseJSON(receiveJSON.getJSONObject("member"));
+		Member me = Member.parseJSONString(receiveJSON.getString("member"));
 		String pw = receiveJSON.getString("pw");
 
 		JSONObject sendJSON = new JSONObject();

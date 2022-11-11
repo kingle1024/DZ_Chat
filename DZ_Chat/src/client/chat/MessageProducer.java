@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
+import dto.Transfer;
 import message.chat.Message;
 
 public class MessageProducer implements Runnable {
@@ -22,6 +23,7 @@ public class MessageProducer implements Runnable {
 		while (getScanner().hasNext()) {
 			try {
 				String msg = getScanner().nextLine();
+				msg = Transfer.getUTF8(msg);
 				JSONObject msgJson = commandParser.createJSONObject(msg);
 				messageQueue.add(msgJson);
 			} catch (ChatRoomExitException e) {

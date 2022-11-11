@@ -4,29 +4,32 @@ import java.io.*;
 
 import org.json.JSONObject;
 
-import member.Member;
-
 public abstract class Service {
-	private BufferedReader br;
-	private BufferedWriter bw;
-	protected Member me;
-
+	private DataInputStream dis;
+	private DataOutputStream dos;
+	private byte[] buff;
+	
 	public JSONObject receive() throws IOException {
-		return new JSONObject(br.readLine());
+		int len = dis.readInt();
+		buff = new byte[len];
+		dis.read(buff, 0, len);
+		System.out.println(len);
+		return new JSONObject(new String(buff, "UTF-8"));
 	}
 	
 	public void send(JSONObject json) throws IOException {
-		bw.write(json.toString());
-		bw.newLine();
-		bw.flush();
+		buff = json.toString().getBytes("UTF-8");
+		dos.writeInt(buff.length);
+		dos.write(buff);
+		dos.flush();
 	}
 	
-	public void setInputStream(BufferedReader br) {
-		this.br = br;
+	public void setInputStream(DataInputStream dis) {
+		this.dis = dis;
 	}
 	
-	public void setOutputStream(BufferedWriter bw) {
-		this.bw= bw;
+	public void setOutputStream(DataOutputStream dos) {
+		this.dos = dos;
 	}
 	
 	public abstract void request() throws IOException;

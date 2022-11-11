@@ -2,6 +2,8 @@ package client;
 
 import member.Member;
 
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 import client.view.View;

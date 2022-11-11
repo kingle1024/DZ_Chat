@@ -16,7 +16,7 @@ public class RegisterService extends Service {
 		try {
 			System.out.println("member.RegisterService");
 			JSONObject receive = receive();
-			Member tmpMember = Member.parseJSON(receive.getJSONObject("member"));
+			Member tmpMember = Member.parseJSONString(receive.getString("member"));
 			String pwChk = receive.getString("pwChk");
 			boolean successRegister = MemberManager.register(tmpMember, pwChk);
 			if (successRegister) LogQueue.add(toLog());
