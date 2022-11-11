@@ -60,7 +60,7 @@ public class ChatClient extends Client {
 					exit(producerThread, consumerThread, listenerThread);
 					return null;
 				} else {
-					connectTry(1000);
+					connectTry(3000);
 				}
 			} catch (InterruptedException e) {
 
