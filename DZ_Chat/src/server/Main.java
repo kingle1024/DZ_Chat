@@ -1,16 +1,22 @@
 package server;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 import log.LogConsumer;
 import member.MemberDao;
-import message.chat.ChatRoom;
 import property.ServerProperties;
 import server.map.ChatRoomMap;
 
 public class Main {
 	public static void main(String[] args) {
+		try {
+			System.setOut(new PrintStream(System.out, true, "UTF-8"));
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		try {
 			MemberDao.readContent();
 			ChatRoomMap.init();
