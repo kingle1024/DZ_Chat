@@ -2,11 +2,8 @@ package server;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.util.concurrent.*;
 
-import member.Member;
-import message.chat.ChatRoom;
 import server.service.ServiceMap;
 
 public class MainServer implements Server {
@@ -30,7 +27,6 @@ public class MainServer implements Server {
 					ServiceMap.getService("MapperService", socket).request();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		});
 	}
