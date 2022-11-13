@@ -37,40 +37,39 @@ public class FtpServer implements Server {
 
 		threadPool.execute(() -> {
 			while (true) {
-				System.out.println("FTP server is listening... (Port: " + serverInfo.getPort() + ")");
-				command();
+				try {
+					System.out.println("FTP server is listening... (Port: " + serverInfo.getPort() + ")");
+					command();
+				} catch (IOException e) {
+					break;
+				}
 			}
 		});
 	}
-	public void command(){ // 이름 변경 및 분리 필요?
-		try {
-			Socket socket = serverSocket.accept();
-			FtpService ftpService = new FtpService();
-			JSONObject response = ftpService.reponseMessage(socket);
-			ChatInfo chatInfo = getChatInfo(response);
+	public void command() throws IOException { // 이름 변경 및 분리 필요?	
+		Socket socket = serverSocket.accept();
+		FtpService ftpService = new FtpService();
+		JSONObject response = ftpService.reponseMessage(socket);
+		ChatInfo chatInfo = getChatInfo(response);
 
-			String command = chatInfo.getCommand();
-			String fileName = new File(chatInfo.getFilePath()).getName();
-			String chatRoomName = chatInfo.getRoomName();
+		String command = chatInfo.getCommand();
+		String fileName = new File(chatInfo.getFilePath()).getName();
+		String chatRoomName = chatInfo.getRoomName();
 
-			JSONObject request = new JSONObject();
-			request.put("fileName", fileName);
-			request.put("chatRoomName", chatRoomName);
+		JSONObject request = new JSONObject();
+		request.put("fileName", fileName);
+		request.put("chatRoomName", chatRoomName);
 
-			if (command.startsWith("#fileSend")) {
-				System.out.println("FileTransferReceiver > startServer() > #fileSend > " + fileName);
-				ftpService.fileSend(request, socket);
-			}else {
-				try {
-					new FileCommon().fileSave("resources/" + chatRoomName + "/" + fileName, socket);
-					System.out.println("서버에서 파일 전송 완료");
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
+		if (command.startsWith("#fileSend")) {
+			System.out.println("FileTransferReceiver > startServer() > #fileSend > " + fileName);
+			ftpService.fileSend(request, socket);
+		} else {
+			try {
+				new FileCommon().fileSave("resources/" + chatRoomName + "/" + fileName, socket);
+				System.out.println("서버에서 파일 전송 완료");
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
 			}
-		} catch (IOException e) {
-			System.out.println("FtpServer > command > "+e);
-			throw new RuntimeException(e);
 		}
 	}
 
