@@ -2,8 +2,10 @@ package dto.chat;
 
 import dto.Transfer;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class ChatInfo {
     String command;
     String filePath;
