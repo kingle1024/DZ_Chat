@@ -1,6 +1,6 @@
 package client.view;
 
 public interface View {
-	public abstract View nextView();
-	public String getViewName();
+	View nextView();
+	String getViewName();
 }
