@@ -54,7 +54,7 @@ public class FileCommon {
 				: storeDirPath + files[0] + "(" + (idx+1) + ")." + files[1];
 	}
 
-	public void fileSave(String filePathAndName, Socket socket) throws IOException, InterruptedException {
+	public void fileSend(String filePathAndName, Socket socket) throws IOException, InterruptedException {
 		File originFileTarget = new File(filePathAndName);
 		InputStream fis = new FileInputStream(originFileTarget);
 		OutputStream os = socket.getOutputStream();
@@ -64,14 +64,14 @@ public class FileCommon {
 
 		System.out.println("FtpService > sendFile() > 여기에 보내는 파일이 있음 ! > " + originFileTarget.getAbsolutePath());
 
-		int readBytes = -1;
+		int readBytes;
 		long totalReadBytes = 0;
 		int cnt = 0;
 		int loopTime = 2;
 		long percent = -1;
 		
 		while ((readBytes = fis.read(buffer)) > 0) {
-			Thread.sleep(1);
+//			Thread.sleep(1);
 			os.write(buffer, 0, readBytes); // 실질적으로 보내는 부분
 			totalReadBytes += readBytes;
 			percent = printStreamProgress(cnt++, loopTime, totalReadBytes, fileSize);

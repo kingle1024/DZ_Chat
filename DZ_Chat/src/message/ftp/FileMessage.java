@@ -14,7 +14,7 @@ public class FileMessage {
     public boolean client(JSONObject json) throws IOException {
         ThreadGroup threadGroup = (ThreadGroup) json.get("threadGroup");
         chatInfo = (ChatInfo) json.get("chatInfo");
-        String command = chatInfo.getCommand();
+        String command = chatInfo.getCommand().toLowerCase();
         if(command.startsWith("#fileStop")) {
             threadGroup.interrupt();
             return false;
@@ -23,22 +23,33 @@ public class FileMessage {
         createSocket();
         sendMessageFtpServer();
 
-        JSONObject threadMap = new JSONObject();
+        JSONObject threadMap = setJSON(command);
+        System.out.println("fileMessage:"+chatInfo.getFilePath());
 
-
-        threadMap.put("chat", command);
-        threadMap.put("threadName", chatInfo.getRoomName());
-        threadMap.put("socket", socket);
-        threadMap.put("chatInfo", chatInfo);
-
-        if(command.startsWith("#fileSend")) {
+        if(command.startsWith("#filesend")) {
             new FileSendThread(threadGroup, threadMap).start();
-        }else if(command.startsWith("#fileSave")){
+        } else if (command.startsWith("#filezip")) {
+            chatInfo.setFilePath("temp.zip");
+            threadMap.put("chatInfo", chatInfo);
+            new FileSaveThread(threadGroup, threadMap).start();
+        } else { // fileSave, fileZip
+            threadMap.put("chatInfo", chatInfo);
             new FileSaveThread(threadGroup, threadMap).start();
         }
 
         return true;
     }
+
+    private JSONObject setJSON(String command) {
+        JSONObject threadMap = new JSONObject();
+        threadMap.put("chat", command);
+        threadMap.put("threadName", chatInfo.getRoomName());
+        threadMap.put("socket", socket);
+        threadMap.put("chatInfo", chatInfo);
+
+        return threadMap;
+    }
+
     public void createSocket(){
         try {
             socket = new Socket(
@@ -70,7 +81,7 @@ public class FileMessage {
             if(remainder < sendBlock){
                 sendBlock = remainder;
             }
-            System.out.println("length = " + sendData.length + "      pos = " + pos + "   sendBlock = " + sendBlock);
+//            System.out.println("length = " + sendData.length + "      pos = " + pos + "   sendBlock = " + sendBlock);
         }
 
         dos.flush();

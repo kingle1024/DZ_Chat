@@ -1,13 +1,13 @@
 package server;
 
+import dto.chat.ChatInfo;
 import message.ftp.FileCommon;
 import org.json.JSONObject;
-
-import dto.chat.ChatInfo;
 import property.ServerProperties;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,6 +17,7 @@ import message.ftp.FtpService;
 public class FtpServer implements Server {
 	final private ServerInfo serverInfo;
 	private static ServerSocket serverSocket;
+
 	public static final ExecutorService threadPool =
 			Executors.newFixedThreadPool(
 					ServerProperties.getThreadPool());
@@ -37,49 +38,70 @@ public class FtpServer implements Server {
 
 		threadPool.execute(() -> {
 			while (true) {
+				System.out.println("FTP server is listening... (Port: " + serverInfo.getPort() + ")");
 				try {
-					System.out.println("FTP server is listening... (Port: " + serverInfo.getPort() + ")");
-					command();
+					Socket socket = serverSocket.accept();
+					JSONObject response = reponseMessage(socket);
+					ChatInfo chatInfo = getChatInfo(response);
+
+					String command = chatInfo.getCommand().toLowerCase();
+					String fileName = new File(chatInfo.getFilePath()).getName();
+					String chatRoomName = chatInfo.getRoomName();
+
+					if (command.startsWith("#filesend")) fileSend(socket, chatInfo);
+					else if(command.startsWith("#filezip")) fileZip(socket, chatInfo);
+					else new FileCommon().fileSend("resources/room/" + chatRoomName + "/" + fileName, socket);
+
+					System.out.println("서버에서 파일 전송 완료");
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
 				} catch (IOException e) {
-					break;
+					System.out.println("FtpServer > command > "+e);
+					throw new RuntimeException(e);
 				}
 			}
 		});
 	}
-	public void command() throws IOException { // 이름 변경 및 분리 필요?	
-		Socket socket = serverSocket.accept();
-		FtpService ftpService = new FtpService();
-		JSONObject response = ftpService.reponseMessage(socket);
-		ChatInfo chatInfo = getChatInfo(response);
 
-		String command = chatInfo.getCommand();
-		String fileName = new File(chatInfo.getFilePath()).getName();
-		String chatRoomName = chatInfo.getRoomName();
+	private static void fileZip(Socket socket, ChatInfo chatInfo) {
+		System.out.println("chatInfo.getFilePath():"+ chatInfo.getFilePath());
+		new FtpService().createZipfile(chatInfo, socket);
+	}
 
+	private static void fileSend(Socket socket, ChatInfo chatInfo) {
+		System.out.println("FileTransferReceiver > startServer() > #fileSend > " + chatInfo.getFilePath());
+		new FtpService().fileSend(chatInfo, socket);
+	}
+
+	private static JSONObject setRequestJSON(String fileName, String chatRoomName) {
 		JSONObject request = new JSONObject();
 		request.put("fileName", fileName);
 		request.put("chatRoomName", chatRoomName);
-
-		if (command.startsWith("#fileSend")) {
-			System.out.println("FileTransferReceiver > startServer() > #fileSend > " + fileName);
-			ftpService.fileSend(request, socket);
-		} else {
-			try {
-				new FileCommon().fileSave("resources/" + chatRoomName + "/" + fileName, socket);
-				System.out.println("서버에서 파일 전송 완료");
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-		}
+		return request;
 	}
 
 	private ChatInfo getChatInfo(JSONObject response) {
 		String chatInfoStr = response.getString("chatInfo");
-		JSONObject chatInfo = new JSONObject(chatInfoStr);
-		String command = chatInfo.getString("command");
-		String filePath = chatInfo.getString("filePath");
-		String roomName = chatInfo.getString("roomName");
+		JSONObject chatInfoJSON = new JSONObject(chatInfoStr);
+		String command = chatInfoJSON.getString("command");
+		String filePath = chatInfoJSON.getString("filePath");
+		String roomName = chatInfoJSON.getString("roomName");
 		return new ChatInfo(command, filePath, roomName);
+	}
+
+	public JSONObject reponseMessage(Socket socket) throws IOException {
+		DataInputStream dis = new DataInputStream(socket.getInputStream());
+		int length = dis.readInt();
+		int pos = 0;
+		byte[] recvData = new byte[length];
+		do{
+			int len = dis.read(recvData, pos, length - pos);
+			pos += len;
+		}while(length != pos);
+
+		String responseJson = new String(recvData, StandardCharsets.UTF_8);
+
+		return new JSONObject(responseJson);
 	}
 
 	@Override
@@ -92,5 +114,6 @@ public class FtpServer implements Server {
 			e.printStackTrace();
 		}
 	}
+
 
 }

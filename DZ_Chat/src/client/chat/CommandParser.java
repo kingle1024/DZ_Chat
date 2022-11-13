@@ -16,7 +16,9 @@ public class CommandParser {
 	private final String chatRoomName;
 	private ThreadGroup threadGroup;
 	private final JSONObject json = new JSONObject();
-	
+	private String command;
+	private String fileName;
+
 	public CommandParser(Member sender, String chatRoomName, ThreadGroup threadGroup) {
 		this.sender = sender;
 		this.chatRoomName = chatRoomName;
@@ -29,6 +31,7 @@ public class CommandParser {
 		if (msg.startsWith("#exit")) return createExitJSON();
 		if (msg.startsWith("#file")) return createFileJSON(msg);
 		if (msg.startsWith("#dir")) return createDirJSON(msg);
+
 		return createChatJSON(msg);
 	}
 
@@ -56,46 +59,49 @@ public class CommandParser {
 		return Transfer.toJSON(new DirDto("#dir", chat, chatRoomName, sender));
 	}
 
-	private JSONObject createFileJSON(String chat) throws IOException {
+	private JSONObject createFileJSON(String chat) {
 		System.out.println("createFileMessage");
-		String[] message = chat.split(" ");
-		if(message.length == 1){
-			message = new String[3];
-			message[1] = "temp";
-			message[2] = "temp2";
-		}
-		String fileName = message[1];
-		boolean result = fileMessage(chat);
+		final String[] message = getMessageSplit(chat);
+		command = message[0];
+		fileName = message[1];
+
+		boolean result = fileMessage();
 
 		return result
 				? Transfer.toJSON(new ChatDto("chat", fileName + " 파일 전송", sender))
 				: Transfer.toJSON(new PrivateChatDto("privateChat", fileName + " 파일 전송 취소", sender, "privateMan"));
 	}
 
+	public boolean fileMessage() {
+		createThreadGroupInstance();
+		JSONObject json = getChatInfoJSON();
 
+		try {
+			return new FileMessage().client(json);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-	public boolean fileMessage(String chat) throws IOException {
+	private JSONObject getChatInfoJSON() {
+		JSONObject json = new JSONObject();
+		json.put("threadGroup", threadGroup);
+		json.put("chatInfo", new ChatInfo(command, fileName, this.chatRoomName));
+		return json;
+	}
+
+	private void createThreadGroupInstance() {
 		if(threadGroup == null){
 			threadGroup = new ThreadGroup(sender.getUserId()+chatRoomName);
 		}
-		JSONObject json = new JSONObject();
-		json.put("threadGroup", threadGroup);
-
-		final String[] message = getMessageSplit(chat);
-		String command = message[0];
-		String fileName = message[1];
-
-		json.put("chatInfo", new ChatInfo(command, fileName, this.chatRoomName));
-
-		return new FileMessage().client(json);
 	}
 
 	public String[] getMessageSplit(String chat){
 		String[] message = chat.split(" ");
 		if(message.length == 1){
 			message = new String[3];
+			message[0] = chat;
 			message[1] = "temp";
-			message[2] = "temp2";
 		}
 		return message;
 	}

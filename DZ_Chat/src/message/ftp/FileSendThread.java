@@ -31,7 +31,7 @@ public class FileSendThread extends Thread {
 
 		try {
 			if (!fileValid(filePathAndName)) return;
-			new FileCommon().fileSave(filePathAndName, (Socket) map.get("socket"));
+			new FileCommon().fileSend(filePathAndName, (Socket) map.get("socket"));
 			System.out.println("클라이언트에서 파일 전송 완료");
 		} catch (IOException e) {
 			System.out.println("ClientToServerThread IOException");

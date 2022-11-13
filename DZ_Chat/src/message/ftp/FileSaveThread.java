@@ -10,12 +10,12 @@ import java.net.UnknownHostException;
 
 // 보내는 곳 (Client)
 public class FileSaveThread extends Thread{
-	private final JSONObject map;
+	private final JSONObject json;
 	private final ChatInfo chatInfo;
 	
 	public FileSaveThread(ThreadGroup threadGroup, JSONObject map) {
 		super(threadGroup, map.get("threadName").toString());
-		this.map = map;
+		this.json = map;
 		this.chatInfo = (ChatInfo) map.get("chatInfo");
 	}
 
@@ -34,12 +34,13 @@ public class FileSaveThread extends Thread{
 			throw new RuntimeException(e);
 		}
 	}
+
 	public void saveFile() throws Exception {
 		try {
 			FtpService ftp = new FtpService();
 			StringBuffer downloadPath =
 					new StringBuffer(ftp.getDownloadPath(chatInfo.getFilePath()));
-			Socket socket = (Socket)map.get("socket");
+			Socket socket = (Socket)json.get("socket");
 
 			if(ftp.saveFile(socket.getInputStream(), downloadPath.toString())){
 				ftp.showPicture(downloadPath);

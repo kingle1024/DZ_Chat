@@ -1,16 +1,20 @@
 package message.ftp;
-import org.json.JSONObject;
+import dto.chat.ChatInfo;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
+import net.lingala.zip4j.io.ZipOutputStream;
 import property.ClientProperties;
 import property.ServerProperties;
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
+
 
 public class FtpService {
-	private final int DEFAULT_BUFFER_SIZE = ClientProperties.getDefaultBufferSize();
-	
+	private static final int DEFAULT_BUFFER_SIZE = ClientProperties.getDefaultBufferSize();
 	public static boolean fileValid(String filePath) {
 		File file = new File(filePath);
 
@@ -26,7 +30,7 @@ public class FtpService {
 		try {
 			byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 			int readBytes;
-			FileOutputStream fos = new FileOutputStream(saveFilePath); // 저장할 파일 위치
+			OutputStream fos = new FileOutputStream(saveFilePath); // 저장할 파일 위치
 
 			while ((readBytes = is.read(buffer)) != -1) { // InputStream에서 내용을 읽어서 FileOutputStream으로 저장
 				fos.write(buffer, 0, readBytes);
@@ -44,7 +48,7 @@ public class FtpService {
 	}
 
 	public String dir(String roomName) {
-		File file = new File(ServerProperties.getDownloadPath() + roomName + "");
+		File file = new File(ServerProperties.getDownloadPath() + roomName);
 		StringBuilder sb = new StringBuilder();
 		
 		if (!file.exists()) {
@@ -118,25 +122,10 @@ public class FtpService {
 		}
 	}
 
-	public JSONObject reponseMessage(Socket socket) throws IOException {
-		DataInputStream dis = new DataInputStream(socket.getInputStream());
-		int length = dis.readInt();
-		int pos = 0;
-		byte[] recvData = new byte[length];
-		do{
-			int len = dis.read(recvData, pos, length - pos);
-			pos += len;
-		}while(length != pos);
-
-		String responseJson = new String(recvData, StandardCharsets.UTF_8);
-
-		return new JSONObject(responseJson);
-	}
-
-	public void fileSend(JSONObject response, Socket socket) {
+	public void fileSend(ChatInfo chatInfo, Socket socket) {
 		try {
-			String fileName = response.getString("fileName");
-			String roomName = response.getString("chatRoomName");
+			String fileName = chatInfo.getFilePath();
+			String roomName = chatInfo.getRoomName();
 			FileCommon fileCommon = new FileCommon();
 
 			String saveFilePath = fileCommon.makeFileName("resources/room/" + roomName + "/", fileName);
@@ -147,6 +136,55 @@ public class FtpService {
 		} catch (IOException e) {
 			System.out.println("FtpService > fileSend > " + e);
 			throw new RuntimeException(e);
+		}
+	}
+
+	public void createZipfile(ChatInfo chatInfo, Socket socket) {
+		try{
+			String folderPath = ServerProperties.getDownloadPath() + chatInfo.getRoomName();
+			File file = new File(folderPath);
+			File[] files = file.listFiles();
+
+			ZipParameters zipParameters = new ZipParameters();
+			setPassword(chatInfo, zipParameters);
+			ZipOutputStream out = new ZipOutputStream(socket.getOutputStream());
+
+			for (int i = 0; i < Objects.requireNonNull(files).length; i++) {
+				writeZipToSocket(zipParameters, out, files[i]);
+			}
+			out.finish();
+			System.out.println("압축 파일 생성 성공");
+		} catch (IOException | ZipException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	private static void writeZipToSocket(ZipParameters parameters, ZipOutputStream out, File files) {
+		byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
+
+		try (InputStream in = new FileInputStream(files)) {
+			out.putNextEntry(files, parameters);
+
+			int len;
+			while((len = in.read(buf)) > 0){
+				out.write(buf, 0, len);
+			}
+
+			out.closeEntry();
+		} catch (IOException | ZipException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void setPassword(ChatInfo chatInfo, ZipParameters zipParameters) {
+		if(!"temp".equals(chatInfo.getFilePath())) {
+			zipParameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+			zipParameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+			zipParameters.setEncryptFiles(true);
+			zipParameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
+			zipParameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
+			zipParameters.setPassword(chatInfo.getFilePath());
 		}
 	}
 }
