@@ -21,6 +21,7 @@ public class LoginView implements View {
 		textInput = new TextInput("id", "pw");
 	}
 
+	@Override
 	public View nextView() {
 		textInput.init();
 		id = textInput.next();
