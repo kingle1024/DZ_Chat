@@ -73,13 +73,6 @@ public class FtpServer implements Server {
 		new FtpService().fileSend(chatInfo, socket);
 	}
 
-	private static JSONObject setRequestJSON(String fileName, String chatRoomName) {
-		JSONObject request = new JSONObject();
-		request.put("fileName", fileName);
-		request.put("chatRoomName", chatRoomName);
-		return request;
-	}
-
 	private ChatInfo getChatInfo(JSONObject response) {
 		String chatInfoStr = response.getString("chatInfo");
 		JSONObject chatInfoJSON = new JSONObject(chatInfoStr);
@@ -114,6 +107,4 @@ public class FtpServer implements Server {
 			e.printStackTrace();
 		}
 	}
-
-
 }
