@@ -8,6 +8,12 @@ import member.MemberDao;
 import property.ServerProperties;
 import server.map.ChatRoomMap;
 
+/*
+ * 실행 전 컴파일러 설정
+ * 메서드 파라미터 이름 정보를 가져와야 하기 때문에 컴파일 옵션 -parameters 를 줘야합니다.
+ * Eclipse: Window > Preferences > Java > Compiler > Store information about method parameters
+ */
+
 public class Main {
 	public static void main(String[] args) {
 //		try {
