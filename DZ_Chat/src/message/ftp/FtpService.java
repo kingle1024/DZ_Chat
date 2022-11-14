@@ -153,7 +153,6 @@ public class FtpService {
 				writeZipToSocket(zipParameters, out, files[i]);
 			}
 			out.finish();
-			System.out.println("압축 파일 생성 성공");
 		} catch (IOException | ZipException e) {
 			throw new RuntimeException(e);
 		}
