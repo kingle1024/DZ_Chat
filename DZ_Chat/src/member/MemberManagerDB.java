@@ -98,14 +98,14 @@ public class MemberManagerDB implements MemberManagerInterface {
 		try {
 			open();
 			
-			cstmt = conn.prepareCall(dbProperties.getInsertDeleteMemberQuery());
-			cstmt.setString(1, member.getUserId());
-			cstmt.setString(2, member.getPassword());
-			cstmt.setString(3, member.getName());
-			cstmt.setString(4, member.getBirth());
-			cstmt.registerOutParameter(5, Types.INTEGER);
-			cstmt.execute();
-			cstmt.close();
+//			cstmt = conn.prepareCall(dbProperties.getInsertDeleteMemberQuery());
+//			cstmt.setString(1, member.getUserId());
+//			cstmt.setString(2, member.getPassword());
+//			cstmt.setString(3, member.getName());
+//			cstmt.setString(4, member.getBirth());
+//			cstmt.registerOutParameter(5, Types.INTEGER);
+//			cstmt.execute();
+//			cstmt.close();
 			
 			pstmt = conn.prepareStatement(dbProperties.getDeleteMemberByUserIdQuery());
 			pstmt.setString(1, member.getUserId());

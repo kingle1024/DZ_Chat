@@ -10,13 +10,11 @@ import server.map.ChatRoomMap;
 
 public class Main {
 	public static void main(String[] args) {
-		try {
-			System.setOut(new PrintStream(System.out, true, "UTF-8"));
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+//		try {
+//			System.setOut(new PrintStream(System.out, true, "UTF-8"));
+//		} catch (UnsupportedEncodingException e1) {
+//			e1.printStackTrace();
+//		}
 		try {
 			MemberDao.readContent();
 			ChatRoomMap.init();

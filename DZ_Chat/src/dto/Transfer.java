@@ -75,7 +75,6 @@ public class Transfer {
 		return ret;
 	}
 	
-	// 괜히 만든 것 같아요.
 	public static Object toDTO(JSONObject json) {
 		try {
 			Constructor<?> constructor = dtoConstructorMap.get(json.getString("__dto__"));
@@ -84,6 +83,7 @@ public class Transfer {
 					.map(param -> json.getString(param.getName())).toArray();
 			return constructor.newInstance(params);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
