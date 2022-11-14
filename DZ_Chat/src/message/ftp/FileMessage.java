@@ -15,7 +15,7 @@ public class FileMessage {
         ThreadGroup threadGroup = (ThreadGroup) json.get("threadGroup");
         chatInfo = (ChatInfo) json.get("chatInfo");
         String command = chatInfo.getCommand().toLowerCase();
-        if(command.startsWith("#fileStop")) {
+        if(command.startsWith("#filestop")) {
             threadGroup.interrupt();
             return false;
         }
@@ -26,18 +26,25 @@ public class FileMessage {
         JSONObject threadMap = setJSON(command);
         System.out.println("fileMessage:"+chatInfo.getFilePath());
 
-        if(command.startsWith("#filesend")) {
-            new FileSendThread(threadGroup, threadMap).start();
-        } else if (command.startsWith("#filezip")) {
-            chatInfo.setFilePath("temp.zip");
-            threadMap.put("chatInfo", chatInfo);
-            new FileSaveThread(threadGroup, threadMap).start();
-        } else { // fileSave, fileZip
-            threadMap.put("chatInfo", chatInfo);
-            new FileSaveThread(threadGroup, threadMap).start();
-        }
+        if(command.startsWith("#filesend")) fileSend(threadGroup, threadMap);
+        else if (command.startsWith("#filezip")) fileZip(threadGroup, threadMap);
+        else fileSave(threadGroup, threadMap);
 
         return true;
+    }
+
+    private void fileSave(ThreadGroup threadGroup, JSONObject threadMap) {
+        threadMap.put("chatInfo", chatInfo);
+        new FileSaveThread(threadGroup, threadMap).start();
+    }
+
+    private void fileZip(ThreadGroup threadGroup, JSONObject threadMap) {
+        chatInfo.setFilePath("temp.zip");
+        fileSave(threadGroup, threadMap);
+    }
+
+    private static void fileSend(ThreadGroup threadGroup, JSONObject threadMap) {
+        new FileSendThread(threadGroup, threadMap).start();
     }
 
     private JSONObject setJSON(String command) {
